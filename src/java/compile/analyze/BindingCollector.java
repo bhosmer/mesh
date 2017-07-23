@@ -56,7 +56,7 @@ public final class BindingCollector extends ModuleVisitor<Object>
      * has added them to type bindings map
      */
     @Override
-    protected void processScope(final Scope scope)
+protected void processScope(final Scope scope)
     {
         final ArrayDeque<Statement> save = generated;
         generated = new ArrayDeque<Statement>();
@@ -108,7 +108,7 @@ public final class BindingCollector extends ModuleVisitor<Object>
         else if (prev.getScope() != scope)
         {
             // shadowing out-of-scope bindings is fine.
-            // Note: a ref to x followed by an binding of x within the same
+            // Note: a ref to x followed by a binding of x within the same
             // scope will be flagged as an illegal forward, regardless of
             // whether an outer binding of x is visible.
             if (Session.isDebug())
@@ -317,7 +317,7 @@ public final class BindingCollector extends ModuleVisitor<Object>
         {
             // first time we've seen this one. fix up name and install on host
             final ParamBinding fixed =
-                new ParamBinding(paramBinding.getLoc(), name, null, true);
+                new ParamBinding(paramBinding.getLoc(), name, null);
 
             if (Session.isDebug())
                 Session.debug(paramBinding.getLoc(), "adding implicit param binding {0}",

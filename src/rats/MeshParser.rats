@@ -21,6 +21,7 @@ module rats.MeshParser;
 header
 {
     import compile.Loc;
+    import compile.Session;
     import compile.parse.ApplyFlavor;
     import static compile.parse.ASTBuilder.*;
     import compile.parse.SigInfo;
@@ -246,7 +247,9 @@ transient compile.Pair<Term, ApplyFlavor> AppRHS
         { yyValue = new compile.Pair<Term, ApplyFlavor>(e, ApplyFlavor.CollIndex); }
 
     / e:BaseExpr
-        { yyValue = new compile.Pair<Term, ApplyFlavor>(e, ApplyFlavor.FuncApp); } ;
+        { yyValue = new compile.Pair<Term, ApplyFlavor>(e, ApplyFlavor.FuncApp); }
+
+    ;
 
 //
 // Base (enclosed) expressions.

@@ -39,10 +39,10 @@ public abstract class AbstractScope implements Scope
     public AbstractScope(final Loc loc, final List<Statement> body)
     {
         this.loc = loc;
-        this.body = body != null ? body : Collections.<Statement>emptyList();
-        this.lets = new LinkedHashMap<String, LetBinding>();
-        this.typeDefs = new LinkedHashMap<String, TypeDef>();
-        this.dependencies = new IdentityHashMap<Statement, Set<Binding>>();
+        this.body = body != null ? body : Collections.emptyList();
+        this.lets = new LinkedHashMap<>();
+        this.typeDefs = new LinkedHashMap<>();
+        this.dependencies = new IdentityHashMap<>();
     }
 
     // Scope
@@ -124,7 +124,7 @@ public abstract class AbstractScope implements Scope
     {
         for (final Statement statement : statements)
             if (!dependencies.containsKey(statement))
-                dependencies.put(statement, Collections.<Binding>emptySet());
+                dependencies.put(statement, Collections.emptySet());
     }
 
     // Located

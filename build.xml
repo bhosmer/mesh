@@ -117,7 +117,7 @@
 
     <!-- compile java source tree(s) into classes tree. -->
     <target name="compile" depends="rats">
-        <javac source="1.5"
+        <javac source="1.8"
                debug="${src.debug}"
                classpathref="classpath"
                srcdir="${gen.dir}/java;${src.dir}/java"

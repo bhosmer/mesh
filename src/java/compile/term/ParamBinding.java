@@ -30,27 +30,14 @@ import compile.type.visit.TypeDumper;
 public class ParamBinding extends ValueBinding
 {
     private LambdaTerm lambda;
-    private final boolean inline;
     private int index;
     private final ParamValue value;
 
-    public ParamBinding(final Loc loc, final String name,final Type declaredType,
-        final boolean inline)
+    public ParamBinding(final Loc loc, final String name,final Type declaredType)
     {
         super(loc, name, declaredType);
-        this.inline = inline;
         this.index = -1;
         this.value = new ParamValue(this);
-    }
-
-    public ParamBinding(final Loc loc, final String name, final Type declaredType)
-    {
-        this(loc, name, declaredType, false);
-    }
-
-    public boolean getInline()
-    {
-        return inline;
     }
 
     public void setIndex(final int index)

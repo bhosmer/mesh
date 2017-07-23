@@ -2,7 +2,7 @@
  * ADOBE SYSTEMS INCORPORATED
  * Copyright 2009-2013 Adobe Systems Incorporated
  * All Rights Reserved.
- *
+ * <p>
  * NOTICE: Adobe permits you to use, modify, and distribute
  * this file in accordance with the terms of the MIT license,
  * a copy of which can be found in the LICENSE.txt file or at
@@ -19,349 +19,311 @@ import java.util.*;
 /**
  * Contains the Type parts of a lambda (or intrinsic) declaration
  */
-public final class Signature implements Located
-{
-    protected final Loc loc;
+public final class Signature implements Located {
+  protected final Loc loc;
 
-    /**
-     * calculated type of the term, set after type inference/checking
-     */
-    private Type type;
+  /**
+   * calculated type of the term, set after type inference/checking
+   */
+  private Type type;
 
-    /**
-     * type parameter declarations, as parsed
-     */
-    private final Map<String, TypeParam> typeParamDecls;
+  /**
+   * type parameter declarations, as parsed
+   */
+  private final Map<String, TypeParam> typeParamDecls;
 
-    /**
-     * (value) parameter declarations, as parsed
-     */
-    private Map<String, ParamBinding> params;
+  /**
+   * (value) parameter declarations, as parsed
+   */
+  private Map<String, ParamBinding> params;
 
-    /**
-     * true once parameter declarations have been committed.
-     * Used to enforce exclusivity of declared and inline param syntax.
-     */
-    private boolean paramsCommitted;
+  /**
+   * true once parameter declarations have been committed.
+   * Used to enforce exclusivity of declared and inline param syntax.
+   */
+  private boolean paramsCommitted;
 
-    /**
-     * aggregate declared parameter type, as parsed, with
-     * {@link WildcardType} used for missing annotations.
-     */
-    private Type declaredParamType;
+  /**
+   * aggregate declared parameter type, as parsed, with
+   * {@link WildcardType} used for missing annotations.
+   */
+  private Type declaredParamType;
 
-    /**
-     * declared result type, as parsed, or null.
-     */
-    private Type declaredResultType;
+  /**
+   * declared result type, as parsed, or null.
+   */
+  private Type declaredResultType;
 
-    /**
-     * type as declared, with {@link WildcardType} in positions
-     * lacking annotations.
-     */
-    private Type signatureType;
+  /**
+   * type as declared, with {@link WildcardType} in positions
+   * lacking annotations.
+   */
+  private Type signatureType;
 
-    /**
-     * Note that {@link #typeParamDecls} has explicitly declared type params;
-     * inlines are added during resolution.
-     */
-    public Signature(
-        final Loc loc,
-        final List<TypeParam> typeParamDecls,
-        final List<ParamBinding> params,
-        final Type declaredResultType)
-    {
-        this.loc = loc;
+  /**
+   * Note that {@link #typeParamDecls} has explicitly declared type params;
+   * inlines are added during resolution.
+   */
+  public Signature(
+      final Loc loc, final List<TypeParam> typeParamDecls,
+      final List<ParamBinding> params, final Type declaredResultType
+  ) {
+    this.loc = loc;
 
-        this.typeParamDecls = new LinkedHashMap<String, TypeParam>();
+    this.typeParamDecls = new LinkedHashMap<>();
 
-        this.params = new LinkedHashMap<String, ParamBinding>();
+    this.params = new LinkedHashMap<>();
 
-        this.paramsCommitted = false;
+    this.paramsCommitted = false;
 
-        this.declaredParamType = null;
+    this.declaredParamType = null;
 
-        this.declaredResultType = declaredResultType;
+    this.declaredResultType = declaredResultType;
 
-        this.signatureType = null;
+    this.signatureType = null;
 
-        for (final TypeParam typeParam : typeParamDecls)
-            addTypeParamDecl(typeParam);
+    for (final TypeParam typeParam : typeParamDecls)
+      addTypeParamDecl(typeParam);
 
-        for (final ParamBinding param : params)
-            addParam(param);
+    for (final ParamBinding param : params)
+      addParam(param);
+  }
+
+  public final Loc getLoc() {
+    return loc;
+  }
+
+  /**
+   *
+   */
+  public void addTypeParamDecl(final TypeParam typeParam) {
+    final TypeParam exists = typeParamDecls.get(typeParam.getName());
+
+    if (exists != null) {
+      Session.error(typeParam.getLoc(),
+          "type parameter {0} already declared at {1}", exists.getName(),
+          exists.getLoc());
+
+      return;
     }
 
-    public final Loc getLoc()
-    {
-        return loc;
+    typeParamDecls.put(typeParam.getName(), typeParam);
+  }
+
+  /**
+   * add non-inline param binding.
+   */
+  public void addParam(final ParamBinding param) {
+    assert !getParamsCommitted() : "param bindings already committed";
+
+    assert !hasInlineParams();
+
+    final ParamBinding exists = params.get(param.getName());
+
+    if (exists != null) {
+      Session.error(param.getLoc(), "parameter {0} already declared at {1}",
+          exists.getName(), exists.getLoc());
+      return;
     }
 
-    /**
-     *
-     */
-    public void addTypeParamDecl(final TypeParam typeParam)
-    {
-        final TypeParam exists = typeParamDecls.get(typeParam.getName());
+    param.setIndex(params.size());
+    params.put(param.getName(), param);
+  }
 
-        if (exists != null)
-        {
-            Session.error(typeParam.getLoc(),
-                "type parameter {0} already declared at {1}",
-                exists.getName(), exists.getLoc());
+  /**
+   *
+   */
+  public void addInlineParam(final ParamBinding param) {
+    assert !getParamsCommitted() : "param bindings already committed";
 
-            return;
+    if (params.isEmpty()) {
+      // replace empty creation-time map with sorted map
+      params = new TreeMap<String, ParamBinding>();
+    } else {
+      // non-empty, better be inlining already
+      assert hasInlineParams();
+    }
+
+    final ParamBinding exists = params.get(param.getName());
+
+    if (exists != null) {
+      Session.error(param.getLoc(), "parameter {0} already declared at {1}",
+          exists.getName(), exists.getLoc());
+      return;
+    }
+
+    params.put(param.getName(), param);
+  }
+
+  /**
+   * A little bit of a hack, but reliable: our params map is
+   * sorted (treemap) iff our params came from inline refs.
+   */
+  private boolean hasInlineParams() {
+    return params instanceof TreeMap;
+  }
+
+  /**
+   * Called once all params have been added.
+   * 1. Lock param binding map.
+   * 2. Fill gaps if inline params have been used.
+   * 3. Build our declared type.
+   * NOTE: declared type is built regardless of whether any annotations
+   * were supplied, so {@link #hasDeclaredType()} is nontrivial.
+   */
+  public void commitParams(final LambdaTerm scope) {
+    assert !paramsCommitted : "params already committed";
+
+    // 1. no more inline params
+    // 2. _ is an undeclared param
+    // 3. declared params need to determine the inferred type of _
+
+    if (hasInlineParams()) {
+      assert scope != null : "Intrinsic can't have inline params";
+      // fill gaps
+      {
+        final ArrayList<ParamBinding> adds = Lists.newArrayList();
+
+        int i = 0;
+        for (final String name : params.keySet()) {
+          // DANGER: assumes format "$n" for inline param names
+          final int j = Integer.parseInt(name.substring(1, name.indexOf('_')));
+          for (; i < j; i++) {
+            final ParamBinding b = new ParamBinding(loc, "$" + i, null);
+            adds.add(b);
+          }
+          i++;
         }
 
-        typeParamDecls.put(typeParam.getName(), typeParam);
-    }
+        for (final ParamBinding add : adds)
+          params.put(add.getName(), add);
+      }
 
-    /**
-     * add non-inline param binding.
-     */
-    public void addParam(final ParamBinding param)
-    {
-        assert !getParamsCommitted() :
-            "param bindings already committed";
-
-        assert !hasInlineParams();
-
-        final ParamBinding exists = params.get(param.getName());
-
-        if (exists != null)
-        {
-            Session.error(param.getLoc(),
-                "parameter {0} already declared at {1}",
-                exists.getName(), exists.getLoc());
-            return;
+      // reindex
+      {
+        int i = 0;
+        for (final ParamBinding param : params.values()) {
+          param.setIndex(i);
+          i++;
         }
-
-        param.setIndex(params.size());
-        params.put(param.getName(), param);
+      }
     }
 
-    /**
-     *
-     */
-    public void addInlineParam(final ParamBinding param)
-    {
-        assert !getParamsCommitted() :
-            "param bindings already committed";
+    // derive lambda types
 
-        if (params.isEmpty())
-        {
-            // replace empty creation-time map with sorted map
-            params = new TreeMap<String, ParamBinding>();
-        }
-        else
-        {
-            // non-empty, better be inlining already
-            assert hasInlineParams();
-        }
+    final List<Type> members = new ArrayList<Type>();
 
-        final ParamBinding exists = params.get(param.getName());
-
-        if (exists != null)
-        {
-            Session.error(param.getLoc(),
-                "parameter {0} already declared at {1}",
-                exists.getName(), exists.getLoc());
-            return;
-        }
-
-        params.put(param.getName(), param);
+    for (final ParamBinding param : params.values()) {
+      if (scope != null) {
+        param.setScope(scope);
+      }
+      members.add(param.hasDeclaredType() ? param.getDeclaredType() :
+          new WildcardType(param.getLoc()));
     }
 
-    /**
-     * A little bit of a hack, but reliable: our params map is
-     * sorted (treemap) iff our params came from inline refs.
-     */
-    private boolean hasInlineParams()
-    {
-        return params instanceof TreeMap;
-    }
+    declaredParamType =
+        members.size() == 1 ? members.get(0) : Types.tup(loc, members);
 
-    /**
-     * Called once all params have been added.
-     * 1. Lock param binding map.
-     * 2. Fill gaps if inline params have been used.
-     * 3. Build our declared type.
-     * NOTE: declared type is built regardless of whether any annotations
-     * were supplied, so {@link #hasDeclaredType()} is nontrivial.
-     */
-    public void commitParams(final LambdaTerm scope)
-    {
-        assert !paramsCommitted : "params already committed";
+    // declared result type or null
+    final Type resultType =
+        declaredResultType != null ? declaredResultType : new WildcardType(loc);
 
-        if (hasInlineParams())
-        {
-            assert scope != null : "Intrinsic can't have inline params";
-            // fill gaps
-            {
-                final ArrayList<ParamBinding> adds = Lists.newArrayList();
+    signatureType = Types.fun(loc, declaredParamType, resultType);
 
-                int i = 0;
-                for (final String name : params.keySet())
-                {
-                    // DANGER: assumes format "$n" for inline param names
-                    final int j = Integer.parseInt(name.substring(1, name.indexOf('_')));
-                    for (; i < j; i++)
-                    {
-                        final ParamBinding b = new ParamBinding(loc, "$" + i, null, true);
-                        adds.add(b);
-                    }
-                    i++;
-                }
+    if (!typeParamDecls.isEmpty())
+      signatureType.addParams(typeParamDecls.values());
 
-                for (final ParamBinding add : adds)
-                    params.put(add.getName(), add);
-            }
+    signatureType.collectInlineParams();
 
-            // reindex
-            {
-                int i = 0;
-                for (final ParamBinding param : params.values())
-                {
-                    param.setIndex(i);
-                    i++;
-                }
-            }
-        }
+    // record any collected inline type params as declared
+    final Map<String, TypeParam> declParams = signatureType.getParams();
+    for (final String name : declParams.keySet())
+      if (!typeParamDecls.containsKey(name))
+        typeParamDecls.put(name, declParams.get(name));
 
-        // derive lambda types
+    paramsCommitted = true;
+  }
 
-        final List<Type> members = new ArrayList<Type>();
+  public boolean getParamsCommitted() {
+    return paramsCommitted;
+  }
 
-        for (final ParamBinding param : params.values())
-        {
-            if (scope != null) 
-            {
-                param.setScope(scope);
-            }
-            members.add(param.hasDeclaredType() ?
-                param.getDeclaredType() :
-                new WildcardType(param.getLoc()));
-        }
+  public Type getSignatureType() {
+    return signatureType;
+  }
 
-        declaredParamType =
-            members.size() == 1 ? members.get(0) : Types.tup(loc, members);
+  /**
+   * Return the given param type from our declared signature.
+   */
+  public Type getSignatureParamType(final int index) {
+    if (params.size() == 1) return declaredParamType;
 
-        // declared result type or null
-        final Type resultType =
-            declaredResultType != null ? declaredResultType : new WildcardType(loc);
+    final List<Type> paramTypes =
+        ((TypeList) Types.tupMembers(declaredParamType).deref()).getItems();
 
-        signatureType = Types.fun(loc, declaredParamType, resultType);
+    return paramTypes.get(index);
+  }
 
-        if (!typeParamDecls.isEmpty())
-            signatureType.addParams(typeParamDecls.values());
+  /**
+   * Return the type of param at given position, from our composite type.
+   */
+  public Type getParamType(final int index) {
+    assert Types.isFun(type);
+    final Type paramTypeTerm = Types.funParam(type);
 
-        signatureType.collectInlineParams();
+    if (params.size() == 1) return paramTypeTerm;
 
-        // record any collected inline params as declared
-        final Map<String, TypeParam> declParams = signatureType.getParams();
-        for (final String name : declParams.keySet())
-            if (!typeParamDecls.containsKey(name))
-                typeParamDecls.put(name, declParams.get(name));
+    final List<Type> paramTypeTerms =
+        ((TypeList) Types.tupMembers(paramTypeTerm).deref()).getItems();
 
-        paramsCommitted = true;
-    }
+    return paramTypeTerms.get(index);
 
-    public boolean getParamsCommitted()
-    {
-        return paramsCommitted;
-    }
+  }
 
-    public Type getSignatureType()
-    {
-        return signatureType;
-    }
+  public Type getDeclaredResultType() {
+    return declaredResultType;
+  }
 
-    /**
-     * Return the given param type from our declared signature.
-     */
-    public Type getSignatureParamType(final int index)
-    {
-        if (params.size() == 1)
-            return declaredParamType;
+  public Map<String, TypeParam> getTypeParamDecls() {
+    return typeParamDecls;
+  }
 
-        final List<Type> paramTypes =
-            ((TypeList)Types.tupMembers(declaredParamType).deref()).getItems();
+  public Type getType() {
+    return type;
+  }
 
-        return paramTypes.get(index);
-    }
+  public void setType(final Type type) {
+    if (!Types.isFun(type)) throw new IllegalArgumentException(
+        "LambdaTerm type must be function type");
 
-    /**
-     * Return the type of param at given position, from our composite type.
-     */
-    public Type getParamType(final int index)
-    {
-        assert Types.isFun(type);
-        final Type paramTypeTerm = Types.funParam(type);
+    this.type = type;
+  }
 
-        if (params.size() == 1)
-            return paramTypeTerm;
+  /**
+   * True if any part of our signature carries a declared type.
+   */
+  public boolean hasDeclaredType() {
+    if (declaredResultType != null) return true;
 
-        final List<Type> paramTypeTerms =
-            ((TypeList)Types.tupMembers(paramTypeTerm).deref()).getItems();
+    for (final ParamBinding param : params.values())
+      if (param.hasDeclaredType()) return true;
 
-        return paramTypeTerms.get(index);
+    return false;
+  }
 
-    }
+  public Type getDeclaredType() {
+    return hasDeclaredType() ? signatureType : null;
+  }
 
-    public Type getDeclaredResultType()
-    {
-        return declaredResultType;
-    }
+  public void setDeclaredType(final Type type) {
+    assert hasDeclaredType() :
+        "Signature.setDeclaredType() w/o declaredType in original";
 
-    public Map<String, TypeParam> getTypeParamDecls()
-    {
-        return typeParamDecls;
-    }
+    signatureType = type;
+  }
 
-    public Type getType()
-    {
-        return type;
-    }
-
-    public void setType(final Type type)
-    {
-        if (!Types.isFun(type))
-            throw new IllegalArgumentException("LambdaTerm type must be function type");
-
-        this.type = type;
-    }
-
-    /**
-     * True if any part of our signature carries a declared type.
-     */
-    public boolean hasDeclaredType()
-    {
-        if (declaredResultType != null)
-            return true;
-
-        for (final ParamBinding param : params.values())
-            if (param.hasDeclaredType())
-                return true;
-
-        return false;
-    }
-
-    public Type getDeclaredType()
-    {
-        return hasDeclaredType() ? signatureType : null;
-    }
-
-    public void setDeclaredType(final Type type)
-    {
-        assert hasDeclaredType() :
-            "Signature.setDeclaredType() w/o declaredType in original";
-
-        signatureType = type;
-    }
-
-    public Map<String, ParamBinding> getParams()
-    {
-        assert params != null : "null params in signature?";
-        return params;
-    }
+  public Map<String, ParamBinding> getParams() {
+    assert params != null : "null params in signature?";
+    return params;
+  }
 }

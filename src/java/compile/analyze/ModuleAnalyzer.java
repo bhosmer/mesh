@@ -29,41 +29,30 @@ public final class ModuleAnalyzer
      */
     public static boolean analyze(final Module module)
     {
-        // setup namespaces and import symbols and types
-        if (!new ImportResolver(module).resolve())
-            return false;
+        return
+            // setup namespaces and import symbols and types
+            new ImportResolver(module).resolve() &&
 
-        // collect value bindings, type bindings, module imports
-        if (!new BindingCollector(module).collect())
-            return false;
-        
-        // setup export list
-        if (!new ExportProcessor(module).resolve())
-            return false;
+            // collect value bindings, type bindings, module imports
+            new BindingCollector(module).collect() &&
 
-        // resolve names
-        if (!new RefResolver(module).resolve())
-            return false;
+            // setup export list
+            new ExportProcessor(module).resolve() &&
 
-        // check forward references
-        if (!new RefChecker(module).check())
-            return false;
+            // resolve names
+            new RefResolver(module).resolve() &&
 
-        // infer and check types
-        if (!new TypeChecker(module).check())
-            return false;
+            // check forward references
+            new RefChecker(module).check() &&
 
-        //
-        // post-typecheck optimizations:
-        //
+            // infer and check types
+            new TypeChecker(module).check() &&
 
-        // constant folding/propagation
-        if (!new ConstantReducer(module).reduce())
-            return false;
+            //
+            // post-typecheck optimizations
+            //
 
-        // TODO inlining, etc. etc.
-
-
-        return true;
+            // constant folding/propagation
+            new ConstantReducer(module).reduce();
     }
 }

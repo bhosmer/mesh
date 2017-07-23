@@ -177,7 +177,7 @@ converge(func, init)
  *        be fed back into the function if guard predicate is still true.
  * @return Value of v when predicate is false.
  */
-intrinsic <T> cycle(v : T, p : T -> Bool, f : T -> T) -> T;
+intrinsic <T> cycle(v: T, p: T -> Bool, f: T -> T) -> T;
 
 /**
  * Iterate on a function n times.
@@ -236,7 +236,7 @@ intrinsic <A, B> for(indexes : [A], body : A -> B) -> ();
  * iter is degenerate while. Execute the predicate until it produces a false value.
  * @param p predicate for empty while loop
  */
-iter(p : () -> Bool) -> ()
+iter(p: () -> Bool) -> ()
 {
     while(p, {()})
 };
@@ -267,7 +267,7 @@ intrinsic <A, B, C> mapred(f : (A, B) -> A, v : A, l : [C], m : C -> B) -> A;
  */
 pfiltern(list, pred, n)
 {
-    flatten(chunks(list, n) |: { filter($0, pred) })
+    flatten(chunks(list, n) |: { filter(_, pred) })
 };
 
 /**
@@ -287,7 +287,7 @@ intrinsic <X, Y> pfor(x : [X], y : X -> Y) -> ();
  */
 <A, B> pforn(list : [A], f : A -> B, n : Int) -> ()
 {
-    pfor(chunks(list, n), { for($0, f) })
+    pfor(chunks(list, n), { for(_, f) })
 };
 
 /**
@@ -306,7 +306,7 @@ intrinsic <X, Y> pfor(x : [X], y : X -> Y) -> ();
  */
 <A> preducen(f : (A, A) -> A, v : A, l : [A], n : Int) -> A
 {
-    reduce(f, v, chunks(l, n) |: { reduce(f, v, $0) })
+    reduce(f, v, chunks(l, n) |: { reduce(f, v, _) })
 };
 
 /**
@@ -319,7 +319,7 @@ intrinsic <X, Y> pfor(x : [X], y : X -> Y) -> ();
 <T> pwheren(list : [T], pred : T -> Bool, ntasks : Int) -> [Int]
 {
     cps = cutpoints(list, ntasks);
-    ixs = zip(cut(list, cps), cps) |: { where($0, pred) @+ $1 };
+    ixs = zip(cut(list, cps), cps) |: { where(_.0, pred) @+ _.1 };
     flatten(ixs)
 };
 
@@ -388,7 +388,7 @@ tconverge(func, init)
  */
 trace(v, p, f)
 {
-    cycle([v], last $ p, { append($0, f(last($0))) })
+    cycle([v], last $ p, { append(_, f(last(_))) })
 };
 
 /**
@@ -401,7 +401,7 @@ trace(v, p, f)
  */
 tracen(v, n, f)
 {
-    cyclen([v], n, { append($0, f(last($0))) })
+    cyclen([v], n, { append(_, f(last(_))) })
 };
 
 /**
@@ -424,10 +424,14 @@ intrinsic <T> while(pred : () -> Bool, b : () -> T) -> ();
  * @return value returned by f when called with arg x
  * @code apply(round, 4.2) //returns 4 @endcode
  */
+/*
 <A, B> apply(f : A -> B, x : A) -> B
 {
     f(x)
 };
+*/
+
+apply = { _.0(_.1) };
 
 /**
  * compose two functions. aliased to infix ($)
@@ -440,7 +444,7 @@ intrinsic <T> while(pred : () -> Bool, b : () -> T) -> ();
  */
 <A, B, C> compose(f : A -> B, g : B -> C) -> (A -> C)
 {
-    { g(f($0)) }
+    { g(f(_)) }
 };
 
 /**
@@ -583,7 +587,7 @@ intrinsic <X, Y> pmap(x : [X], y : X -> Y) -> [Y];
  */
 pmapn(list, f, n)
 {
-    flatten(chunks(list, n) |: { $0 | f })
+    flatten(chunks(list, n) |: { _ | f })
 };
 
 /**
@@ -615,7 +619,7 @@ memo(f)
     { a =>
         if(iskey(*m, a), { (*m)[a] }, {
             v = f(a);
-            m <- { mapset($0, a, v) };
+            m <- { mapset(_, a, v) };
             v
         })
     }
@@ -1627,7 +1631,7 @@ eachpair(init, f, args)
  */
 edges(list)
 {
-    [0] + filter(drop(1, index(list)), { list[$0 - 1] != list[$0] })
+    [0] + filter(drop(1, index(list)), { list[_ - 1] != list[_] })
 };
 
 /**
@@ -1801,7 +1805,7 @@ ppart(vals, f)
  */
 ppartn(vals, f, n)
 {
-    group(flatten(chunks(vals, n) |: { $0 | f }), vals)
+    group(flatten(chunks(vals, n) |: { _ | f }), vals)
 };
 
 /**
@@ -1842,7 +1846,7 @@ intrinsic <T> rep(x:Int, y:T) -> [T];
  */
 reverse(list) {
     n = size(list);
-    index(list) | { list[n - 1 - $0] }
+    index(list) | { list[n - 1 - _] }
 };
 
 /**
@@ -1866,7 +1870,7 @@ rotate(list, n)
  */
 runlens(list)
 {
-    eachpair(0, { $1 - $0 }, drop(1, append(edges(list), size(list))))
+    eachpair(0, { _.1 - _.0 }, drop(1, append(edges(list), size(list))))
 };
 
 /**
@@ -1974,10 +1978,7 @@ avg(lst)
  * @param is list of integers
  * @return product of elements in list
  */
-product(is : [Int]) -> Int
-{
-    reduce((*), 1, is)
-};
+product: [Int] -> Int = { reduce((*), 1, _) };
 
 /**
  * Running total of a list of integers. E.g.,
@@ -1985,10 +1986,7 @@ product(is : [Int]) -> Int
  * @param is list of integers
  * @return list of running total of input
  */
-runtot(is : [Int]) -> [Int]
-{
-    drop(1, scan((+), 0, is))
-};
+runtot: [Int] -> [Int] = { drop(1, scan((+), 0, _)) };
 
 /**
  * Sum of a list of integers. E.g.,
@@ -1996,10 +1994,7 @@ runtot(is : [Int]) -> [Int]
  * @param is list of integers
  * @return sum of list elements
  */
-sum(is : [Int]) -> Int
-{
-    reduce((+), 0, is)
-};
+sum: [Int] -> Int = { reduce((+), 0, _) };
 
 // --------------------------------------------------------------------------
 
@@ -2069,10 +2064,7 @@ fsum(fs : [Double]) -> Double
  * @return true iff any value in the given list
  * satisfies the given predicate (shortcuts).
  */
-any(vals, pred)
-{
-    evolve_while(not, false, { _, v => pred(v) }, vals)
-};
+any = { xs, p => evolve_while(not, false, { p(_.1) }, xs) };
 
 /**
  *  Is predicate true for all values in a list?
@@ -2087,10 +2079,7 @@ any(vals, pred)
  * @return true iff all values in the given list
  * satisfy the given predicate (shortcuts).
  */
-all(vals, pred)
-{
-    evolve_while(id, true, { _, v => pred(v) }, vals)
-};
+all = { xs, p => evolve_while (id, true, { p(_.1) }, xs) };
 
 /**
  * set intersection on lists
@@ -2101,7 +2090,7 @@ all(vals, pred)
 intersection(list1, list2)
 {
     map2 = assoc(list2, [()]);
-    unique(filter(list1, { iskey(map2, $0) }))
+    unique(filter(list1, { iskey(map2, _) }))
 };
 
 /**
@@ -2109,7 +2098,7 @@ intersection(list1, list2)
  * @param b list of values
  * @return true if lists a and b are permutations of each other
  */
-isperm(a, b) { counts(a) == counts(b) };
+isperm = { counts(_.0) == counts(_.1) };
 
 /**
  * directional set difference on lists
@@ -2120,7 +2109,7 @@ isperm(a, b) { counts(a) == counts(b) };
 difference(list1, list2)
 {
     map2 = assoc(list2, [()]);
-    unique(filter(list1, { !iskey(map2, $0) }))
+    unique(filter(list1, { !iskey(map2, _) }))
 };
 
 /**
@@ -2256,7 +2245,7 @@ mapgetd(map, key, default)
 cross(xs, ys)
 {
     xn = size(xs);
-    flatten(ys | { zip(xs, rep(xn, $0)) })
+    flatten(ys | { zip(xs, rep(xn, _)) })
 };
 
 /**
@@ -2271,17 +2260,14 @@ cross(xs, ys)
  */
 <A, B, C> fan(f : A -> B, g : A -> C) -> A -> (B, C)
 {
-    { (f($0), g($0)) }
+    { (f(_), g(_)) }
 };
 
 /**
  * @param p tuple value
  * @return returns the value in the tuple at position 0
  */
-<A, B> fst(p:(A, B)) -> A
-{
-    p.0
-};
+fst = { _.0 };
 
 /**
  * Given two functions, produce a function that takes a pair of inputs
@@ -2295,26 +2281,20 @@ cross(xs, ys)
  */
 <A, B, C, D> fuse(f : A -> B, g : C -> D) -> (A, C) -> (B, D)
 {
-    { (f($0), g($1)) }
+    { (f(_.0), g(_.1)) }
 };
 
 /**
  * @param p tuple value
  * @return returns the value in the tuple at position 1
  */
-<A, B> snd(p:(A, B)) -> B
-{
-    p.1
-};
+snd = { _.1 };
 
 /**
  * @param value
  * @return a two-tuple containing "twins" of value.
  */
-<A> twin(v : A) -> (A, A)
-{
-    (v, v)
-};
+twin = { (_, _) };
 
 // ------------------------------------------------------------------
 
@@ -2725,7 +2705,7 @@ taut(bs, p, f)
 dep(src, f)
 {
     sink = box(f(get(src)));
-    react(src, { put(sink, f($0)) });
+    react(src, { put(sink, f(_)) });
     sink
 };
 
