@@ -20,7 +20,9 @@ clover_**
 .DS_Store
 
 # IJ workspace state
+.idea/**
 *.iws
+*.iml
 
 # compiled classes
 classes/**
@@ -33,3 +35,6 @@ gen/**
 
 # built jars
 mesh.jar
+
+# build artifacts
+out/**
