@@ -24,6 +24,11 @@ public final class SubsumptionConstraint implements Constraint
 
     // Constraint
 
+    @Override public Type getType()
+    {
+        return type;
+    }
+
     public Pair<? extends Constraint, SubstMap> merge(
         final Constraint constraint, final TypeEnv env)
     {
@@ -133,7 +138,7 @@ public final class SubsumptionConstraint implements Constraint
         if (Session.isDebug())
             Session.debug(loc, "({0}).satisfy({1})", dump(), other.dump());
 
-        return other.subsume(loc, type, env);
+        return other.subsume(loc, type.deref(), env);
     }
 
     public Constraint subst(final SubstMap substMap)

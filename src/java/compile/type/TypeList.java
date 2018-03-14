@@ -2,7 +2,7 @@
  * ADOBE SYSTEMS INCORPORATED
  * Copyright 2009-2013 Adobe Systems Incorporated
  * All Rights Reserved.
- *
+ * <p>
  * NOTICE: Adobe permits you to use, modify, and distribute
  * this file in accordance with the terms of the MIT license,
  * a copy of which can be found in the LICENSE.txt file or at
@@ -21,6 +21,8 @@ import compile.type.visit.SubstMap;
 import compile.type.visit.TypeVisitor;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,329 +32,327 @@ import java.util.List;
  */
 public final class TypeList extends NonScopeType
 {
-    private final List<Type> items;
+  private final List<Type> items;
 
-    public TypeList(final Loc loc, final List<Type> items)
+  public TypeList(final Loc loc, final Collection<Type> items)
+  {
+    super(loc);
+    this.items = items instanceof List ? (List<Type>)items : new ArrayList<Type>(items);
+  }
+
+  public List<Type> getItems()
+  {
+    return items;
+  }
+
+  // Type
+
+  /**
+   * TODO This is here to support demos and is horribly inefficient
+   * TODO and duplicative.
+   * TODO Transitive eval/deref needs to be (a) implemented properly,
+   * TODO (b) be merged with reducer and/or (c) implemented for all
+   * TODO type terms. Type system needs a housecleaning in general.
+   */
+  public Type eval()
+  {
+    List<Type> newItems = null;
+
+    final int size = items.size();
+    for (int i = 0; i < size; i++)
     {
-        super(loc);
-        this.items = items;
+      final Type item = items.get(i);
+      final Type itemEval = item.deref().eval();
+
+      if (item != itemEval)
+      {
+        if (newItems == null)
+          newItems = new ArrayList<Type>(items);
+
+        newItems.set(i, itemEval);
+      }
     }
 
-    public List<Type> getItems()
+    return newItems == null ? this : new TypeList(loc, newItems);
+  }
+
+  public Kind getKind()
+  {
+    return Kinds.STAR_LIST;
+  }
+
+  /**
+   * TODO associate TypeAbs-specific matching with the TypeAbs itself
+   */
+  public SubstMap unify(final Loc loc, final Type other, final TypeEnv env)
+  {
+    if (other instanceof TypeVar)
+      return SubstMap.bindVar(loc, (TypeVar) other, this, env);
+
+    final Type otherEval = other.deref().eval();
+
+    if (otherEval instanceof TypeList)
     {
-        return items;
-    }
+      // both sides are explicit type lists, unify item by item:
 
-    // Type
+      // A <=> X, B <=> Y, C <=> Z
+      // ------------------
+      // [A,B,C] <=> [X,Y,Z]
 
-    /**
-     * TODO This is here to support demos and is horribly inefficient
-     * TODO and duplicative.
-     * TODO Transitive eval/deref needs to be (a) implemented properly,
-     * TODO (b) be merged with reducer and/or (c) implemented for all
-     * TODO type terms. Type system needs a housecleaning in general.
-     */
-    public Type eval()
+      final TypeList otherList = (TypeList) otherEval;
+
+      final List<Type> otherItems = otherList.getItems();
+
+      return items.size() == otherItems.size() ? unifyRange(otherItems, env) :
+          null;
+    } else if (Types.isApp(otherEval) && otherEval.getKind() == Kinds.STAR_LIST)
     {
-        List<Type> newItems = null;
+      // here we try to unify against type applications yielding type lists
 
-        final int size = items.size();
-        for (int i = 0; i < size; i++)
+      final TypeApp app = (TypeApp) otherEval;
+      final Type base = app.getBase();
+
+      if (base == Types.TMAP)
+      {
+        // other type is type-level map expr
+        // if our elements can all be expressed as applications of
+        // a particular type constructor, then we can be expressed
+        // as a map operation over that TC.
+
+        // A <=> TC(a), B <=> TC(b), C <=> TC(c), ...
+        // ---------------------------------------
+        // [A,B,C,...] <=> [a,b,c,...] | TC
+
+        final Type tlist = Types.tmapList(app);
+        final Type tcon = Types.tmapCons(app);
+
+        final List<Type> argVars = new ArrayList<Type>();
+
+        SubstMap subst = SubstMap.EMPTY;
+
+        for (final Type item : items)
         {
-            final Type item = items.get(i);
-            final Type itemEval = item.deref().eval();
+          // fresh var to unify with TC arg
+          final TypeVar argVar = env.freshVar(item.getLoc(), Kinds.STAR);
+          argVars.add(argVar);
 
-            if (item != itemEval)
-            {
-                if (newItems == null)
-                    newItems = new ArrayList<Type>(items);
+          // build target item to unify with TODO reexamine deref/eval
+          final Type targetItem =
+              Types.app(item.getLoc(), tcon, argVar).deref().eval();
 
-                newItems.set(i, itemEval);
-            }
+          // attempt to unify
+          final SubstMap itemSubst =
+              item.subst(subst).unify(loc, targetItem.subst(subst), env);
+
+          if (itemSubst == null)
+            return null;
+
+          subst = subst.compose(loc, itemSubst);
         }
 
-        return newItems == null ? this : new TypeList(loc, newItems);
-    }
+        // arg to map operation is list of args to TC
+        final TypeList argList = new TypeList(loc, argVars);
 
-    public Kind getKind()
-    {
-        return Kinds.STAR_LIST;
-    }
+        // note: should work if items worked
+        final SubstMap listSubst =
+            argList.subst(subst).unify(loc, tlist.subst(subst), env);
 
-    /**
-     * TODO associate TypeAbs-specific matching with the TypeAbs itself
-     */
-    public SubstMap unify(final Loc loc, final Type other, final TypeEnv env)
-    {
-        if (other instanceof TypeVar)
-            return SubstMap.bindVar(loc, (TypeVar)other, this, env);
+        return listSubst == null ? null : subst.compose(loc, listSubst);
+      }
+      else if (base == Types.CONE)
+      {
+        // other type is cone expr
+        // if our elements can all be expressed as function types
+        // with a particular codomain, then we can be expressed as
+        // a cone over the list of domains and that codomain.
 
-        final Type otherEval = other.deref().eval();
+        // A <=> a->X, B <=> b->X, C <=> c->X, ...
+        // --------------------------------------------
+        // [A->X,B->X,C->X,...] <=> Cone([a,b,c,...],X)
 
-        if (otherEval instanceof TypeList)
+        final Type doms = Types.coneDomains(app);
+        final Type cod = Types.coneCodomain(app);
+
+        final List<Type> domVars = new ArrayList<Type>();
+        final TypeVar codVar = env.freshVar(cod.getLoc(), Kinds.STAR);
+
+        SubstMap subst = SubstMap.EMPTY;
+
+        for (final Type item : items)
         {
-            // both sides are explicit type lists, unify item by item:
+          // fresh var to unify with domain
+          final TypeVar domVar = env.freshVar(item.getLoc(), Kinds.STAR);
+          domVars.add(domVar);
 
-            // A <=> X, B <=> Y, C <=> Z
-            // ------------------
-            // [A,B,C] <=> [X,Y,Z]
+          // build target dv -> cv item to unify with TODO reexamine deref/eval
+          final Type targetItem =
+              Types.fun(item.getLoc(), domVar, codVar).deref().eval();
 
-            final TypeList otherList = (TypeList)otherEval;
+          // attempt to unify
+          final SubstMap itemSubst =
+              item.subst(subst).unify(loc, targetItem.subst(subst), env);
 
-            final List<Type> otherItems = otherList.getItems();
+          if (itemSubst == null)
+            return null;
 
-            return items.size() == otherItems.size() ?
-                unifyRange(otherItems, env) :
-                null;
-        }
-        else if (Types.isApp(otherEval) && otherEval.getKind() == Kinds.STAR_LIST)
-        {
-            // here we try to unify against type applications yielding type lists
-
-            final TypeApp app = (TypeApp)otherEval;
-            final Type base = app.getBase();
-
-            if (base == Types.TMAP)
-            {
-                // other type is type-level map expr
-                // if our elements can all be expressed as applications of
-                // a particular type constructor, then we can be expressed
-                // as a map operation over that TC.
-
-                // A <=> TC(a), B <=> TC(b), C <=> TC(c), ...
-                // ---------------------------------------
-                // [A,B,C,...] <=> [a,b,c,...] | TC
-
-                final Type tlist = Types.tmapList(app);
-                final Type tcon = Types.tmapCons(app);
-
-                final List<Type> argVars = new ArrayList<Type>();
-
-                SubstMap subst = SubstMap.EMPTY;
-
-                for (final Type item : items)
-                {
-                    // fresh var to unify with TC arg
-                    final TypeVar argVar = env.freshVar(item.getLoc(), Kinds.STAR);
-                    argVars.add(argVar);
-
-                    // build target item to unify with TODO reexamine deref/eval
-                    final Type targetItem =
-                        Types.app(item.getLoc(), tcon, argVar).deref().eval();
-
-                    // attempt to unify
-                    final SubstMap itemSubst =
-                        item.subst(subst).unify(loc, targetItem.subst(subst), env);
-
-                    if (itemSubst == null)
-                        return null;
-
-                    subst = subst.compose(loc, itemSubst);
-                }
-
-                // arg to map operation is list of args to TC
-                final TypeList argList = new TypeList(loc, argVars);
-
-                // note: should work if items worked
-                final SubstMap listSubst =
-                    argList.subst(subst).unify(loc, tlist.subst(subst), env);
-
-                return listSubst == null ? null : subst.compose(loc, listSubst);
-            }
-            else if (base == Types.CONE)
-            {
-                // other type is cone expr
-                // if our elements can all be expressed as function types
-                // with a particular codomain, then we can be expressed as
-                // a cone over the list of domains and that codomain.
-
-                // A <=> a->X, B <=> b->X, C <=> c->X, ...
-                // --------------------------------------------
-                // [A->X,B->X,C->X,...] <=> Cone([a,b,c,...],X)
-
-                final Type doms = Types.coneDomains(app);
-                final Type cod = Types.coneCodomain(app);
-
-                final List<Type> domVars = new ArrayList<Type>();
-                final TypeVar codVar = env.freshVar(cod.getLoc(), Kinds.STAR);
-
-                SubstMap subst = SubstMap.EMPTY;
-
-                for (final Type item : items)
-                {
-                    // fresh var to unify with domain
-                    final TypeVar domVar = env.freshVar(item.getLoc(), Kinds.STAR);
-                    domVars.add(domVar);
-
-                    // build target dv -> cv item to unify with TODO reexamine deref/eval
-                    final Type targetItem =
-                        Types.fun(item.getLoc(), domVar, codVar).deref().eval();
-
-                    // attempt to unify
-                    final SubstMap itemSubst =
-                        item.subst(subst).unify(loc, targetItem.subst(subst), env);
-
-                    if (itemSubst == null)
-                        return null;
-
-                    subst = subst.compose(loc, itemSubst);
-                }
-
-                // first arg to cone TC is list of domains
-                final TypeList domList = new TypeList(loc, domVars);
-
-                // note: should work if items worked
-                final SubstMap domsSubst =
-                    domList.subst(subst).unify(loc, doms.subst(subst), env);
-
-                return domsSubst == null ? null : subst.compose(loc, domsSubst);
-            }
+          subst = subst.compose(loc, itemSubst);
         }
 
+        // first arg to cone TC is list of domains
+        final TypeList domList = new TypeList(loc, domVars);
+
+        // note: should work if items worked
+        final SubstMap domsSubst =
+            domList.subst(subst).unify(loc, doms.subst(subst), env);
+
+        return domsSubst == null ? null : subst.compose(loc, domsSubst);
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * unify a range of our list against an entire other list.
+   */
+  private SubstMap unifyRange(final List<Type> list, final TypeEnv env)
+  {
+    final int listSize = list.size();
+
+    if (listSize > items.size())
+      return null;
+
+    SubstMap subst = SubstMap.EMPTY;
+
+    for (int i = 0; i < listSize; i++)
+    {
+      final Type item = items.get(i);
+      final Type otherItem = list.get(i);
+
+      final SubstMap itemSubst =
+          item.subst(subst).unify(loc, otherItem.subst(subst), env);
+
+      if (itemSubst == null)
         return null;
+
+      subst = subst.compose(loc, itemSubst);
     }
 
-    /**
-     * unify a range of our list against an entire other list.
-     */
-    private SubstMap unifyRange(final List<Type> list, final TypeEnv env)
+    return subst;
+  }
+
+  /**
+   * return substitution if we contain at least as many items as another
+   * type list, and all overlapping items are unifiable with each other.
+   * otherwise null
+   */
+  public SubstMap subsume(final Loc loc, final Type type, final TypeEnv env)
+  {
+    if (!(type instanceof TypeList))
     {
-        final int listSize = list.size();
-
-        if (listSize > items.size())
-            return null;
-
-        SubstMap subst = SubstMap.EMPTY;
-
-        for (int i = 0; i < listSize; i++)
-        {
-            final Type item = items.get(i);
-            final Type otherItem = list.get(i);
-
-            final SubstMap itemSubst =
-                item.subst(subst).unify(loc, otherItem.subst(subst), env);
-
-            if (itemSubst == null)
-                return null;
-
-            subst = subst.compose(loc, itemSubst);
-        }
-
-        return subst;
+      Session.error("TypeList.subsume(): non-TypeList arg: {0}", type.dump());
+      return null;
     }
 
-    /**
-     * return substitution if we contain at least as many items as another
-     * type list, and all overlapping items are unifiable with each other.
-     * otherwise null
-     */
-    public SubstMap subsume(final Loc loc, final Type type, final TypeEnv env)
+    final TypeList list = (TypeList) type;
+
+    if (items.size() < list.getItems().size())
+      return null;
+
+    SubstMap subst = SubstMap.EMPTY;
+
+    int i = 0;
+    for (final Type listItem : list.getItems())
     {
-        if (!(type instanceof TypeList))
-        {
-            Session.error("TypeList.subsume(): non-TypeList arg: {0}", type.dump());
-            return null;
-        }
+      final Type item = items.get(i++);
 
-        final TypeList list = (TypeList)type;
+      final SubstMap itemSubst =
+          item.subst(subst).unify(loc, listItem.subst(subst), env);
 
-        if (items.size() < list.getItems().size())
-            return null;
+      if (itemSubst == null)
+        return null;
 
-        SubstMap subst = SubstMap.EMPTY;
-
-        int i = 0;
-        for (final Type listItem : list.getItems())
-        {
-            final Type item = items.get(i++);
-
-            final SubstMap itemSubst =
-                item.subst(subst).unify(loc, listItem.subst(subst), env);
-
-            if (itemSubst == null)
-                return null;
-
-            subst = subst.compose(loc, itemSubst);
-        }
-
-        return subst;
+      subst = subst.compose(loc, itemSubst);
     }
 
-    /**
-     * return pair of merged type list and substitution map, if
-     * we can be merged successfully with another type list.,
-     * otherwise null
-     */
-    public Pair<TypeList, SubstMap> merge(final TypeList list, final TypeEnv env)
+    return subst;
+  }
+
+  /**
+   * return pair of merged type list and substitution map, if
+   * we can be merged successfully with another type list.,
+   * otherwise null
+   */
+  public Pair<TypeList, SubstMap> merge(final TypeList list, final TypeEnv env)
+  {
+    SubstMap subst = SubstMap.EMPTY;
+
+    final List<Type> resultItems = Lists.newArrayList(items);
+    final int n = items.size();
+
+    int i = 0;
+    for (final Type listItem : list.getItems())
     {
-        SubstMap subst = SubstMap.EMPTY;
+      if (i < n)
+      {
+        final Type resultItem = resultItems.get(i++);
 
-        final List<Type> resultItems = Lists.newArrayList(items);
-        final int n = items.size();
+        final SubstMap memberSubst =
+            resultItem.subst(subst).unify(loc, listItem.subst(subst), env);
 
-        int i = 0;
-        for (final Type listItem : list.getItems())
-        {
-            if (i < n)
-            {
-                final Type resultItem = resultItems.get(i++);
+        if (memberSubst == null)
+          return null;
 
-                final SubstMap memberSubst =
-                    resultItem.subst(subst).unify(loc, listItem.subst(subst), env);
-
-                if (memberSubst == null)
-                    return null;
-
-                subst = subst.compose(loc, memberSubst);
-            }
-            else
-            {
-                resultItems.add(listItem);
-            }
-        }
-
-        return Pair.create(new TypeList(loc, resultItems), subst);
+        subst = subst.compose(loc, memberSubst);
+      } else
+      {
+        resultItems.add(listItem);
+      }
     }
 
-    public <T> T accept(final TypeVisitor<T> visitor)
+    return Pair.create(new TypeList(loc, resultItems), subst);
+  }
+
+  public <T> T accept(final TypeVisitor<T> visitor)
+  {
+    return visitor.visit(this);
+  }
+
+  public boolean equiv(final Type other, final EquivState state)
+  {
+    final Type otherDeref = other.deref();
+
+    if (otherDeref instanceof TypeList)
     {
-        return visitor.visit(this);
+      final TypeList otherList = (TypeList) otherDeref;
+
+      for (int i = 0; i < items.size(); i++)
+        if (!items.get(i).equiv(otherList.getItems().get(i), state))
+          return false;
+
+      return true;
     }
 
-    public boolean equiv(final Type other, final EquivState state)
-    {
-        final Type otherDeref = other.deref();
+    return false;
+  }
 
-        if (otherDeref instanceof TypeList)
-        {
-            final TypeList otherList = (TypeList)otherDeref;
+  @Override public boolean equals(final Object obj)
+  {
+    if (this == obj)
+      return true;
+    if (obj == null || getClass() != obj.getClass())
+      return false;
 
-            for (int i = 0; i < items.size(); i++)
-                if (!items.get(i).equiv(otherList.getItems().get(i), state))
-                    return false;
+    final TypeList typeList = (TypeList) obj;
 
-            return true;
-        }
+    if (!items.equals(typeList.items))
+      return false;
 
-        return false;
-    }
+    return true;
+  }
 
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        final TypeList typeList = (TypeList)obj;
-
-        if (!items.equals(typeList.items)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return items.hashCode();
-    }
+  @Override public int hashCode()
+  {
+    return items.hashCode();
+  }
 }

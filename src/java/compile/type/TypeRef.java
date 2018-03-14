@@ -2,7 +2,7 @@
  * ADOBE SYSTEMS INCORPORATED
  * Copyright 2009-2013 Adobe Systems Incorporated
  * All Rights Reserved.
- *
+ * <p>
  * NOTICE: Adobe permits you to use, modify, and distribute
  * this file in accordance with the terms of the MIT license,
  * a copy of which can be found in the LICENSE.txt file or at
@@ -11,6 +11,7 @@
 package compile.type;
 
 import compile.Loc;
+import compile.Session;
 import compile.term.TypeBinding;
 import compile.term.TypeDef;
 import compile.type.kind.Kind;
@@ -25,135 +26,137 @@ import compile.type.visit.TypeVisitor;
  */
 public final class TypeRef extends ScopeType
 {
-    private final String name;
-    private TypeBinding binding;
+  private final String name;
+  private TypeBinding binding;
 
-    private TypeRef(final Loc loc, final String name, final TypeBinding binding)
-    {
-        super(loc);
-        this.name = name;
-        this.binding = binding;
-    }
+  private TypeRef(final Loc loc, final String name, final TypeBinding binding)
+  {
+    super(loc);
+    this.name = name;
+    this.binding = binding;
+  }
 
-    public TypeRef(final Loc loc, final String name)
-    {
-        this(loc, name, null);
-    }
+  public TypeRef(final Loc loc, final String name)
+  {
+    this(loc, name, null);
+  }
 
-    public TypeRef(final Loc loc, final TypeParam param)
-    {
-        this(loc, param.getName(), param);
-    }
+  public TypeRef(final Loc loc, final TypeParam param)
+  {
+    this(loc, param.getName(), param);
+  }
 
-    public TypeRef(final Loc loc, final TypeDef binding)
-    {
-        this(loc, binding.getName(), binding);
-    }
+  public TypeRef(final Loc loc, final TypeDef binding)
+  {
+    this(loc, binding.getName(), binding);
+  }
 
-    public String getName()
-    {
-        return name;
-    }
+  public String getName()
+  {
+    return name;
+  }
 
-    public TypeBinding getBinding()
-    {
-        return binding;
-    }
+  public TypeBinding getBinding()
+  {
+    return binding;
+  }
 
-    public void setBinding(final TypeBinding binding)
-    {
-        assert !isResolved();
-        this.binding = binding;
-    }
+  public void setBinding(final TypeBinding binding)
+  {
+    assert !isResolved();
+    this.binding = binding;
+  }
 
-    /**
-     * patch our current resolved type param to point to another, equivalent object.
-     */
-    public void patchInlineParam(final TypeParam param)
-    {
-        assert name.equals(param.getName());
-        assert binding instanceof TypeParam;
-        assert ((TypeParam)binding).getTypeScope() == param.getTypeScope();
+  /**
+   * patch our current resolved type param to point to another, equivalent object.
+   */
+  public void patchInlineParam(final TypeParam param)
+  {
+    assert name.equals(param.getName());
+    assert binding instanceof TypeParam;
+    assert ((TypeParam) binding).getTypeScope() == param.getTypeScope();
 
-        this.binding = param;
-    }
+    this.binding = param;
+  }
 
-    public boolean isResolved()
-    {
-        return binding != null;
-    }
+  public boolean isResolved()
+  {
+    return binding != null;
+  }
 
-    public boolean isParamRef()
-    {
-        return binding instanceof TypeParam;
-    }
+  public boolean isParamRef()
+  {
+    return binding instanceof TypeParam;
+  }
 
-    // Type
+  // Type
 
-    public Kind getKind()
-    {
-        return binding != null ? binding.getKind() : null;
-    }
+  public Kind getKind()
+  {
+    return binding != null ? binding.getKind() : null;
+  }
 
-    public Type deref()
-    {
-        return isResolved() ? binding.deref() : null;
-    }
+  public Type deref()
+  {
+    if (!isResolved())
+      Session.error("internal error: unresolved TypeRef {0}", dump());
 
-    public SubstMap unify(final Loc loc, final Type other, final TypeEnv env)
-    {
-        assert isResolved();
+    return isResolved() ? binding.deref() : null;
+  }
 
-        if (env.checkVisited(this, other))
-            return SubstMap.EMPTY;
+  public SubstMap unify(final Loc loc, final Type other, final TypeEnv env)
+  {
+    assert isResolved();
 
-        return equals(other) ?
-            SubstMap.EMPTY : getBinding().unify(loc, other, env);
-    }
+    if (env.checkVisited(this, other))
+      return SubstMap.EMPTY;
 
-    public SubstMap subsume(final Loc loc, final Type type, final TypeEnv env)
-    {
-        assert isResolved();
+    return equals(other) ? SubstMap.EMPTY : getBinding().unify(loc, other, env);
+  }
 
-        if (env.checkVisited(this, type))
-            return SubstMap.EMPTY;
+  public SubstMap subsume(final Loc loc, final Type type, final TypeEnv env)
+  {
+    assert isResolved();
 
-        return equals(type) ?
-            SubstMap.EMPTY : getBinding().subsume(loc, type, env);
-    }
+    if (env.checkVisited(this, type))
+      return SubstMap.EMPTY;
 
-    public boolean equiv(final Type other, final EquivState state)
-    {
-        assert isResolved();
-        return state.checkVisited(this, other) ||
-            getBinding().equiv(other, state);
-    }
+    return equals(type) ? SubstMap.EMPTY : getBinding().subsume(loc, type, env);
+  }
 
-    public <T> T accept(final TypeVisitor<T> visitor)
-    {
-        return visitor.visit(this);
-    }
+  public boolean equiv(final Type other, final EquivState state)
+  {
+    assert isResolved();
+    return state.checkVisited(this, other) || getBinding().equiv(other, state);
+  }
 
-    // Object
+  public <T> T accept(final TypeVisitor<T> visitor)
+  {
+    return visitor.visit(this);
+  }
 
-    @Override
-    public boolean equals(final Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  // Object
 
-        final TypeRef typeRef = (TypeRef)o;
+  @Override public boolean equals(final Object o)
+  {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
 
-        if (!name.equals(typeRef.name)) return false;
-        if (binding != null ? !binding.equals(typeRef.binding) : typeRef.binding != null)
-            return false;
+    final TypeRef typeRef = (TypeRef) o;
 
-        return true;
-    }
+    if (!name.equals(typeRef.name))
+      return false;
+    if (binding != null ? !binding.equals(typeRef.binding) :
+        typeRef.binding != null)
+      return false;
 
-    @Override
-    public int hashCode()
-    {
-        return name.hashCode();
-    }
+    return true;
+  }
+
+  @Override public int hashCode()
+  {
+    return name.hashCode();
+  }
 }

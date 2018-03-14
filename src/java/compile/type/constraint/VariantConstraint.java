@@ -15,140 +15,139 @@ import java.util.Set;
  */
 public final class VariantConstraint implements Constraint
 {
-    private final Type var;
+  private final Type var;
 
-    // TODO what about non-typemap cases?
-    public VariantConstraint(final TypeMap fields)
+  // TODO what about non-typemap cases?
+  public VariantConstraint(final TypeMap fields)
+  {
+    this.var = Types.var(fields.getLoc(), fields);
+  }
+
+  // Constraint
+
+  @Override public Type getType()
+  {
+    return var;
+  }
+
+  public Pair<? extends Constraint, SubstMap> merge(final Constraint constraint,
+      final TypeEnv env)
+  {
+    if (constraint == Constraint.ANY)
+      return Pair.create(this, SubstMap.EMPTY);
+
+    if (!(constraint instanceof VariantConstraint))
+      return null;
+
+    final VariantConstraint variantConstraint = (VariantConstraint) constraint;
+
+    final TypeMap opts = (TypeMap) Types.varOpts(var);
+    final TypeMap otherOpts = (TypeMap) Types.varOpts(variantConstraint.var);
+
+    // NOTE: reverse order tends to accumulate constraints in code order,
+    // given the polarity of unify() args in type checker. ugh
+    final Pair<TypeMap, SubstMap> merged = otherOpts.merge(opts, env);
+
+    if (merged == null)
+      return null;
+
+    return Pair.create(new VariantConstraint(merged.left), merged.right);
+  }
+
+  public SubstMap satisfy(final Loc loc, final Type type, final TypeEnv env)
+  {
+    if (Session.isDebug())
+      Session.debug(loc, "({0}).satisfy({1})", dump(), type.dump());
+
+    if (!Types.isVar(type))
+      return null;
+
+    final TypeMap opts = (TypeMap) Types.varOpts(var);
+
+    final Type otherOpts = Types.varOpts(type);
+
+    if (otherOpts instanceof TypeMap)
     {
-        this.var = Types.var(fields.getLoc(), fields);
+      return otherOpts.subsume(loc, opts, env);
     }
-
-    // Constraint
-
-    public Pair<? extends Constraint, SubstMap> merge(
-        final Constraint constraint, final TypeEnv env)
+    else if (otherOpts instanceof TypeApp)
     {
-        if (constraint == Constraint.ANY)
-            return Pair.create(this, SubstMap.EMPTY);
+      final TypeApp otherOptsApp = (TypeApp) otherOpts;
+      final Type otherBase = otherOptsApp.getBase();
 
-        if (!(constraint instanceof VariantConstraint))
-            return null;
-
-        final VariantConstraint variantConstraint = (VariantConstraint)constraint;
-
-        final TypeMap opts = (TypeMap)Types.varOpts(var);
-        final TypeMap otherOpts = (TypeMap)Types.varOpts(variantConstraint.var);
-
-        // NOTE: reverse order tends to accumulate constraints in code order,
-        // given the polarity of unify() args in type checker. ugh
-        final Pair<TypeMap, SubstMap> merged = otherOpts.merge(opts, env);
-
-        if (merged == null)
-            return null;
-
-        return Pair.create(new VariantConstraint(merged.left), merged.right);
-    }
-
-    public SubstMap satisfy(final Loc loc, final Type type, final TypeEnv env)
-    {
+      if (!(otherBase instanceof TypeCons))
+      {
         if (Session.isDebug())
-            Session.debug(loc, "({0}).satisfy({1})", dump(), type.dump());
+          Session.debug(loc, "type app otherBase {0} is not a type cons, fail",
+              otherBase.dump());
 
-        if (!Types.isVar(type))
-            return null;
+        return null;
+      }
 
-        final TypeMap opts = (TypeMap)Types.varOpts(var);
+      final TypeCons otherBaseCons = (TypeCons) otherBase;
 
-        final Type otherOpts = Types.varOpts(type);
+      if (otherBaseCons == Types.ASSOC)
+      {
+        final Type assocKey = Types.assocKey(otherOptsApp);
+        final SubstMap keySubst = assocKey.subsume(loc, opts.getKeyType(), env);
 
-        if (otherOpts instanceof TypeMap)
-        {
-            return otherOpts.subsume(loc, opts, env);
-        }
-        else if (otherOpts instanceof TypeApp)
-        {
-            Session.info("TypeApp otherOpts = {0}", otherOpts.dump());
+        if (keySubst == null)
+          return null;
 
-            return otherOpts.subsume(loc, opts, env);
+        final Type assocVals = Types.assocVals(otherOptsApp).subst(keySubst);
+        final SubstMap valsSubst =
+          assocVals.subsume(loc, opts.getValueTypes().subst(keySubst), env);
 
-            /*
-            final TypeApp otherOptsApp = (TypeApp)otherOpts;
-            final Type base = otherOptsApp.getBase();
+        if (valsSubst == null)
+          return null;
 
-            if (!(base instanceof TypeCons))
-            {
-                if (Session.isDebug())
-                    Session.debug(loc, "type app base {0} is not a type cons, fail",
-                        base.dump());
+        return keySubst.compose(loc, valsSubst);
+      }
 
-                return null;
-            }
+      if (Session.isDebug())
+        Session
+            .debug(loc, "type cons {0} is not handled, fail", otherBaseCons.dump());
 
-            final TypeCons baseCons = (TypeCons)base;
-
-            if (baseCons == Types.ASSOC)
-            {
-                final Type assocKey = Types.assocKey(otherOptsApp);
-                final SubstMap keySubst =
-                    assocKey.subsume(opts.getKeyType());
-
-                if (keySubst == null)
-                    return null;
-
-                final Type assocVals = Types.assocVals(otherOptsApp).subst(keySubst);
-                final SubstMap valsSubst =
-                    assocVals.subsume(opts.getValueTypes().subst(keySubst));
-
-                if (valsSubst == null)
-                    return null;
-
-                return keySubst.compose(loc, valsSubst);
-            }
-
-            if (Session.isDebug())
-                Session.debug(loc, "type cons {0} is not handled, fail",
-                    baseCons.dump());
-            */
-        }
-        else
-        {
-            // Note that TypeVar is handled by caller--should probably be handled
-            // in Constraint.satisfy() super-impl instead TODO
-
-            Session.error(loc,
-                "internal error in ({0}).satisfy({1}): : unhandled argument {2} to Var TC ",
-                dump(), type.dump(), otherOpts.dump());
-
-            return null;
-        }
+      return null;
     }
-
-    public Constraint subst(final SubstMap substMap)
+    else
     {
-        final Type opts = Types.varOpts(var);
-        final Type subst = opts.subst(substMap);
+      // Note that TypeVar is handled by caller--should probably be handled
+      // in Constraint.satisfy() super-impl instead TODO
 
-        return opts == subst ? this :
-            new VariantConstraint((TypeMap)subst);
+      Session.error(loc,
+          "internal error in ({0}).satisfy({1}): : unhandled argument {2} to Var TC ",
+          dump(), type.dump(), otherOpts.dump());
+
+      return null;
     }
+  }
 
-    public Constraint instance(final TypeInstantiator inst)
-    {
-        final Type instance = var.accept(inst);
+  public Constraint subst(final SubstMap substMap)
+  {
+    final Type opts = Types.varOpts(var);
+    final Type subst = opts.subst(substMap);
 
-        return instance == var ? this :
-            new VariantConstraint((TypeMap)Types.varOpts(instance));
-    }
+    return opts == subst ? this : new VariantConstraint((TypeMap) subst);
+  }
 
-    public Set<TypeVar> getVars()
-    {
-        return var.getVars();
-    }
+  public Constraint instance(final TypeInstantiator inst)
+  {
+    final Type instance = var.accept(inst);
 
-    // Dumpable
+    return instance == var ? this :
+        new VariantConstraint((TypeMap) Types.varOpts(instance));
+  }
 
-    public String dump()
-    {
-        return var.dump();
-    }
+  public Set<TypeVar> getVars()
+  {
+    return var.getVars();
+  }
+
+  // Dumpable
+
+  public String dump()
+  {
+    return var.dump();
+  }
 }

@@ -23,6 +23,11 @@ public final class RecordConstraint implements Constraint
 
     // Constraint
 
+    @Override public Type getType()
+    {
+        return rec;
+    }
+
     public Pair<? extends Constraint, SubstMap>
         merge(final Constraint constraint, final TypeEnv env)
     {

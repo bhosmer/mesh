@@ -147,7 +147,8 @@ setposhealth(p:Player, pos, health)
 // cell coords from position
 poscellxy(pos:V2)
 {
-    (min(W - 1, max(0, f2i(pos.0))) / CELLEXT, min(H - 1, max(0, f2i(pos.1))) / CELLEXT)
+    (min(W - 1, max(0, f2i(pos.0))) / CELLEXT,
+     min(H - 1, max(0, f2i(pos.1))) / CELLEXT)
 };
 
 // cell from position
@@ -163,13 +164,13 @@ playercell(p:Player) { poscell(p.pos) };
 // remove player from position-derived cell
 removeplayer(pbox:*Player)
 {
-    playercell(*pbox) <- { remove($0, pbox) }
+    playercell(*pbox) <- { remove(_, pbox) }
 };
 
 // add player to cell
 addplayer(pbox:*Player, cell:*[*Player])
 {
-    cell <- { append($0, pbox) }
+    cell <- { append(_, pbox) }
 };
 
 //
@@ -181,19 +182,15 @@ addplayer(pbox:*Player, cell:*[*Player])
 // transaction open and owns this player box, but it's
 // cheap to be future-proof here.
 //
-transferplayer(pbox:*Player, newpos)
-{
-    do
-    {
-        oldcell = playercell(*pbox);
-        newcell = poscell(newpos);
-
-        when(oldcell != newcell,
-        {
-            removeplayer(pbox);
-            addplayer(pbox, newcell)
-        })
-    }
+transferplayer(pbox:*Player, newpos) {
+  do {
+    oldcell = playercell(*pbox);
+    newcell = poscell(newpos);
+    when(oldcell != newcell, {
+      removeplayer(pbox);
+      addplayer(pbox, newcell)
+    })
+  }
 };
 
 // ---------
@@ -328,14 +325,14 @@ collisions(pbox:Box(Player), qboxes:[Box(Player)])
     when(!isdragging(pbox), {
         (wbounce, whealth) = wallbounce(p);
         when(wbounce != p.vel, {
-            pbox <- { setvelhealth($0, wbounce, whealth) }
+            pbox <- { setvelhealth(_, wbounce, whealth) }
         })
     });
 
     // bump with everyone after us in creation order -
     // ensures each pair is bumped at most once
     after = filter(qboxes, { qb:*Player => (*qb).id > p.id });
-    for(after, { bump(pbox, $0) });
+    for(after, { bump(pbox, _) });
 };
 
 //
@@ -346,11 +343,11 @@ cellcollisions(cx, cy)
     cellplayers = *(cells[cy][cx]);
 
     // collect players to test against - this cell and adjacent cells
-    testplayers = flatten(NABE[cy][cx] | { *(cells[$1][$0]) });
+    testplayers = flatten(NABE[cy][cx] | { *(cells[_.1][_.0]) });
 
     // test each player in our cell against players
     // in our neighborhood
-    for(cellplayers, { collisions($0, testplayers) });
+    for(cellplayers, { collisions(_, testplayers) });
 };
 
 // ----------
@@ -423,8 +420,8 @@ turn(last)
     // update players to reflect the passage of time (limited)
     elapsedms = fmin(elapsed /. MSNANOS, 100.0);
     if (ct <= 1,
-        { for(*players, { age($0, elapsedms) }) },
-        { pforn(*players, { age($0, elapsedms) }, ct) });
+        { for(*players, { age(_, elapsedms) }) },
+        { pforn(*players, { age(_, elapsedms) }, ct) });
 
     // remove dead players
     dead = filter(*players, { pb:*Player => (*pb).health <=. MORBID });
@@ -439,8 +436,8 @@ turn(last)
 //
 addplayers(pboxes:[*Player])
 {
-    players <- { $0 + pboxes };
-    for(pboxes, { addplayer($0, playercell(*$0)) })
+    players <- { _ + pboxes };
+    for(pboxes, { addplayer(_, playercell(*_)) })
 };
 
 // remove players from list, and from their respective
@@ -448,7 +445,7 @@ addplayers(pboxes:[*Player])
 //
 removeplayers(pboxes:[*Player])
 {
-    players <- { difference($0, pboxes) };
+    players <- { difference(_, pboxes) };
     for(pboxes, removeplayer)
 };
 
@@ -545,7 +542,7 @@ updatedraghist()
 grab()
 {
     initdrag();
-    fordraglist({ $0 <- { setvelhealth($0, VZERO, 1.0) } })
+    fordraglist({ _ <- { setvelhealth(_, VZERO, 1.0) } })
 };
 
 // find players at a given point, return map of drag info structs to offsets
@@ -570,7 +567,7 @@ drag()
         do {
             newpos = add(dragpos, dragoffset(pbox));
             transferplayer(pbox, newpos);
-            pbox <- { setposhealth($0, newpos, 1.0) }
+            pbox <- { setposhealth(_, newpos, 1.0) }
         }
     };
 
@@ -582,7 +579,7 @@ drag()
 release()
 {
     vel = dragvel();
-    fordraglist({ $0 <- { setvel($0, vel) } });
+    fordraglist({ _ <- { setvel(_, vel) } });
     draginfo := [:];
 };
 
@@ -639,7 +636,7 @@ drawplayers()
     // draw underlays, then players, then overlays
     prbackground(0);
     when(diagmode(), drawcells);
-    for(*players, { drawplayer(*$0) });
+    for(*players, { drawplayer(*_) });
     when(diagmode(), {for(*players, drawinfo)});
 
     // when single-tasked, do game turn in rendering task
@@ -732,7 +729,7 @@ drawinfo(pbox:*Player)
         pv = playervel(pbox);
         drawdot(f) { prellipse(p.pos.0 + f *. pv.0, p.pos.1 + f *. pv.1, 6.0, 6.0)};
         m = sqrt(mag(pv)) *. 200.0;
-        cycle(0.0, { $0 <. m }, { drawdot($0); $0 + 20.0 })
+        cycle(0.0, { _ <. m }, { drawdot(_); _ + 20.0 })
     });
 };
 
@@ -876,8 +873,8 @@ fonts : *[Symbol:Font] = box([:]);
 
 loadfonts()
 {
-    fonts <- { mapset($0, #splash, prloadfont("data/AmericanTypewriter-24.vlw")) };
-    fonts <- { mapset($0, #diag, prloadfont("data/SansSerif.plain-12.vlw")) };
+    fonts <- { mapset(_, #splash, prloadfont("data/AmericanTypewriter-24.vlw")) };
+    fonts <- { mapset(_, #diag, prloadfont("data/SansSerif.plain-12.vlw")) };
 };
 
 splashfont() { (*fonts)[#splash] };
@@ -918,7 +915,7 @@ addtask()
 removetask()
 {
     lastrenderturn := nanotime();
-    calctasks <- { max(0, dec($0)) }
+    calctasks <- { max(0, dec(_)) }
 };
 
 // open window

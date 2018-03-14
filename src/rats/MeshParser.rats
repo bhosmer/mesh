@@ -600,8 +600,8 @@ transient List<TypeParam> TypeParamList
         { yyValue = cons(h, t.list()); } ;
 
 transient TypeParam TypeParam
-    = n:Id k:(Colon KindExpr)?
-        { yyValue = typeParam(loc(yyStart), n, k); } ;
+    = n:Id k:(Colon KindExpr)? c:(VerticalBar TypeExpr)?
+        { yyValue = typeParam(loc(yyStart), n, k, c); } ;
 
 transient List<compile.Pair<Term, Type>> TermTypePairList
     = h:TermTypePair t:(Comma TermTypePair)*

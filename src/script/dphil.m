@@ -65,7 +65,7 @@ start_eating(phil:*Phil)
         guard(!all(forks, avail), false,
         {
             // make all forks unavailable
-            forks | { $0 <- toggle_fork };
+            forks | { _ <- toggle_fork };
 
             // update phil to started state
             phil <- started;
@@ -94,7 +94,7 @@ stop_eating(phil:*Phil)
     do
     {
         // toggle forks
-        (*phil).forks | { $0 <- toggle_fork };
+        (*phil).forks | { _ <- toggle_fork };
 
         // update phil to stopped state
         phil <- stopped
@@ -158,7 +158,7 @@ init_phil(name, forkix)
 phils:[*Phil] = zip(names, count(nphils)) | init_phil;
 
 // set watcher to print status on phil state change
-for(phils, { react($0, status) });
+for(phils, { react(_, status) });
 
 // start a task running cycle() on the given phil
 startPhil(p:*Phil) { spawn { cycle(p, 5, 100, 100) } };

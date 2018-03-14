@@ -27,6 +27,11 @@ public final class EnumConstraint implements Constraint
 
     // Constraint
 
+    @Override public Type getType()
+    {
+        return enumType;
+    }
+
     public Pair<? extends Constraint, SubstMap> merge(
         final Constraint constraint, final TypeEnv env)
     {

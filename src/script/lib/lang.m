@@ -121,8 +121,10 @@ intrinsic <T> when(c : Bool, b : () -> T) -> ();
 /**
  * generalized conditional. sugared to infix ?
  */
-intrinsic <K, V:[*], R>
-    cond(sel : Var(Assoc(K, V)), cases : Rec(Assoc(K, Cone(V, R)))) -> R;
+intrinsic <K, K2 | K, V:[*], R> cond(
+  sel : Var(Assoc(K, V)),
+  cases : Rec(Assoc(K2, Cone(V, R)))
+) -> R;
 
 /**
  * runs the function in the map indicated by the selector,

@@ -21,6 +21,11 @@ public final class TupleConstraint implements Constraint {
 
   // Constraint
 
+  @Override public Type getType()
+  {
+    return tup;
+  }
+
   public Pair<? extends Constraint, SubstMap> merge(
       final Constraint constraint, final TypeEnv env) {
     if (constraint == Constraint.ANY)

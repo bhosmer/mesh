@@ -72,7 +72,6 @@ final class Sublist extends AbstractListValue
         final int n = size();
 
         int i = 0;
-
         while (i < n && !get(i).equals(value))
             i++;
 
