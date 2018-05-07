@@ -2,7 +2,7 @@
  * ADOBE SYSTEMS INCORPORATED
  * Copyright 2009-2013 Adobe Systems Incorporated
  * All Rights Reserved.
- *
+ * <p>
  * NOTICE: Adobe permits you to use, modify, and distribute
  * this file in accordance with the terms of the MIT license,
  * a copy of which can be found in the LICENSE.txt file or at
@@ -24,134 +24,136 @@ import java.util.Set;
 
 /**
  * Type interface. Should be a little less sprawly after refactor.
- *
- * @author Basil Hosmer
  */
-public interface Type extends Located, Dumpable
-{
-    /**
-     * used (rarely) to patch loc when building types from user exprs
-     */
-    public void setLoc(Loc loc);
+public interface Type extends Located, Dumpable {
+  /**
+   * used (rarely) to patch loc when building types from user exprs
+   */
+  public void setLoc(Loc loc);
 
-    /**
-     *
-     */
-    void collectInlineParams();
+  /**
+   *
+   */
+  void collectInlineParams();
 
-    /**
-     *
-     */
-    Type deref();
+  /**
+   *
+   */
+  boolean isResolved();
 
-    /**
-     * TODO merge with use of TypeReducer.reduce
-     */
-    Type eval();
+  /**
+   *
+   */
+  Type deref();
 
-    /**
-     *
-     */
-    Kind getKind();
+  /**
+   * TODO merge with use of TypeReducer.reduce
+   */
+  Type eval();
 
-    /**
-     *
-     */
-    boolean hasVars();
+  /**
+   *
+   */
+  Kind getKind();
 
-    /**
-     * Return set of all type variables occuring in the term
-     */
-    Set<TypeVar> getVars();
+  /**
+   *
+   */
+  boolean hasVars();
 
-    /**
-     *
-     */
-    boolean hasParams();
+  /**
+   * Return set of all type variables occurring in the term
+   */
+  Set<TypeVar> getVars();
 
-    /**
-     *
-     */
-    Map<String, TypeParam> getParams();
+  /**
+   *
+   */
+  boolean hasParams();
 
-    /**
-     *
-     */
-    TypeParam getParam(String name);
+  /**
+   *
+   */
+  Map<String, TypeParam> getParams();
 
-    /**
-     *
-     */
-    void addParam(TypeParam param);
+  /**
+   *
+   */
+  TypeParam getParam(String name);
 
-    /**
-     *
-     */
-    void addParams(Collection<TypeParam> params);
+  /**
+   *
+   */
+  void addParam(TypeParam param);
 
-    /**
-     *
-     */
-    boolean getParamsCommitted();
+  /**
+   *
+   */
+  void addParams(Collection<TypeParam> params);
 
-    /**
-     * Convert all params to fresh vars. Store type params names with type vars
-     * for use in later quantification, if directed
-     */
-    Type instance(TypeEnv env, boolean useParamNames);
+  /**
+   *
+   */
+  boolean getParamsCommitted();
 
-    /**
-     *
-     */
-    Type quantify(SubstMap newParams, SubstMap ambientParams);
+  /**
+   * Convert all params to fresh vars. Store type params names with type vars
+   * for use in later quantification, if directed
+   */
+  Type instance(TypeEnv env, boolean useParamNames);
 
-    /**
-     *
-     */
-    SubstMap buildParamMap(Set<TypeVar> vars, int nameGenOffset, TypeEnv env);
+  /**
+   *
+   */
+  Type quantify(SubstMap newParams, SubstMap ambientParams);
 
-    /**
-     * Apply substitutions from map
-     */
-    Type subst(SubstMap substMap);
+  /**
+   *
+   */
+  SubstMap buildParamMap(Set<TypeVar> vars, int nameGenOffset, TypeEnv env);
 
-    /**
-     * Returns a most general unifier with other type.
-     * Experimental - base types generate mgu if otherType
-     * is a subtype.
-     */
-    SubstMap unify(Loc loc, Type other, TypeEnv env);
+  /**
+   * Apply substitutions from map
+   */
+  Type subst(SubstMap substMap);
 
-    /**
-     * TODO
-     */
-    SubstMap subsume(Loc loc, Type type, TypeEnv env);
+  /**
+   * Returns a most general unifier with other type.
+   * Experimental - base types generate mgu if otherType
+   * is a subtype.
+   */
+  SubstMap unify(Loc loc, Type other, TypeEnv env);
 
-    /**
-     * TODO
-     */
-    //Pair<? extends Type, SubstMap> merge(Type type, TypeEnv env);
+  /**
+   * TODO
+   */
+  SubstMap subsume(Loc loc, Type type, TypeEnv env);
 
-    /**
-     * Equivalent for purposes of checking agreement between
-     * declared and inferred types: sees through refs/defs,
-     * and matches wildcards to any *-kind type
-     */
-    boolean equiv(Type other);
+  /**
+   * TODO
+   */
+  //Pair<? extends Type, SubstMap> merge(Type type, TypeEnv env);
 
-    /**
-     * used from top-level {@link #equiv} calls, carries
-     * in-progress match state.
-     */
-    boolean equiv(Type other, EquivState state);
+  /**
+   * Equivalent for purposes of checking agreement between
+   * declared and inferred types: sees through refs/defs,
+   * and matches wildcards to any *-kind type
+   */
+  boolean equiv(Type other);
 
-    /**
-     * Type visitor dispatch.
-     */
-    <T> T accept(TypeVisitor<T> visitor);
+  /**
+   * used from top-level {@link #equiv} calls, carries
+   * in-progress match state.
+   */
+  boolean equiv(Type other, EquivState state);
 
-    /**
-     *
-     */
-    boolean hasWildcards();
+  /**
+   * Type visitor dispatch.
+   */
+  <T> T accept(TypeVisitor<T> visitor);
+
+  /**
+   *
+   */
+  boolean hasWildcards();
 }

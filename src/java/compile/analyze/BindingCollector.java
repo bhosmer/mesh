@@ -2,7 +2,7 @@
  * ADOBE SYSTEMS INCORPORATED
  * Copyright 2009-2013 Adobe Systems Incorporated
  * All Rights Reserved.
- *
+ * <p>
  * NOTICE: Adobe permits you to use, modify, and distribute
  * this file in accordance with the terms of the MIT license,
  * a copy of which can be found in the LICENSE.txt file or at
@@ -26,13 +26,11 @@ import java.util.Iterator;
  * {@link Module} analyzer. {@link #collect} method collects bindings from
  * module's statement list and adds them to its binding maps, along with
  * semantic checking, e.g. for shadowing.
- *
- * @author Basil Hosmer
  */
 public final class BindingCollector extends ModuleVisitor<Object>
 {
     private ArrayDeque<Statement> generated;
-    
+
     public BindingCollector(final Module module)
     {
         super(module);
@@ -56,7 +54,7 @@ public final class BindingCollector extends ModuleVisitor<Object>
      * has added them to type bindings map
      */
     @Override
-protected void processScope(final Scope scope)
+    protected void processScope(final Scope scope)
     {
         final ArrayDeque<Statement> save = generated;
         generated = new ArrayDeque<Statement>();
@@ -67,10 +65,11 @@ protected void processScope(final Scope scope)
         while (!generated.isEmpty())
         {
             final Statement gen = generated.pop();
-            
+
             if (Session.isDebug())
                 Session.debug(gen.getLoc(), "processing generated statement {0}",
-                    gen.dump());
+                    gen.dump()
+                );
 
             processStatement(gen);
             scope.getBody().add(gen);
@@ -114,7 +113,8 @@ protected void processScope(final Scope scope)
             if (Session.isDebug())
                 Session.debug(let.getLoc(),
                     "new let {0} shadows out-of-scope binding from {1}",
-                    let.dump(), prev.getLoc());
+                    let.dump(), prev.getLoc()
+                );
         }
         else
         {
@@ -124,14 +124,16 @@ protected void processScope(final Scope scope)
                 // let redefinition
                 Session.error(let.getLoc(),
                     "new let {0} shadows previous definition at {1}",
-                    let.dump(), prev.getLoc());
+                    let.dump(), prev.getLoc()
+                );
             }
             else
             {
                 // a let shadowing a param is not fine
                 Session.error(let.getLoc(),
                     "new let {0} conflicts with parameter declared at {1}",
-                    let.dump(), prev.getLoc());
+                    let.dump(), prev.getLoc()
+                );
             }
         }
 
@@ -152,7 +154,7 @@ protected void processScope(final Scope scope)
         // ...this is just for readability in our current primitive debug env
         final Term value = let.getValue();
         if (value instanceof LambdaTerm)
-            ((LambdaTerm)value).setBindingName(name);
+            ((LambdaTerm) value).setBindingName(name);
 
         return result;
     }
@@ -171,7 +173,8 @@ protected void processScope(final Scope scope)
             if (!def.resolveIntrinsic())
             {
                 Session.error(def.getLoc(),
-                        "unresolved intrinsic type {0}", def.getName());
+                    "unresolved intrinsic type {0}", def.getName()
+                );
                 return null;
             }
         }
@@ -187,7 +190,8 @@ protected void processScope(final Scope scope)
             {
                 Session.error(def.getLoc(),
                     "type def {0} conflicts with type parameter declared at {1}",
-                    def.getName(), prev.getLoc());
+                    def.getName(), prev.getLoc()
+                );
             }
             else
             {
@@ -196,7 +200,8 @@ protected void processScope(final Scope scope)
 
                 Session.error(def.getLoc(),
                     "redefinition of type {0}, previously defined at {1}",
-                    def.getName(), prev.getLoc());
+                    def.getName(), prev.getLoc()
+                );
             }
         }
         else
@@ -204,8 +209,8 @@ protected void processScope(final Scope scope)
             final Type type = def.getValue();
 
             final Type paramHost =
-                type instanceof TypeCons && ((TypeCons)type).getBody() != null ?
-                    ((TypeCons)type).getBody() : type;
+                type instanceof TypeCons && ((TypeCons) type).getBody() != null ?
+                    ((TypeCons) type).getBody() : type;
 
             final int nparams = paramHost.getParams().size();
 
@@ -214,8 +219,10 @@ protected void processScope(final Scope scope)
 
             if (nparams < paramHost.getParams().size())
             {
-                Session.error(def.getLoc(),
-                    "type def cannot contain inline type params");
+                Session.error(
+                    def.getLoc(),
+                    "type def cannot contain inline type params"
+                );
 
                 return def;
             }
@@ -232,7 +239,8 @@ protected void processScope(final Scope scope)
 
                 if (Session.isDebug())
                     Session.debug(def.getLoc(), "adding type ctor let {0}, dtor let {1}",
-                        ctorLet.dump(), dtorLet.dump());
+                        ctorLet.dump(), dtorLet.dump()
+                    );
 
                 generated.add(ctorLet);
                 generated.add(dtorLet);
@@ -260,7 +268,7 @@ protected void processScope(final Scope scope)
 
         assert binding instanceof ParamBinding : "corrupt inline param ref";
 
-        final ParamBinding paramBinding = (ParamBinding)binding;
+        final ParamBinding paramBinding = (ParamBinding) binding;
 
         // now, find the host lambda by counting dollar signs
 
@@ -269,9 +277,11 @@ protected void processScope(final Scope scope)
 
         if (!name.startsWith("$"))
         {
-            Session.error(ref.getLoc(),
+            Session.error(
+                ref.getLoc(),
                 "internal error: malformed name in inline param ref: {0}",
-                paramBinding.getName());
+                paramBinding.getName()
+            );
 
             return super.visit(ref);
         }
@@ -287,20 +297,23 @@ protected void processScope(final Scope scope)
         if (!scope.isLambda())
         {
             Session.error(ref.getLoc(),
-                "inline param ref {0} does not resolve to lambda", ref.getName());
+                "inline param ref {0} does not resolve to lambda", ref.getName()
+            );
 
             return super.visit(ref);
         }
 
         // found the right lambda, is it eligible?
-        final LambdaTerm lambdaTerm = (LambdaTerm)scope;
+        final LambdaTerm lambdaTerm = (LambdaTerm) scope;
 
         if (lambdaTerm.getParamsCommitted())
         {
             // if lambda has explicit param list, inline params cannot be used
-            Session.error(ref.getLoc(),
+            Session.error(
+                ref.getLoc(),
                 "inline param ref {0} resolves to lambda with declared parameters",
-                ref.getName());
+                ref.getName()
+            );
 
             return super.visit(ref);
         }
@@ -321,7 +334,8 @@ protected void processScope(final Scope scope)
 
             if (Session.isDebug())
                 Session.debug(paramBinding.getLoc(), "adding implicit param binding {0}",
-                    fixed.dump());
+                    fixed.dump()
+                );
 
             lambdaTerm.addInlineParam(fixed);
 

@@ -21,6 +21,7 @@ clover_**
 
 # IJ workspace state
 .idea/**
+workspace.xml
 *.iws
 *.iml
 

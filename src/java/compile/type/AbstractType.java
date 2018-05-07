@@ -2,7 +2,7 @@
  * ADOBE SYSTEMS INCORPORATED
  * Copyright 2009-2013 Adobe Systems Incorporated
  * All Rights Reserved.
- *
+ * <p>
  * NOTICE: Adobe permits you to use, modify, and distribute
  * this file in accordance with the terms of the MIT license,
  * a copy of which can be found in the LICENSE.txt file or at
@@ -17,8 +17,6 @@ import java.util.Set;
 
 /**
  * Common base implementation for all types.
- *
- * @author Basil Hosmer
  */
 public abstract class AbstractType implements Type
 {
@@ -41,7 +39,7 @@ public abstract class AbstractType implements Type
         {
             final int ci = i % 26;
             i = i / 26 - 1;
-            name = (char)(((int)'A') + ci) + name;
+            name = (char) (((int) 'A') + ci) + name;
         }
         return name;
     }
@@ -51,6 +49,11 @@ public abstract class AbstractType implements Type
     public final void setLoc(final Loc loc)
     {
         this.loc = loc;
+    }
+
+    public boolean isResolved()
+    {
+        return true;
     }
 
     public Type deref()
@@ -67,7 +70,7 @@ public abstract class AbstractType implements Type
     {
         return TypeVarCollector.check(this);
     }
-    
+
     public final Set<TypeVar> getVars()
     {
         return TypeVarCollector.collect(this);
@@ -82,7 +85,7 @@ public abstract class AbstractType implements Type
     {
         return equiv(other, new EquivState());
     }
-    
+
     public boolean hasWildcards()
     {
         return WildcardTypeScanner.scan(this);

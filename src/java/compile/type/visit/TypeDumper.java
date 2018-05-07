@@ -54,7 +54,7 @@ public final class TypeDumper extends StackedTypeVisitor<String>
 
         return result;
     }
-    
+
     /**
      *
      */
@@ -210,7 +210,7 @@ public final class TypeDumper extends StackedTypeVisitor<String>
     {
         return "?";
     }
-    
+
     @Override
     public String visit(final EnumType enumType)
     {
@@ -278,7 +278,7 @@ public final class TypeDumper extends StackedTypeVisitor<String>
             return ref.getName();
         }
     }
-    
+
     @Override
     public String visit(final TypeDef def)
     {
@@ -299,7 +299,7 @@ public final class TypeDumper extends StackedTypeVisitor<String>
     @Override
     public String visit(final TypeApp app)
     {
-        final Type base = app.getBase().deref();
+        final Type base = app.getBase().isResolved() ? app.getBase().deref() : app.getBase();
         final Type arg = app.getArg();
 
         if (base == Types.LIST)
@@ -325,7 +325,7 @@ public final class TypeDumper extends StackedTypeVisitor<String>
                     "(" + visitType(paramType) + ")" : visitType(paramType);
 
                 final Type resultType = Types.funResult(app);
-                final String resultDump = Types.isFun(resultType) ?
+                final String resultDump = resultType.isResolved() && Types.isFun(resultType) ?
                     "(" + visitType(resultType) + ")" : visitType(resultType);
 
                 return paramDump + " -> " + resultDump;
@@ -395,7 +395,7 @@ public final class TypeDumper extends StackedTypeVisitor<String>
         final List<Type> items = list.getItems();
         return "[" + StringUtils.join(visitEach(items), ", ") + "]";
     }
-    
+
     @Override
     public String visit(final TypeMap map)
     {

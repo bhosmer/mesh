@@ -21,8 +21,6 @@ import java.util.*;
  * Common base implementation for classes that represent type terms
  * that can be quantified.
  * TODO refactor quantified types pronto
- *
- * @author Basil Hosmer
  */
 public abstract class ScopeType extends AbstractType
 {

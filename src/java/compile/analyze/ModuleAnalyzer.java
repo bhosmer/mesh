@@ -15,8 +15,6 @@ import compile.module.Module;
 /**
  * Module analysis pipeline. Incoming module is as-parsed,
  * outgoing module is ready for CG.
- *
- * @author Basil Hosmer
  */
 public final class ModuleAnalyzer
 {

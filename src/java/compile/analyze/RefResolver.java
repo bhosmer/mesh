@@ -2,7 +2,7 @@
  * ADOBE SYSTEMS INCORPORATED
  * Copyright 2009-2013 Adobe Systems Incorporated
  * All Rights Reserved.
- *
+ * <p>
  * NOTICE: Adobe permits you to use, modify, and distribute
  * this file in accordance with the terms of the MIT license,
  * a copy of which can be found in the LICENSE.txt file or at
@@ -22,8 +22,6 @@ import compile.term.*;
  * Also resolves type name refs in type terms, both in declared type annotations
  * (in lets and lambdas) and in type defs. Type name resolution is done here rather
  * than in a separate pass because value and type expressions are entangled.
- *
- * @author Basil Hosmer
  */
 public final class RefResolver extends ModuleVisitor<Object>
 {
@@ -37,7 +35,10 @@ public final class RefResolver extends ModuleVisitor<Object>
         this.termRefResolver = new TermRefResolver(this);
     }
 
-    TypeRefResolver getTypeRefResolver() { return typeRefResolver; }
+    TypeRefResolver getTypeRefResolver()
+    {
+        return typeRefResolver;
+    }
 
     /**
      *
@@ -70,11 +71,12 @@ public final class RefResolver extends ModuleVisitor<Object>
         if (let.hasDeclaredType())
             typeRefResolver.resolve(let.getDeclaredType());
 
-        if (!let.isIntrinsic()) 
+        if (!let.isIntrinsic())
         {
             final Term t = resolve(let.getValue());
             let.setValue(t); // might have changed
         }
+
         return null;
     }
 
@@ -85,12 +87,11 @@ public final class RefResolver extends ModuleVisitor<Object>
     public Object visit(final TypeDef typeDef)
     {
         typeRefResolver.resolve(typeDef.getValue());
-
         return super.visit(typeDef);
     }
 
-    @Override 
-    protected Object visitTerm(final Term term) 
+    @Override
+    protected Object visitTerm(final Term term)
     {
         return termRefResolver.resolve(term);
     }

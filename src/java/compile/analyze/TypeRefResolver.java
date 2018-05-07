@@ -2,7 +2,7 @@
  * ADOBE SYSTEMS INCORPORATED
  * Copyright 2009-2013 Adobe Systems Incorporated
  * All Rights Reserved.
- *
+ * <p>
  * NOTICE: Adobe permits you to use, modify, and distribute
  * this file in accordance with the terms of the MIT license,
  * a copy of which can be found in the LICENSE.txt file or at
@@ -19,8 +19,6 @@ import compile.type.visit.StackedTypeVisitor;
 /**
  * {@link #resolve} method resolves any type refs within the
  * hosted type term, as well as any value expressions.
- *
- * @author Basil Hosmer
  */
 public final class TypeRefResolver extends StackedTypeVisitor<Object>
 {
@@ -46,9 +44,9 @@ public final class TypeRefResolver extends StackedTypeVisitor<Object>
     @Override
     public Object visit(final EnumType enumType)
     {
+        visitParams(enumType.getParams());
         for (final Term value : enumType.getValues())
             refResolver.resolve(value);
-
         return enumType;
     }
 
@@ -67,6 +65,11 @@ public final class TypeRefResolver extends StackedTypeVisitor<Object>
     @Override
     public Object visit(final TypeRef ref)
     {
+        if (Session.isDebug())
+            Session.debug(ref.getLoc(), "HEY TypeRefResolver.visit {0}", ref.dump());
+
+        visitParams(ref.getParams());
+
         if (ref.isResolved())
         {
             if (ref.isParamRef())
@@ -94,12 +97,14 @@ public final class TypeRefResolver extends StackedTypeVisitor<Object>
 
                 if (Session.isDebug())
                     Session.debug(ref.getLoc(), "resolved type ref {0} to type {1} from {2}",
-                        ref.dump(), binding.dump(), binding.getLoc());
+                        ref.dump(), binding.dump(), binding.getLoc()
+                    );
             }
             else
             {
                 Session.error(ref.getLoc(),
-                    "no definition for type {0} is available here", ref.getName());
+                    "no definition for type {0} is available here", ref.getName()
+                );
             }
         }
 
@@ -114,6 +119,17 @@ public final class TypeRefResolver extends StackedTypeVisitor<Object>
         }
 
         return super.visit(ref);
+    }
+
+    /**
+     * resolve value references. note that enum base type is
+     * never stated explicitly, so no resolution is needed.
+     */
+    @Override
+    public Object visit(final TypeApp app)
+    {
+        visitParams(app.getParams());
+        return super.visit(app);
     }
 
     /**
