@@ -138,6 +138,13 @@ public final class SubsumptionConstraint implements Constraint
         if (Session.isDebug())
             Session.debug(loc, "({0}).satisfy({1})", dump(), other.dump());
 
+        if (type instanceof TypeVar) {
+            final Type constraintType = ((TypeVar)type).getConstraint().getType();
+            if (constraintType != null) {
+                return other.subsume(loc, constraintType.deref(), env);
+            }
+        }
+
         return other.subsume(loc, type.deref(), env);
     }
 

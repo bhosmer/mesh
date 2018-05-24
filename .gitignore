@@ -20,8 +20,8 @@ clover_**
 .DS_Store
 
 # IJ workspace state
-.idea/**
-workspace.xml
+# workspace.xml
+/.idea/**
 *.iws
 *.iml
 
