@@ -35,8 +35,8 @@ public final class TypeApp extends ScopeType
     private Type reduced;   // cached result of application
     private boolean inEval;
 
-    public TypeApp(final Loc loc, final Type base, final Type arg,
-                   final Kind kind)
+    public TypeApp(
+        final Loc loc, final Type base, final Type arg, final Kind kind)
     {
         super(loc);
         this.base = base;
@@ -93,8 +93,7 @@ public final class TypeApp extends ScopeType
     {
         final Type baseDeref = base.deref();
 
-        return baseDeref instanceof TypeCons &&
-            ((TypeCons) baseDeref).getBody() != null;
+        return baseDeref instanceof TypeCons && ((TypeCons) baseDeref).getBody() != null;
     }
 
     /**
@@ -147,8 +146,7 @@ public final class TypeApp extends ScopeType
             if (!(argEval instanceof TypeTuple))
                 assert false;
 
-            final Iterator<Type> argList =
-                ((TypeTuple) argEval).getMembers().iterator();
+            final Iterator<Type> argList = ((TypeTuple) argEval).getMembers().iterator();
 
             for (final TypeParam param : params)
             {
@@ -165,8 +163,11 @@ public final class TypeApp extends ScopeType
         inEval = false;
 
         if (Session.isDebug())
-            Session.debug(body.getLoc(), "eval {0}({1}) => {2}", body.dump(),
-                argMap.dump(), reduced.dump()
+            Session.debug(body.getLoc(),
+                "eval {0}({1}) => {2}",
+                body.dump(),
+                argMap.dump(),
+                reduced.dump()
             );
 
         return reduced;
@@ -178,8 +179,7 @@ public final class TypeApp extends ScopeType
      */
     private Type reduced(final Type base, final Type arg)
     {
-        return base == this.base && arg == this.arg ? this :
-            new TypeApp(loc, base, arg, kind);
+        return base == this.base && arg == this.arg ? this : new TypeApp(loc, base, arg, kind);
     }
 
     /**
@@ -193,7 +193,9 @@ public final class TypeApp extends ScopeType
         {
             Session.error(loc,
                 "internal error: abs {0} has non-lambda kind {1} in type app {2}",
-                abs.dump(), absKind.dump(), dump()
+                abs.dump(),
+                absKind.dump(),
+                dump()
             );
 
             return false;
@@ -206,7 +208,9 @@ public final class TypeApp extends ScopeType
         {
             Session.error(loc,
                 "internal error: param kind {0} incompatible with arg kind {1} in type app {2}",
-                paramKind.dump(), argKind.dump(), dump()
+                paramKind.dump(),
+                argKind.dump(),
+                dump()
             );
 
             return false;
@@ -248,8 +252,9 @@ public final class TypeApp extends ScopeType
 
             if (baseSubst != null)
             {
-                final SubstMap argSubst =
-                    arg.subst(baseSubst).unify(loc, otherApp.arg.subst(baseSubst), env);
+                final SubstMap argSubst = arg
+                    .subst(baseSubst)
+                    .unify(loc, otherApp.arg.subst(baseSubst), env);
 
                 if (argSubst != null)
                     return baseSubst.compose(loc, argSubst);
@@ -283,10 +288,10 @@ public final class TypeApp extends ScopeType
 
         if (!(otherEval instanceof TypeApp))
         {
-            Session
-                .error("TypeApp.subsume(): non-TypeApp/TypeVar arg: {0} (this = {1})",
-                    otherEval.dump(), dump()
-                );
+            Session.error("TypeApp.subsume(): non-TypeApp/TypeVar arg: {0} (this = {1})",
+                otherEval.dump(),
+                dump()
+            );
 
             return null;
         }

@@ -11,6 +11,7 @@
 package compile.type;
 
 import compile.Loc;
+import compile.Session;
 import compile.gen.java.Constants;
 import compile.term.*;
 import compile.type.constraint.RecordConstraint;
@@ -345,7 +346,10 @@ public final class Types
         type = type.deref();
 
         if (!Types.isRec(type))
+        {
+            Session.error("Type.recFields: {0} is not a record type", type.dump());
             throw new IllegalArgumentException();
+        }
 
         return ((TypeApp)type).getArg();
     }

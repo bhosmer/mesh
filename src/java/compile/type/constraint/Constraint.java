@@ -17,73 +17,74 @@ import java.util.Set;
  */
 public interface Constraint extends Dumpable
 {
-  static Constraint ANY = new Constraint()
-  {
-    public SubstMap satisfy(final Loc loc, final Type type, final TypeEnv env)
+    static Constraint ANY = new Constraint()
     {
-      return SubstMap.EMPTY;
-    }
+        public SubstMap satisfy(final Loc loc, final Type type, final TypeEnv env)
+        {
+            return SubstMap.EMPTY;
+        }
 
-    @Override public Type getType()
-    {
-      return null;
-    }
+        @Override
+        public Type getType()
+        {
+            return null;
+        }
 
-    public Pair<Constraint, SubstMap> merge(final Constraint constraint,
-        final TypeEnv env)
-    {
-      return Pair.create(constraint, SubstMap.EMPTY);
-    }
+        public Pair<Constraint, SubstMap> merge(final Constraint constraint,
+                                                final TypeEnv env)
+        {
+            return Pair.create(constraint, SubstMap.EMPTY);
+        }
 
-    public Constraint subst(final SubstMap substMap)
-    {
-      return this;
-    }
+        public Constraint subst(final SubstMap substMap)
+        {
+            return this;
+        }
 
-    public Constraint instance(final TypeInstantiator inst)
-    {
-      return this;
-    }
+        public Constraint instance(final TypeInstantiator inst)
+        {
+            return this;
+        }
 
-    public Set<TypeVar> getVars()
-    {
-      return Collections.emptySet();
-    }
+        public Set<TypeVar> getVars()
+        {
+            return Collections.emptySet();
+        }
 
-    public String dump()
-    {
-      return "*";
-    }
-  };
+        public String dump()
+        {
+            return "*";
+        }
+    };
 
-  /**
-   *
-   */
-  Type getType();
+    /**
+     *
+     */
+    Type getType();
 
-  /**
-   *
-   */
-  Pair<? extends Constraint, SubstMap> merge(Constraint constraint,
-      TypeEnv env);
+    /**
+     *
+     */
+    Pair<? extends Constraint, SubstMap> merge(Constraint constraint,
+                                               TypeEnv env);
 
-  /**
-   *
-   */
-  SubstMap satisfy(Loc loc, Type type, TypeEnv env);
+    /**
+     *
+     */
+    SubstMap satisfy(Loc loc, Type type, TypeEnv env);
 
-  /**
-   *
-   */
-  Constraint subst(SubstMap subtMap);
+    /**
+     *
+     */
+    Constraint subst(SubstMap subtMap);
 
-  /**
-   *
-   */
-  Constraint instance(TypeInstantiator inst);
+    /**
+     *
+     */
+    Constraint instance(TypeInstantiator inst);
 
-  /**
-   *
-   */
-  Set<TypeVar> getVars();
+    /**
+     *
+     */
+    Set<TypeVar> getVars();
 }

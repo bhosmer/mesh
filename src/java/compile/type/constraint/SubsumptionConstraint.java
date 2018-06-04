@@ -24,7 +24,8 @@ public final class SubsumptionConstraint implements Constraint
 
     // Constraint
 
-    @Override public Type getType()
+    @Override
+    public Type getType()
     {
         return type;
     }
@@ -38,13 +39,13 @@ public final class SubsumptionConstraint implements Constraint
         if (!(constraint instanceof SubsumptionConstraint))
             return null;
 
-        final Type otherType = ((SubsumptionConstraint)constraint).type;
+        final Type otherType = ((SubsumptionConstraint) constraint).type;
 
         if (Types.isVar(type) && Types.varOpts(type) instanceof TypeMap &&
             Types.isVar(otherType) && Types.varOpts(otherType) instanceof TypeMap)
         {
-            final TypeMap opts = (TypeMap)Types.varOpts(type);
-            final TypeMap otherOpts = (TypeMap)Types.varOpts(otherType);
+            final TypeMap opts = (TypeMap) Types.varOpts(type);
+            final TypeMap otherOpts = (TypeMap) Types.varOpts(otherType);
 
             // NOTE: reverse order tends to accumulate constraints in code order,
             // given the polarity of unify() args in type checker. ugh
@@ -58,8 +59,8 @@ public final class SubsumptionConstraint implements Constraint
         else if (Types.isRec(type) && Types.recFields(type) instanceof TypeMap &&
             Types.isRec(otherType) && Types.recFields(otherType) instanceof TypeMap)
         {
-            final TypeMap fields = (TypeMap)Types.recFields(type);
-            final TypeMap otherFields = (TypeMap)Types.recFields(otherType);
+            final TypeMap fields = (TypeMap) Types.recFields(type);
+            final TypeMap otherFields = (TypeMap) Types.recFields(otherType);
 
             // NOTE: reverse order tends to accumulate constraints in code order,
             // given the polarity of unify() args in type checker. ugh
@@ -72,8 +73,8 @@ public final class SubsumptionConstraint implements Constraint
         }
         else if (type instanceof TypeMap && otherType instanceof TypeMap)
         {
-            final TypeMap map = (TypeMap)type;
-            final TypeMap otherMap = (TypeMap)otherType;
+            final TypeMap map = (TypeMap) type;
+            final TypeMap otherMap = (TypeMap) otherType;
 
             // NOTE: reverse order tends to accumulate constraints in code order,
             // given the polarity of unify() args in type checker. ugh
@@ -86,8 +87,8 @@ public final class SubsumptionConstraint implements Constraint
         }
         else if (type instanceof TypeList && otherType instanceof TypeList)
         {
-            final TypeList list = (TypeList)type;
-            final TypeList otherList = (TypeList)otherType;
+            final TypeList list = (TypeList) type;
+            final TypeList otherList = (TypeList) otherType;
 
             // NOTE: reverse order tends to accumulate constraints in code order,
             // given the polarity of unify() args in type checker. ugh
@@ -100,8 +101,8 @@ public final class SubsumptionConstraint implements Constraint
         }
         else if (type instanceof EnumType && otherType instanceof EnumType)
         {
-            final EnumType enumType = (EnumType)type;
-            final EnumType otherEnum = (EnumType)otherType;
+            final EnumType enumType = (EnumType) type;
+            final EnumType otherEnum = (EnumType) otherType;
 
             // NOTE: reverse order tends to accumulate constraints in code order,
             // given the polarity of unify() args in type checker. ugh
@@ -116,7 +117,8 @@ public final class SubsumptionConstraint implements Constraint
         {
             Session.error(
                 "SubsumptionConstraint: {0} merge {1}: Type.merge not implemented",
-                dump(), constraint.dump());
+                dump(), constraint.dump()
+            );
 
             return null;
 
@@ -138,9 +140,11 @@ public final class SubsumptionConstraint implements Constraint
         if (Session.isDebug())
             Session.debug(loc, "({0}).satisfy({1})", dump(), other.dump());
 
-        if (type instanceof TypeVar) {
-            final Type constraintType = ((TypeVar)type).getConstraint().getType();
-            if (constraintType != null) {
+        if (type instanceof TypeVar)
+        {
+            final Type constraintType = ((TypeVar) type).getConstraint().getType();
+            if (constraintType != null)
+            {
                 return other.subsume(loc, constraintType.deref(), env);
             }
         }

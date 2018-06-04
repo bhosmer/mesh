@@ -103,6 +103,9 @@ public final class EnumType extends ScopeType
 
     public SubstMap subsume(final Loc loc, final Type type, final TypeEnv env)
     {
+        if (type instanceof TypeVar)
+            return ((TypeVar) type).getConstraint().satisfy(loc, this, env);
+
         if (!(type instanceof EnumType))
             return null;
 

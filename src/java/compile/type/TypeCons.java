@@ -2,7 +2,7 @@
  * ADOBE SYSTEMS INCORPORATED
  * Copyright 2009-2013 Adobe Systems Incorporated
  * All Rights Reserved.
- *
+ * <p>
  * NOTICE: Adobe permits you to use, modify, and distribute
  * this file in accordance with the terms of the MIT license,
  * a copy of which can be found in the LICENSE.txt file or at
@@ -11,6 +11,7 @@
 package compile.type;
 
 import compile.Loc;
+import compile.Session;
 import compile.type.kind.Kind;
 import compile.type.kind.Kinds;
 import compile.type.visit.EquivState;
@@ -52,7 +53,7 @@ public final class TypeCons extends NonScopeType
     {
         this(name, Kinds.STAR);
     }
-    
+
     public String getName()
     {
         return name;
@@ -79,17 +80,20 @@ public final class TypeCons extends NonScopeType
     {
         return
             other instanceof TypeVar ?
-                SubstMap.bindVar(loc, (TypeVar)other, this, env) :
-            other.deref().equals(this) ?
-                SubstMap.EMPTY :
-            null;
+                SubstMap.bindVar(loc, (TypeVar) other, this, env) :
+                other.deref().equals(this) ?
+                    SubstMap.EMPTY :
+                    null;
     }
 
     public SubstMap subsume(final Loc loc, final Type type, final TypeEnv env)
     {
+        if (Session.isDebug())
+            Session.debug(loc, "TypeCons({0}.subsume...", name);
+
         return
             type instanceof TypeVar ?
-                ((TypeVar)type).getConstraint().satisfy(loc, this, env) :
+                ((TypeVar) type).getConstraint().satisfy(loc, this, env) :
                 type.deref().equals(this) ?
                     SubstMap.EMPTY :
                     null;
@@ -110,13 +114,17 @@ public final class TypeCons extends NonScopeType
     @Override
     public boolean equals(final Object o)
     {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        if (!super.equals(o))
+            return false;
 
-        final TypeCons typeCons = (TypeCons)o;
+        final TypeCons typeCons = (TypeCons) o;
 
-        if (!kind.equals(typeCons.kind)) return false;
+        if (!kind.equals(typeCons.kind))
+            return false;
 
         return true;
     }

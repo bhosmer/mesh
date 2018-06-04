@@ -94,10 +94,10 @@ reset(cols, rows) {
 
             // generate the 3x3 square of (x,y) positions centered on i,
             // then convert them to indexes
-            square = cross(range(x - 1, 3), range(y - 1, 3)) | { xy2i(wrap($0, $1)) };
+            square = cross(range(x - 1, 3), range(y - 1, 3)) | { xy2i(wrap _) };
 
             // remove i itself and return the list
-            filter(square, { $0 != i })
+            filter(square, { _ != i })
         };
 
         // return a list of regions, one for each index in the new state
@@ -115,7 +115,7 @@ reset(cols, rows) {
             torpt(t) { (MAJRAD *. cos(t), MAJRAD *. sin(t)) };
 
             // get ring left, mid, right intersection points
-            pts = [i2f(r), i2f(r) + 0.5, i2f(r + 1)] | { torpt($0 /. i2f(rows) *. TWO_PI) };
+            pts = [i2f(r), i2f(r) + 0.5, i2f(r + 1)] | { torpt(_ /. i2f(rows) *. TWO_PI) };
             (p0, p1, p2) = (pts[0], pts[1], pts[2]);
 
             // chord across ring at MAJRAD
@@ -175,7 +175,7 @@ reset(cols, rows) {
 compute(cells:[Int], check:[Int], regions:[[Int]])
 {
     // return number of ON neighbors of the cell at index i
-    nabes(i) { size(filter(regions[i], { cells[$0] == ON })) };
+    nabes(i) { size(filter(regions[i], { cells[_] == ON })) };
 
     // number of jobs to split filtering into
     nj = *njobs;
@@ -188,7 +188,7 @@ compute(cells:[Int], check:[Int], regions:[[Int]])
     ];
 
     // collect indexes of changing cells (parallel filters)
-    [dying, off, on] = preds | { pfiltern(check, $0, nj) };
+    [dying, off, on] = preds | { pfiltern(check, _, nj) };
 
     // given a list of cells, indexes and a state, return
     // a new version with cells at indexes set to state
@@ -373,12 +373,12 @@ drawview() {
             el = drawelapsed /. MSNANOS;
 
             rot <- { (
-                tocirc($0 + rv.0 *. el),
-                tocirc($1 + rv.1 *. el),
-                tocirc($2 + rv.2 *. el)
+                tocirc(_.0 + rv.0 *. el),
+                tocirc(_.1 + rv.1 *. el),
+                tocirc(_.2 + rv.2 *. el)
             ) };
 
-            rotv <- { ($0 *. FRICTION, $1 *. FRICTION, $2 *. FRICTION) };
+            rotv <- { (_.0 *. FRICTION, _.1 *. FRICTION, _.2 *. FRICTION) };
         });
 
         // draw

@@ -2,7 +2,7 @@
  * ADOBE SYSTEMS INCORPORATED
  * Copyright 2009-2013 Adobe Systems Incorporated
  * All Rights Reserved.
- *
+ * <p>
  * NOTICE: Adobe permits you to use, modify, and distribute
  * this file in accordance with the terms of the MIT license,
  * a copy of which can be found in the LICENSE.txt file or at
@@ -34,9 +34,10 @@ public final class TypeDef extends TypeBinding
     public static TypeDef opaque(final String name)
     {
         final TypeDef def = new TypeDef(Loc.INTRINSIC, name,
-            Types.newType(Loc.INTRINSIC, Types.OPAQUE));
+            Types.newType(Loc.INTRINSIC, Types.OPAQUE)
+        );
 
-        ((TypeApp)def.getValue()).setKind(Kinds.STAR);
+        ((TypeApp) def.getValue()).setKind(Kinds.STAR);
 
         return def;
     }
@@ -110,19 +111,19 @@ public final class TypeDef extends TypeBinding
         if (!(type instanceof TypeApp))
             return false;
 
-        final Type base = ((TypeApp)type).getBase();
+        final Type base = ((TypeApp) type).getBase();
 
         if (!(base instanceof TypeRef))
             return false;
 
-        final TypeRef baseRef = (TypeRef)base;
+        final TypeRef baseRef = (TypeRef) base;
 
         if (baseRef.getBinding() != null)
             return Types.isNew(type);
 
         final TypeBinding binding = scope.getModule().findTypeBinding(baseRef.getName());
 
-        if (binding instanceof TypeDef && ((TypeDef)binding).getValue() == Types.NEW)
+        if (binding instanceof TypeDef && ((TypeDef) binding).getValue() == Types.NEW)
         {
             baseRef.setBinding(binding);
             return true;
@@ -146,7 +147,8 @@ public final class TypeDef extends TypeBinding
 
         return new LambdaTerm(loc, Collections.<TypeParam>emptyList(),
             Collections.singletonList(param), outType, // null,
-            Collections.singletonList(result));
+            Collections.singletonList(result)
+        );
     }
 
     private LambdaTerm makeDtor()
@@ -164,7 +166,8 @@ public final class TypeDef extends TypeBinding
 
         return new LambdaTerm(loc, Collections.<TypeParam>emptyList(),
             Collections.singletonList(param), outType, // null,
-            Collections.singletonList(result));
+            Collections.singletonList(result)
+        );
     }
 
     public TypeDef(final String name, final Type type)
@@ -234,11 +237,11 @@ public final class TypeDef extends TypeBinding
         return
             equals(otherDeref) ?
                 SubstMap.EMPTY :
-            !nominal ?
-                value.unify(loc, otherDeref, env) :
-            other instanceof TypeVar ?
-                SubstMap.bindVar(loc, (TypeVar)otherDeref, this, env) :
-            null;
+                !nominal ?
+                    value.unify(loc, otherDeref, env) :
+                    other instanceof TypeVar ?
+                        SubstMap.bindVar(loc, (TypeVar) otherDeref, this, env) :
+                        null;
     }
 
     public SubstMap subsume(final Loc loc, final Type other, final TypeEnv env)
@@ -251,7 +254,7 @@ public final class TypeDef extends TypeBinding
                 !nominal ?
                     value.subsume(loc, otherDeref, env) :
                     otherDeref instanceof TypeVar ?
-                        ((TypeVar)otherDeref).getConstraint().satisfy(loc, this, env) :
+                        ((TypeVar) otherDeref).getConstraint().satisfy(loc, this, env) :
                         null;
     }
 
@@ -289,13 +292,17 @@ public final class TypeDef extends TypeBinding
     @Override
     public boolean equals(final Object o)
     {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        if (!super.equals(o))
+            return false;
 
-        final TypeDef typeDef = (TypeDef)o;
+        final TypeDef typeDef = (TypeDef) o;
 
-        if (!value.equals(typeDef.value)) return false;
+        if (!value.equals(typeDef.value))
+            return false;
 
         return true;
     }

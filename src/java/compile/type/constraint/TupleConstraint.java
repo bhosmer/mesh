@@ -2,6 +2,7 @@ package compile.type.constraint;
 
 import compile.Loc;
 import compile.Pair;
+import compile.Session;
 import compile.type.*;
 import compile.type.visit.SubstMap;
 import compile.type.visit.TypeInstantiator;
@@ -53,12 +54,16 @@ public final class TupleConstraint implements Constraint
 
     public SubstMap satisfy(final Loc loc, final Type type, final TypeEnv env)
     {
+        if (Session.isDebug())
+            Session.debug(loc, "TupleConstraint: ({0}).satisfy({1})", dump(), type.dump());
+
         if (!Types.isTup(type))
             return null;
 
         final TypeList members = (TypeList) Types.tupMembers(tup);
         final TypeList otherMembers = (TypeList) Types.tupMembers(type);
 
+        // @@@ here's where we would call the one 0-offset subsumption
         return otherMembers.subsume(loc, members, env);
     }
 

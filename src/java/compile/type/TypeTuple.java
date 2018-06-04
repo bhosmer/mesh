@@ -144,6 +144,9 @@ public final class TypeTuple extends NonScopeType
      */
     public SubstMap subsume(final Loc loc, final Type type, final TypeEnv env)
     {
+        if (type instanceof TypeVar)
+            return ((TypeVar) type).getConstraint().satisfy(loc, this, env);
+
         if (!(type instanceof TypeTuple))
         {
             Session.error("TypeTuple.subsume(): non-TypeTuple arg: {0} (this = {1})",

@@ -2,6 +2,7 @@ package compile.type.constraint;
 
 import compile.Loc;
 import compile.Pair;
+import compile.Session;
 import compile.type.*;
 import compile.type.visit.SubstMap;
 import compile.type.visit.TypeInstantiator;
@@ -54,13 +55,70 @@ public final class RecordConstraint implements Constraint
 
     public SubstMap satisfy(final Loc loc, final Type type, final TypeEnv env)
     {
+        if (Session.isDebug())
+            Session.debug("RecordConstraint: ({0}).satisfy({1})", dump(), type.dump());
+
         if (!Types.isRec(type))
             return null;
 
         final TypeMap fields = (TypeMap)Types.recFields(rec);
-        final TypeMap otherFields = (TypeMap)Types.recFields(type);
 
-        return otherFields.subsume(loc, fields, env);
+        // final TypeMap otherFields = (TypeMap)Types.recFields(type);
+        // return otherFields.subsume(loc, fields, env);
+
+        final Type otherFields = Types.recFields(type);
+
+        if (otherFields instanceof TypeMap)
+        {
+            return otherFields.subsume(loc, fields, env);
+        }
+        else if (otherFields instanceof TypeApp)
+        {
+            final TypeApp otherFieldsApp = (TypeApp)otherFields;
+            final Type otherBase = otherFieldsApp.getBase();
+
+            if (!(otherBase instanceof TypeCons))
+            {
+                if (Session.isDebug())
+                    Session.debug(loc, "type app otherBase {0} is not a type cons, fail", otherBase.dump());
+
+                return null;
+            }
+
+            final TypeCons otherBaseCons = (TypeCons) otherBase;
+
+            if (otherBaseCons == Types.ASSOC)
+            {
+                final Type assocKey = Types.assocKey(otherFieldsApp);
+                final SubstMap keySubst = assocKey.subsume(loc, fields.getKeyType(), env);
+
+                if (keySubst == null)
+                    return null;
+
+                final Type assocVals = Types.assocVals(otherFieldsApp).subst(keySubst);
+                final SubstMap valsSubst = assocVals.subsume(loc, fields.getValueTypes().subst(keySubst), env);
+
+                if (valsSubst == null)
+                    return null;
+
+                return keySubst.compose(loc, valsSubst);
+            }
+
+            if (Session.isDebug())
+                Session.debug(loc, "type const{0} is not handled, fail", otherBaseCons.dump());
+
+            return null;
+        }
+        else
+        {
+            // Note that TypeVar is handled by caller. Should probably be handled
+            // in Constraint.safisfy() super-impl instead TODO
+
+            Session.error(loc, "internal error in ({0}).satisfy({1}): unhendled arumebnt {2} to RecordConstraint",
+                dump(), type.dump(), otherFields.dump());
+
+            return null;
+        }
     }
 
     public Constraint subst(final SubstMap substMap)

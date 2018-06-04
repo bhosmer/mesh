@@ -23,8 +23,6 @@ import java.util.*;
 /**
  * Method {@link #collect} collects symbol constants mentioned in
  * a module.
- *
- * @author Basil Hosmer
  */
 public final class SymbolConstantCollector extends ModuleVisitor<Object>
 {
@@ -71,12 +69,7 @@ public final class SymbolConstantCollector extends ModuleVisitor<Object>
         // visit substructures
         super.visit(record);
 
-        final Type recordType = record.getType();
-
-        final List<SimpleLiteralTerm> list = Types.recKeyList(recordType);
-
-        if (list != null)
-            keysetConstants.add(list);
+        keysetConstants.add(record.getKeyList());
 
         return null;
     }

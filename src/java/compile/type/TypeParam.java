@@ -24,8 +24,6 @@ import compile.type.visit.TypeVisitor;
 
 /**
  * Type param binding.
- *
- * @author Basil Hosmer
  */
 public final class TypeParam extends TypeBinding
 {

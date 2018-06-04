@@ -2,7 +2,7 @@
  * ADOBE SYSTEMS INCORPORATED
  * Copyright 2009-2013 Adobe Systems Incorporated
  * All Rights Reserved.
- *
+ * <p>
  * NOTICE: Adobe permits you to use, modify, and distribute
  * this file in accordance with the terms of the MIT license,
  * a copy of which can be found in the LICENSE.txt file or at
@@ -12,6 +12,7 @@ package compile.term;
 
 import compile.Loc;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
@@ -51,12 +52,15 @@ public abstract class KeyedTerm extends AbstractTypedTerm
     @Override
     public boolean equals(final Object o)
     {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
-        final KeyedTerm listTerm = (KeyedTerm)o;
+        final KeyedTerm listTerm = (KeyedTerm) o;
 
-        if (!items.equals(listTerm.items)) return false;
+        if (!items.equals(listTerm.items))
+            return false;
 
         return true;
     }
