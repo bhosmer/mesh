@@ -14,6 +14,7 @@ import compile.*;
 import compile.Compiler;
 import compile.gen.Unit;
 import compile.module.*;
+import compile.module.Module;
 import compile.term.*;
 
 import java.util.*;

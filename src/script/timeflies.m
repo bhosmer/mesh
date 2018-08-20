@@ -48,7 +48,7 @@ makedep(i, s)
 
 // global list of boxes reactive to mpos,
 // holding mouse positions for each MSG char
-locs = count(strlen(MSG)) | { makedep($0, MSG) };
+locs = count(strlen(MSG)) | { makedep(_, MSG) };
 
 // given i, draw MSG(i) at position held in locs(i)
 drawchar(i) {

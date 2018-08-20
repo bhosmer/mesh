@@ -20,8 +20,6 @@ package runtime.rep;
  * strongly-typed reference to the lambda is available. (Also,
  * standard practice is to have apply() always delegate to
  * invoke()).
- *
- * @author Basil Hosmer
  */
 public interface Lambda
 {

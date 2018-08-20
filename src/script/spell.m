@@ -19,8 +19,8 @@ alphabet = strcut("abcdefghijklmnopqrstuvwxyz", count(26));
 // (deletions, transpositions, replacements and insertions)
 // with edit distance 1
 //
-edits1(word)
-{
+edits1 = { word =>
+
     // list of pairs, word split at each position
     splits =  count(strlen(word) + 1) | {i => (strtake(i, word), strdrop(i, word))};
 
@@ -47,10 +47,8 @@ edits1(word)
 };
 
 // filter a list of words by their presence in dict
-known(words)
-{
-    filter(words, { iskey(dict, $0) })
-};
+// known = { filter(_, { iskey(dict, _) }) };
+known = { _ `filter { dict `iskey _ } };
 
 //
 // for a given word, generate all edits of distance 2
@@ -58,7 +56,7 @@ known(words)
 //
 known_edits2(word)
 {
-    unique(flatten(edits1(word) | { known(edits1($0)) }))
+    unique(flatten(edits1(word) | { known (edits1 _) }))
 };
 
 //
@@ -79,7 +77,7 @@ correct(word)
     // return first word with highest nonzero count,
     // or fall back to original
     guard(hi == 0, word, {
-        candidates[first_where({ dict[$0] == hi }, candidates)]
+        candidates[first_where({ dict[_] == hi }, candidates)]
     })
 };
 
@@ -229,12 +227,12 @@ tests1 = [ "access": "acess", "accessing": "accesing", "accommodation":
 //
 
 print("serial");
-s = bench({spelltest(tests1, false, true)}); // verbose
-//s = bench({spelltest(tests1, false, false)});   // quiet
+//s = bench({spelltest(tests1, false, true)}); // verbose
+s = bench({spelltest(tests1, false, false)});   // quiet
 
 print("parallel");
-p = bench({spelltest(tests1, true, true)});  // verbose
-//p = bench({spelltest(tests1, true, false)});    // quiet
+//p = bench({spelltest(tests1, true, true)});  // verbose
+p = bench({spelltest(tests1, true, false)});    // quiet
 
 // print results
 print("serial", s);

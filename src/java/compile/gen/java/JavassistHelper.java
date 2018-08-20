@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * Helpers for multipass Javassist code generation.
- *
- * @author Basil Hosmer
  */
 public final class JavassistHelper
 {

@@ -14,7 +14,7 @@ PI = 3.1415927;
 TWO_PI = 6.2831855;
 HALF_PI = 1.5707964;
 
-(W, H) = (1024, 1024);                            // screen width, height
+(W, H) = (1024, 1024);                          // screen width, height
 (Wf, Hf) = (i2f(W), i2f(H));                    // convenience (loosely speaking)
 (MAJRAD, MINRAD) = (0.25 *. Wf, 0.125 *. Wf);   // major and minor torus radii
 
@@ -37,6 +37,10 @@ cells:*[Int] = box(take(0, [0]));               // cells are kept in a linear li
 check:*[Int] = box(take(0, [0]));               // subset of cell indexes to check at each step
 regions:*[[Int]] = box(take(0, [[0]]));         // for each cell, a list of neighbor indexes
 tormesh:*[[(Double, Double, Double)]] = box(take(0, [[(0.0, 0.0, 0.0)]]));   // 3d surface mesh for torus, list of point lists
+
+// derived
+// TODO check transactionality
+scalexy = dep(dims, { cols, rows => (Wf /. i2f(cols), Hf /. i2f(rows)) });
 
 // settings
 bgproc = box(true);                             // background processing on/off
@@ -300,31 +304,42 @@ drawtor() {
 // draw CA as a simple grid covering the entire screen
 drawgrid()
 {
-    // get synchronized snapshow of dims, cells
-    ((cols, rows), cur) = gets(dims, cells);
+    // get synchronized snapshot of dims, cells
+    ((cols, rows), (scalex, scaley), cur) = gets(dims, scalexy, cells);
 
     // scale factors
-    (scalex, scaley) = (Wf /. i2f(cols), Hf /. i2f(rows));
+    //(scalex, scaley) = (Wf /. i2f(cols), Hf /. i2f(rows));
+
+    // draw grid
+    prnostroke();
+
+/*
+    for(count(rows), { y =>
+        for(count(cols), { x =>
+            c = cur[y * cols + x];
+            fill = FILL[c];
+            prfillrgba(fill);
+            prrect(i2f(x) *. scalex, i2f(y) *. scaley, scalex, scaley)
+        })
+    });
+*/
+
 
     // helper - convert index to position, using current cols
     i2xy(i) { (i % cols, i / cols) };
 
-    // draw cell at index i onto screen
-    drawcell(i) {
-        c = cur[i];
-        (x, y) = i2xy(i);
-        prfillrgba(FILL[c]);
-        prrect(i2f(x) *. scalex, i2f(y) *. scaley, scalex, scaley)
-    };
-
-    // draw grid
-    prnostroke();
-    for(count(cols * rows), drawcell);
+    for(count(cols * rows), {
+                                    c = cur[_];
+                                    (x, y) = i2xy(_);
+                                    prfillrgba(FILL[c]);
+                                    prrect(i2f(x) *. scalex, i2f(y) *. scaley, scalex, scaley)
+                                });
 
     // overlay heads-up info
     drawinfo();
     ()
 };
+
 
 // helper - format a float for diagnostic purposes
 ffmt(f, places) {
@@ -368,7 +383,8 @@ drawview() {
 
         when(rv.0 + rv.1 + rv.2 >. 0.0,
         {
-            tocirc(r) { (r + TWO_PI) %. TWO_PI };
+            // tocirc(r) { (r + TWO_PI) %. TWO_PI };
+            tocirc = { (_ + TWO_PI) %. TWO_PI };
 
             el = drawelapsed /. MSNANOS;
 

@@ -165,14 +165,43 @@ b. go back to original tups/recs because literal terms should have simple types,
         (may force keyed access, or dictionary passing?)
 
 /////////////////////////////////// refs have lifetime types //////////////////////////////////////////
+/////////////////////////////////// transitive unbox **x //////////////////////////////////////////
 
 @@@
-okay, the TC is limping along with tvar approach to records, but inferene is wrong - bad polarity.
+okay, the TC is limping along with tvar approach to records, but inference is wrong - bad polarity.
 just doing the same thing with recs as it does with variants.
 blows up at RT in the expected way
 @@@
 
-@@@ also this doesn't work <T | (x: Int)> f() -> T { (x:10, y:10) } @@@
+@@@ also this doesn't work <T | (x: Int)> f() -> T { (x:10, y:10) }
+@@@ ...or <T | (x: Int)> f() -> T { (x:10) } @@@
+@@@ ...or <T | ?(x: Int)> f() -> T { x!10 } @@@
+@@@ <T|Int> f(x:T) -> T { x * 1 }
+    ERROR <shell>[1, 1]: declared type <T:Int> T -> T does not agree with inferred type Int -> Int
+@@@
+seems like constraint checking is fucked up
+also variant type and expr syntax ...
+
+choices:
+1. try to eliminate type vars at end by noticing that types are minimal or maximal (needs variance regardless)
+2. always use type vars during inference, even for e.g. Int constants (would have the opposite problem w.r.t. annotations?)
+. definitely need
+
+> <T|(x:String, y:Int)> f(r:T) -> String  { r.x }
+<T|(x:String, y:Int)> f(r:T) -> String  { r.x }
+...another one - annotation overconstrains w.r.t. inference
+
+
+T1. fix above
+T2. rationalize constraints
+T3. polarity
+T4. indexed application, indexed composition
+
+Rules:
+unify on concrete types has no subtyping, but constraints do (and polarity)
+once T has been bound to a concrete type, it's pinned.
+
+
 
 next:
 fix above probs,
@@ -194,6 +223,11 @@ then indexed application/composition
     but why don't vars do the same thing?
 
 3. DONT FORGET THAT ITS A PROCESS
+
+
+>> tuple-to-rec coercion at callsites. funs w/named params take records not tuples.
+then extend autocoerce idea to () -> lambdas?
+
 
 
 **/
