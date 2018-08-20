@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * boolean not()
- *
- * @author Basil Hosmer
  */
 public final class _not extends IntrinsicLambda
 {

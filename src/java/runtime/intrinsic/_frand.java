@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * frand()
- *
- * @author Basil Hosmer
  */
 public final class _frand extends IntrinsicLambda
 {

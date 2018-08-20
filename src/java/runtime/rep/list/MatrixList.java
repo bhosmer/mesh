@@ -18,8 +18,6 @@ import java.util.NoSuchElementException;
 
 /**
  * Sequence of regular-length lists representing a single list.
- *
- * @author Basil Hosmer
  */
 public final class MatrixList extends AbstractListValue
 {

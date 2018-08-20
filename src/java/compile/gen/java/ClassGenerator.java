@@ -15,8 +15,6 @@ import compile.term.ValueBinding;
 /**
  * Super for class generators e.g. {@link LambdaClassGenerator},
  * {@link ModuleClassGenerator}. Holds common helpers etc.
- *
- * @author Basil Hosmer
  */
 public class ClassGenerator
 {

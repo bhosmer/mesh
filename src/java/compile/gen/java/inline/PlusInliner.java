@@ -24,8 +24,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic._plus}.
- *
- * @author Basil Hosmer
  */
 public class PlusInliner implements Inliner
 {

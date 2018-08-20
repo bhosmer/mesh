@@ -22,8 +22,6 @@ import java.util.concurrent.FutureTask;
 
 /**
  * parallel for
- *
- * @author Basil Hosmer
  */
 public final class _pfor extends IntrinsicLambda
 {

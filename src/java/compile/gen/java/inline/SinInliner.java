@@ -15,8 +15,6 @@ import compile.term.ApplyTerm;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.Sin}.
- *
- * @author Basil Hosmer
  */
 public class SinInliner implements Inliner
 {

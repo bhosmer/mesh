@@ -23,8 +23,6 @@ import java.util.LinkedList;
  * wait(box, pred) puts current thread into wait state
  * until/unless pred(get(box)) returns true. pred() is
  * called each time a value is committed to box.
- *
- * @author Basil Hosmer
  */
 public final class _await extends IntrinsicLambda
 {

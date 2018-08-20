@@ -17,8 +17,6 @@ import java.util.List;
 
 /**
  * Term representing a list literal expression.
- *
- * @author Basil Hosmer
  */
 public final class ListTerm extends PositionalTerm
 {

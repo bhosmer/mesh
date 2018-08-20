@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * intrinsic div() - adds two ints
- *
- * @author Basil Hosmer
  */
 public final class _div extends IntrinsicLambda
 {

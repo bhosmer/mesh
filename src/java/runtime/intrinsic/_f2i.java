@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * take floor of double, return int
- *
- * @author Basil Hosmer
  */
 public final class _f2i extends IntrinsicLambda
 {

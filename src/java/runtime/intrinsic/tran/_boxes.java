@@ -16,8 +16,6 @@ import runtime.tran.Box;
 
 /**
  * Create a tuple of boxes initialized with a tuple of values.
- *
- * @author Basil Hosmer
  */
 public final class _boxes extends IntrinsicLambda
 {

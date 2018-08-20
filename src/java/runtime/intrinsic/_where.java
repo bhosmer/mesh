@@ -20,8 +20,6 @@ import java.util.ArrayList;
 
 /**
  * where(list, pred) -> indexes
- *
- * @author Basil Hosmer
  */
 public final class _where extends IntrinsicLambda
 {

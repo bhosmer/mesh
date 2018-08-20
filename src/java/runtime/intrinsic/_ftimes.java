@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * float times()
- *
- * @author Basil Hosmer
  */
 public final class _ftimes extends IntrinsicLambda
 {

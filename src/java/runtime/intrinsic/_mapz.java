@@ -21,8 +21,6 @@ import java.util.Iterator;
 /**
  * mapz(lists, f) == map(zip(lists), f), but doesn't
  * create the intermediate list of tuples.
- *
- * @author Basil Hosmer
  */
 public final class _mapz extends IntrinsicLambda
 {

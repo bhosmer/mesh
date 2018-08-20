@@ -14,8 +14,6 @@
 // Ant build script generates rats.MeshParser into gen/java/rats.
 // Action code calls static methods in compile.parse.ASTBuilder
 //
-// @author Basil Hosmer
-//
 module rats.MeshParser;
 
 header

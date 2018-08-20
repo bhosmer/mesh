@@ -16,8 +16,6 @@ import compile.term.Term;
 
 /**
  * sign application reducer.
- *
- * @author Basil Hosmer
  */
 public class SignReducer implements ApplyReducer
 {

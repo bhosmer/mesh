@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 
 /**
  * true if key argument is valid key for map argument
- *
- * @author Basil Hosmer
  */
 public final class _iskey extends IntrinsicLambda
 {

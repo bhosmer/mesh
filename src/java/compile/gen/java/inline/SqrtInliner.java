@@ -15,8 +15,6 @@ import compile.term.ApplyTerm;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.Sqrt}.
- *
- * @author Basil Hosmer
  */
 public class SqrtInliner implements Inliner
 {

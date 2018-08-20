@@ -28,8 +28,6 @@ import java.util.Map;
 /**
  * Type map term.
  * TODO should not inherit from NonScopeTYpe, nor should TypeList, TypeTuple
- *
- * @author Basil Hosmer
  */
 public final class TypeMap extends NonScopeType
 {

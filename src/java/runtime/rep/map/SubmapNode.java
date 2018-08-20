@@ -22,8 +22,6 @@ import java.util.NoSuchElementException;
  * A submap node is a complete hashmap whose entries
  * share a common key hash prefix, which locates the
  * submap in the trie.
- *
- * @author Basil Hosmer
  */
 final class SubmapNode extends MapNode implements PersistentConstants
 {

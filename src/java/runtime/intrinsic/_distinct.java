@@ -19,8 +19,6 @@ import java.util.Set;
 /**
  * Return sublist of unique items from list.
  * Like {@link _unique}, but order preserving.
- *
- * @author Basil Hosmer
  */
 public final class _distinct extends IntrinsicLambda
 {

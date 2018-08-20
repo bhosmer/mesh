@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.GE}.
- *
- * @author Basil Hosmer
  */
 public class GEInliner implements Inliner
 {

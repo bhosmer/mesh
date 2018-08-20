@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * sleep the current thread a given number of millis
- *
- * @author Basil Hosmer
  */
 public final class _sleep extends IntrinsicLambda
 {

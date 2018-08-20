@@ -18,8 +18,6 @@ import java.util.Iterator;
 
 /**
  * string version of list cut
- *
- * @author Basil Hosmer
  */
 public final class _strcut extends IntrinsicLambda
 {

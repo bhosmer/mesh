@@ -15,8 +15,6 @@ import runtime.tran.Box;
 
 /**
  * Create a box with an initial value.
- *
- * @author Basil Hosmer
  */
 public final class _box extends IntrinsicLambda
 {

@@ -15,8 +15,6 @@ import runtime.rep.list.ListValue;
 /**
  * list size.
  * TODO collection TC
- *
- * @author Basil Hosmer
  */
 public final class _size extends IntrinsicLambda
 {

@@ -20,8 +20,6 @@ import java.util.List;
 /**
  * Parser for shell input. Extends {@link RatsScriptParser} to wrap
  * final top-level statement, if an unbound value, in a call to print().
- *
- * @author Basil Hosmer
  */
 public final class RatsShellScriptParser extends RatsScriptParser
 {

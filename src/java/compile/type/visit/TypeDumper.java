@@ -24,8 +24,6 @@ import java.util.*;
 /**
  * Dump a string representation of a type term. Provides static (thread local) methods.
  * TODO phase out static methods in favor of DumpUtils
- *
- * @author Basil Hosmer
  */
 public final class TypeDumper extends StackedTypeVisitor<String>
 {

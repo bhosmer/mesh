@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * polymorphic not-equals
- *
- * @author Basil Hosmer
  */
 public final class _ne extends IntrinsicLambda
 {

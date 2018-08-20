@@ -16,8 +16,6 @@ import runtime.tran.TransactionManager;
 
 /**
  * Own a box. Valid only in a transaction. returns box value.
- *
- * @author Basil Hosmer
  */
 public final class _own extends IntrinsicLambda
 {

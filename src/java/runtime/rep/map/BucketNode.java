@@ -20,8 +20,6 @@ import java.util.NoSuchElementException;
 /**
  * Bucket node - {@link MapNode} for multiple entries
  * with a common hash.
- *
- * @author Basil Hosmer
  */
 final class BucketNode extends MapNode
 {

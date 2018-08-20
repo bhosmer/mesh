@@ -19,8 +19,6 @@ import java.util.NoSuchElementException;
 /**
  * Virtualized list that repeats a particular value
  * a given number of times.
- *
- * @author Basil Hosmer
  */
 public final class RepeatList extends AbstractListValue
 {

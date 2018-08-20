@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * long difference
- *
- * @author Basil Hosmer
  */
 public final class _lminus extends IntrinsicLambda
 {

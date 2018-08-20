@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 
 /**
  * list concatenation
- *
- * @author Basil Hosmer
  */
 public final class _lplus extends IntrinsicLambda
 {

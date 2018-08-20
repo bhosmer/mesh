@@ -20,8 +20,6 @@ import compile.type.*;
  * subclasses of {@link TypeTransformerBase}.
  * <p/>
  * @param <T> type of value returned by visitation
- *
- * @author Basil Hosmer
  */
 public interface TypeVisitor<T>
 {

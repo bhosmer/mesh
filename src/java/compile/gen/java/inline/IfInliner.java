@@ -20,8 +20,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic._if}.
- *
- * @author Basil Hosmer
  */
 public class IfInliner implements Inliner
 {

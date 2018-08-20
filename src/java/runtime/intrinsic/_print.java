@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * print(x) == {@link _printstr}({@link _tostr}(x))
- *
- * @author Basil Hosmer
  */
 public final class _print extends IntrinsicLambda
 {

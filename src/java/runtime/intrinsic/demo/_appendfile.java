@@ -20,8 +20,6 @@ import java.io.IOException;
 
 /**
  * Demo support--simple file write
- *
- * @author Basil Hosmer
  */
 public final class _appendfile extends IntrinsicLambda
 {

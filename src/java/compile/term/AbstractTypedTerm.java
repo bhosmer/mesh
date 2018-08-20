@@ -16,8 +16,6 @@ import compile.type.Type;
 /**
  * Common impl for tersm whose type is calculated and stored with the term,
  * rather than being an invariant of the term itself as in simple literals.
- *
- * @author Basil Hosmer
  */
 public abstract class AbstractTypedTerm extends AbstractTerm
 {

@@ -18,8 +18,6 @@ import compile.module.Module;
 /**
  * Defines static method {@link #build}, which generates
  * compilation unit for a given module.
- *
- * @author Basil Hosmer
  */
 public final class JavaUnitBuilder implements UnitBuilder.Impl
 {

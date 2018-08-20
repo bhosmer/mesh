@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Double divide application reducer.
- *
- * @author Basil Hosmer
  */
 public class FDivReducer implements ApplyReducer
 {

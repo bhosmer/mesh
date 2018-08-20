@@ -20,8 +20,6 @@ import runtime.tran.TransactionManager;
  * Remove a reactor function from a box.
  * Function equality is identity, so you need to pass
  * the reactor function itself.
- *
- * @author Basil Hosmer
  */
 public final class _unreact extends IntrinsicLambda
 {

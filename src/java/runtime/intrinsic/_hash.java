@@ -13,8 +13,6 @@ package runtime.intrinsic;
 /**
  * Hash code, defined over all values. Structural hash for
  * everything except lamdas and boxes, identity hash for those.
- *
- * @author Basil Hosmer
  */
 public final class _hash extends IntrinsicLambda
 {

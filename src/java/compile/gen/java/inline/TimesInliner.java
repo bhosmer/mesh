@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.Times}.
- *
- * @author Basil Hosmer
  */
 public class TimesInliner implements Inliner
 {

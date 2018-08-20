@@ -13,8 +13,6 @@ package runtime.intrinsic;
 /**
  * string length
  * TODO should be an overload of size(), or vice versa
- *
- * @author Basil Hosmer
  */
 public final class _strlen extends IntrinsicLambda
 {

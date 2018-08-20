@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * Natural log
- *
- * @author Basil Hosmer
  */
 public final class _ln extends IntrinsicLambda
 {

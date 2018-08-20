@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 /**
  * substr(str, start, len)
  * TODO probably temp
- *
- * @author Basil Hosmer
  */
 public final class _substr extends IntrinsicLambda
 {

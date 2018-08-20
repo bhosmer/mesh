@@ -22,8 +22,6 @@ import java.util.List;
  * utility methods, and requires implementors to
  * implement mutating List methods by throwing
  * {@link UnsupportedOperationException}.
- *
- * @author Basil Hosmer
  */
 public interface ListValue extends List<Object>
 {

@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.Max}.
- *
- * @author Basil Hosmer
  */
 public class MaxInliner implements Inliner
 {

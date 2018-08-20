@@ -18,8 +18,6 @@ import runtime.rep.Tuple;
  * Apply a map of arguments to a function, yielding map of results:
  * E.g. mapmf([#a: (2, 2), #b: (3, 3)], (+))
  * => [#a: 4, #b: 6]
- *
- * @author Basil Hosmer
  */
 public final class _mapmf extends IntrinsicLambda
 {

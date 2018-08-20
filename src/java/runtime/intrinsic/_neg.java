@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * int negation
- *
- * @author Basil Hosmer
  */
 public final class _neg extends IntrinsicLambda
 {

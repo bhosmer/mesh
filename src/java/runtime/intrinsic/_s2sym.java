@@ -15,8 +15,6 @@ import runtime.rep.Symbol;
 /**
  * string to symbol.
  * Parse failures throw currently. TODO variants.
- *
- * @author Basil Hosmer
  */
 public final class _s2sym extends IntrinsicLambda
 {

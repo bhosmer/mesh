@@ -22,8 +22,6 @@ import runtime.tran.TransactionManager;
  * operations requiring relationships outside those already established for
  * reading arguments and writing the result, then it is guaranteed to run
  * without retrying.
- *
- * @author Basil Hosmer
  */
 public final class _transfers extends IntrinsicLambda
 {

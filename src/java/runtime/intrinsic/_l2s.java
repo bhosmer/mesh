@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * long to string
- *
- * @author Basil Hosmer
  */
 public final class _l2s extends IntrinsicLambda
 {

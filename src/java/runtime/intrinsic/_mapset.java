@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 /**
  * create a new map with original's contents, with given key
  * now associated with value
- *
- * @author Basil Hosmer
  */
 public final class _mapset extends IntrinsicLambda
 {

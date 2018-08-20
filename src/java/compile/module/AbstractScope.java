@@ -20,8 +20,6 @@ import java.util.*;
 /**
  * Parts of {@link Scope} common to both
  * {@link compile.module.Module} and {@link LambdaTerm}.
- *
- * @author Basil Hosmer
  */
 public abstract class AbstractScope implements Scope
 {

@@ -20,8 +20,6 @@ import runtime.tran.TransactionManager;
  * Update a box with the result of a function that takes box's
  * current value as input.
  * Wraps itself in a transaction if none is currently running.
- *
- * @author Basil Hosmer
  */
 public final class _update extends IntrinsicLambda
 {

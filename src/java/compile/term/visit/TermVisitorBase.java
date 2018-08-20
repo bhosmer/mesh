@@ -19,8 +19,6 @@ import java.util.Map;
 /**
  * Common base implementation for term visitors.
  * Performs complete traversal but takes no action.
- *
- * @author Basil Hosmer
  */
 public class TermVisitorBase<T> implements TermVisitor<T>
 {

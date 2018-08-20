@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * int times()
- *
- * @author Basil Hosmer
  */
 public final class _times extends IntrinsicLambda
 {

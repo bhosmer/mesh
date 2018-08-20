@@ -16,8 +16,6 @@ import runtime.rep.list.PersistentList;
 
 /**
  * returns the values of a map as a list
- *
- * @author Basil Hosmer
  */
 public final class _values extends IntrinsicLambda
 {

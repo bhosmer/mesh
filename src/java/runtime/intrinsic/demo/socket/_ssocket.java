@@ -16,8 +16,6 @@ import java.io.IOException;
 
 /**
  * Demo support.
- *
- * @author Basil Hosmer
  */
 public final class _ssocket extends IntrinsicLambda
 {

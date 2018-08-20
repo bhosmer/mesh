@@ -26,8 +26,6 @@ import java.util.Map;
  * print a string representation of any value.
  * goal is print/parse round trip for a well-defined
  * subset of values.
- *
- * @author Basil Hosmer
  */
 public final class _tostr extends IntrinsicLambda
 {

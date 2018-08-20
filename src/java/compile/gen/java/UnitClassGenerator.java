@@ -15,8 +15,6 @@ import compile.Session;
 /**
  * Method {@link #generate} generates all necessary Java classes for a
  * given {@link JavaUnit}.
- *
- * @author Basil Hosmer
  */
 public final class UnitClassGenerator
 {

@@ -23,8 +23,6 @@ import java.util.List;
 /**
  * Performs reduction on type terms.
  * TODO system is getting a little tippy here with experiments, trim back.
- *
- * @author Basil Hosmer
  */
 public final class TypeReducer extends TypeTransformerBase
 {

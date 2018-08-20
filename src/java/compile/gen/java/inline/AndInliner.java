@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic._and}.
- *
- * @author Basil Hosmer
  */
 public class AndInliner implements Inliner
 {

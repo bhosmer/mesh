@@ -25,8 +25,6 @@ import java.util.List;
 
 /**
  * {@link #generate} produces a classdef for a module.
- *
- * @author Basil Hosmer
  */
 public final class ModuleClassGenerator extends ClassGenerator
 {

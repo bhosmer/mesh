@@ -12,8 +12,6 @@ package runtime.sys;
 
 /**
  * Utilities for querying runtime configuration.
- *
- * @author Basil Hosmer
  */
 public final class ConfigUtils
 {

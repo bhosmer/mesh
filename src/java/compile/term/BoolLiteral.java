@@ -17,8 +17,6 @@ import compile.type.Types;
 
 /**
  * Boolean literal term.
- *
- * @author Basil Hosmer
  */
 public final class BoolLiteral extends SimpleLiteralTerm
 {

@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * sqrt()
- *
- * @author Basil Hosmer
  */
 public final class _sqrt extends IntrinsicLambda
 {

@@ -23,8 +23,6 @@ import java.util.Map;
  *
  * Implementations should return {@link UnsupportedOperationException}
  * for Map's ordinary mutator methods.
- *
- * @author Basil Hosmer
  */
 public interface MapValue extends Map<Object, Object>
 {

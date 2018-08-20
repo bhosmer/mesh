@@ -18,8 +18,6 @@ import runtime.rep.list.ListValue;
  * functional map: apply a function to a list of arguments,
  * yielding a congruent list of results. Aliased to infix
  * operator '|' in {@link compile.parse.Ops}.
- *
- * @author Basil Hosmer
  */
 public final class _map extends IntrinsicLambda
 {

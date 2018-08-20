@@ -18,8 +18,6 @@ import runtime.rep.Tuple;
  * object, created on demand and dormant between transactions.
  * This class provides the bulk of the transaction API used by
  * the intrinsic functions that define it in the surface language.
- *
- * @author Basil Hosmer
  */
 public final class TransactionManager
 {

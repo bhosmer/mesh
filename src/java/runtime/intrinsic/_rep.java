@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 
 /**
  * rep(n, item)
- *
- * @author Basil Hosmer
  */
 public final class _rep extends IntrinsicLambda
 {

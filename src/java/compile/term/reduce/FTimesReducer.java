@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * Double times application reducer.
- *
- * @author Basil Hosmer
  */
 public class FTimesReducer implements ApplyReducer
 {

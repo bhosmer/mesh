@@ -27,8 +27,6 @@ import java.util.List;
 
 /**
  * Type list term.
- *
- * @author Basil Hosmer
  */
 public final class TypeList extends NonScopeType
 {

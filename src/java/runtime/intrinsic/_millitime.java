@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * Return current time in millis.
- *
- * @author Basil Hosmer
  */
 public final class _millitime extends IntrinsicLambda
 {

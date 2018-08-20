@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 
 /**
  * guarded execution: guard(cond, def, block) { cond ? def : block() }
- *
- * @author Basil Hosmer
  */
 public final class _guard extends IntrinsicLambda
 {

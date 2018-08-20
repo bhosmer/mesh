@@ -18,8 +18,6 @@ import java.util.Iterator;
 
 /**
  * Singleton list.
- *
- * @author Basil Hosmer
  */
 final class SingletonList extends PersistentList
 {

@@ -26,8 +26,6 @@ import java.util.*;
  * copy-on-write semantics, and the use of Phil Bagwell's
  * mapped tries for their implementation, is inspired by
  * Rich Hickey's prioneering work in Clojure.
- *
- * @author Basil Hosmer
  */
 public final class PersistentMap implements MapValue, PersistentConstants
 {

@@ -24,8 +24,6 @@ import runtime.rep.Variant;
  *
  *  <Key, Vals:[*], R>
  *      select(sel:Var(Assoc(K, Vs)), cases:Rec(Assoc(K, Cone(Vs, R))));
- *
- * @author Basil Hosmer
  */
 public final class _cond extends IntrinsicLambda
 {

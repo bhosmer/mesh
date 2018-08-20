@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.Pow}.
- *
- * @author Basil Hosmer
  */
 public class PowInliner implements Inliner
 {

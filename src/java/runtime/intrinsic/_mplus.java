@@ -17,8 +17,6 @@ import java.util.Map;
 
 /**
  * Merge two maps. Right map wins where keysets overlap.
- *
- * @author Basil Hosmer
  */
 public final class _mplus extends IntrinsicLambda
 {

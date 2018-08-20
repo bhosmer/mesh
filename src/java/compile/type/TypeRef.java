@@ -21,8 +21,6 @@ import compile.type.visit.TypeVisitor;
 
 /**
  * reference to a named type
- *
- * @author Basil Hosmer
  */
 public final class TypeRef extends ScopeType
 {

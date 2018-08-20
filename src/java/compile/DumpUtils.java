@@ -16,8 +16,6 @@ import java.util.Map;
 
 /**
  * Utility methods for dumping Dumpable objects and collections.
- *
- * @author Basil Hosmer
  */
 public final class DumpUtils
 {

@@ -22,8 +22,6 @@ import java.util.Collections;
 
 /**
  * A named type definition.
- *
- * @author Basil Hosmer
  */
 public final class TypeDef extends TypeBinding
 {

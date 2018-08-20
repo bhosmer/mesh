@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * int min()
- *
- * @author Basil Hosmer
  */
 public final class _min extends IntrinsicLambda
 {

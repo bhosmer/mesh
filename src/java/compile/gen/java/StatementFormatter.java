@@ -45,8 +45,6 @@ import static compile.parse.ApplyFlavor.StructAddr;
  * forward slashes are escaped in string literals.)
  * So compiling source dumps almost works without edits but not quite.
  * In the shell, $u dumps source to shell, $w dumps .java and .class files.
- *
- * @author Basil Hosmer
  */
 public final class StatementFormatter extends BindingVisitorBase<String>
 {

@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * string tolower
- *
- * @author Basil Hosmer
  */
 public final class _tolower extends IntrinsicLambda
 {

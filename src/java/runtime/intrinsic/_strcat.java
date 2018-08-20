@@ -15,8 +15,6 @@ import runtime.rep.list.ListValue;
 
 /**
  * concatenate strings
- *
- * @author Basil Hosmer
  */
 public final class _strcat extends IntrinsicLambda
 {

@@ -20,8 +20,6 @@ import java.util.Set;
 /**
  * Collects all params referred to from a type term (local and
  * from enclosing type terms).
- *
- * @author Basil Hosmer
  */
 public class TypeParamCollector extends TypeVisitorBase<Object>
 {

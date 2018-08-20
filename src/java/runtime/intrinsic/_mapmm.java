@@ -17,8 +17,6 @@ import runtime.rep.Tuple;
  * apply a map of keys to a map of values, yielding a map of selected values.
  * > mapmm([#a: 1, #b: 2], [1: "One", 2: "Two"])
  * => [#a: "One", #b: "Two"]
- *
- * @author Basil Hosmer
  */
 public final class _mapmm extends IntrinsicLambda
 {

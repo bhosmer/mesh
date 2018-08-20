@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 
 /**
  * create a new map with original's contents, minus the given key
- *
- * @author Basil Hosmer
  */
 public final class _mapdel extends IntrinsicLambda
 {

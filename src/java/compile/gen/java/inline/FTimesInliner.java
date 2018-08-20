@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic._ftimes}.
- *
- * @author Basil Hosmer
  */
 public class FTimesInliner implements Inliner
 {

@@ -21,8 +21,6 @@ import java.util.LinkedList;
 
 /**
  * Transactional wait/notify against a tuple of boxes.
- *
- * @author Basil Hosmer
  */
 public final class _awaits extends IntrinsicLambda
 {

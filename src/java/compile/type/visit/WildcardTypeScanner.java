@@ -15,8 +15,6 @@ import compile.type.WildcardType;
 
 /**
  * Scans for wildcards in a type term.
- *
- * @author Basil Hosmer
  */
 public final class WildcardTypeScanner extends TypeVisitorBase<Object>
 {

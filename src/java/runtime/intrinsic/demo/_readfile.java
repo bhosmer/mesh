@@ -18,8 +18,6 @@ import java.io.FileReader;
 /**
  * Demo support--simple file read
  * TODO variant return
- *
- * @author Basil Hosmer
 
  */
 public final class _readfile extends IntrinsicLambda

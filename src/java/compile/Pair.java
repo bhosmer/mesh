@@ -12,8 +12,6 @@ package compile;
 
 /**
  * Simple pair structure.
- *
- * @author Basil Hosmer
  */
 public final class Pair<L, R>
 {

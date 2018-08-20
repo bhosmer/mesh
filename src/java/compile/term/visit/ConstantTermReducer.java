@@ -27,8 +27,6 @@ import java.util.HashMap;
  *
  * As with inlining, only implemented a few of the usual
  * suspects here. TODO the rest.
- *
- * @author Basil Hosmer
  */
 public class ConstantTermReducer extends TermTransformerBase
 {

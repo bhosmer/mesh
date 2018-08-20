@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 /**
  * strtake(str, n) = first n if n > 0, last -n if n < 0. n > list size wraps
  * TODO should be replaced by take over list TC, which string implements
- *
- * @author Basil Hosmer
  */
 public final class _strtake extends IntrinsicLambda
 {

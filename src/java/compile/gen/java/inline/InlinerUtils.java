@@ -24,8 +24,6 @@ import java.util.ArrayList;
 /**
  * Situation-aware formatting utilities used by {@link Inliner}
  * implementations.
- *
- * @author Basil Hosmer
  */
 public class InlinerUtils
 {

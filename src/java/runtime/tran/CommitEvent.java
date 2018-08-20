@@ -16,8 +16,6 @@ import runtime.rep.map.PersistentMap;
 /**
  * Change event, dispatched over the set of reactors attached
  * to a box at the time of a successful commit.
- *
- * @author Basil Hosmer
  */
 final class CommitEvent
 {

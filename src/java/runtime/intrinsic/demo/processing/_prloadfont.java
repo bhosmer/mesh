@@ -16,8 +16,6 @@ import java.io.File;
 
 /**
  * Demo support, Processing hook
- *
- * @author Basil Hosmer
  */
 public final class _prloadfont extends IntrinsicLambda
 {

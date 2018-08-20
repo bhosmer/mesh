@@ -18,8 +18,6 @@ import compile.type.Type;
  * Instances correspond directly to simple (non-decomposing) lets
  * in the surface language. Decomposing lets are currently desugared
  * into simple lets at parse time.
- *
- * @author Basil Hosmer
  */
 public final class IntrinsicLetBinding extends LetBinding
 {

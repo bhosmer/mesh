@@ -22,8 +22,6 @@ import java.util.*;
 /**
  * Utility for pretty printing terms and term lists.
  * TODO phase out static methods in favor of DumpUtils
- *
- * @author Basil Hosmer
  */
 public final class TermDumper extends TermVisitorBase<String> {
   public static final ThreadLocal<TermDumper> LOCAL =

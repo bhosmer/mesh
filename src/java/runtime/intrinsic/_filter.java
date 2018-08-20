@@ -18,8 +18,6 @@ import runtime.rep.Tuple;
 
 /**
  * filter(list, pred) -> list items where pred
- *
- * @author Basil Hosmer
  */
 public final class _filter extends IntrinsicLambda
 {

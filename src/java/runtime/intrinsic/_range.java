@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 
 /**
  * Create int list [start, ..., start + extent)
- *
- * @author Basil Hosmer
  */
 public final class _range extends IntrinsicLambda
 {

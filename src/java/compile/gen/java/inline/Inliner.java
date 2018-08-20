@@ -16,8 +16,6 @@ import compile.term.ApplyTerm;
 /**
  * Implementations define a {@link #tryInlining} method for particular
  * intrinsic functions.
- *
- * @author Basil Hosmer
  */
 public interface Inliner
 {

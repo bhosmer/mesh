@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 
 /**
  * true if integer argument is an index value for list argument
- *
- * @author Basil Hosmer
  */
 public final class _isindex extends IntrinsicLambda
 {

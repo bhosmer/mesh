@@ -21,8 +21,6 @@ import java.util.concurrent.FutureTask;
 /**
  * Start running a block in a {@link Future} and return a lambda
  * that provides (blocking) access to the result.
- *
- * @author Basil Hosmer
  */
 public final class _future extends IntrinsicLambda
 {

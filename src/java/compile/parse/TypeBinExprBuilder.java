@@ -21,8 +21,6 @@ import java.util.List;
 
 /**
  * Binary expr builder for type terms.
- *
- * @author Basil Hosmer
  */
 public class TypeBinExprBuilder extends BinExprBuilder<Type>
 {

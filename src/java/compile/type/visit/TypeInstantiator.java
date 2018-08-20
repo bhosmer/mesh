@@ -37,8 +37,6 @@ import java.util.Map;
  * (e.g. {@link TypeVarSubstitutor}). Here we copy instead,
  * but this breaks nested type abstractions.
  * TODO this is broken, fix param ref tracking.
- *
- * @author Basil Hosmer
  */
 public final class TypeInstantiator extends TypeTransformerBase
 {

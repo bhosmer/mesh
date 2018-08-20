@@ -17,8 +17,6 @@ import runtime.rep.Tuple;
 /**
  * draw(n, max) returns list of n random ints
  * in the range 0..max - 1
- *
- * @author Basil Hosmer
  */
 public final class _draw extends IntrinsicLambda
 {

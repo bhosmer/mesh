@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 /**
  * Boolean (shortcutting) or of boolean value on left,
  * and boolean-returning closure on right.
- *
- * @author Basil Hosmer
  */
 public final class _or extends IntrinsicLambda
 {

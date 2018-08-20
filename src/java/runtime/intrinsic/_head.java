@@ -15,8 +15,6 @@ import runtime.rep.list.ListValue;
 /**
  * head(list) = head element of non-empty list.
  * empty list throws, currently.
- *
- * @author Basil Hosmer
  */
 public final class _head extends IntrinsicLambda
 {

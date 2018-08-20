@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 /**
  * drop(list, n) = drops first n if n > 0, last -n if n < 0.
  * n is held to list size.
- *
- * @author Basil Hosmer
  */
 public final class _drop extends IntrinsicLambda
 {

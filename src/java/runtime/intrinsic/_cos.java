@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * cos()
- *
- * @author Basil Hosmer
  */
 public final class _cos extends IntrinsicLambda
 {

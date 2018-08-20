@@ -17,8 +17,6 @@ import compile.module.Module;
  * Service for building compilation units from modules.
  * Hooked up to backend-specific implementation by compiler.
  * See similar setup in {@link IntrinsicsResolver}.
- *
- * @author Basil Hosmer
  */
 public final class UnitBuilder
 {

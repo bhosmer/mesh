@@ -20,8 +20,6 @@ import java.net.Socket;
 
 /**
  * Demo support.
- *
- * @author Basil Hosmer
  */
 public final class _accept extends IntrinsicLambda
 {

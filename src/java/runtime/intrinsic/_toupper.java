@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * string toupper
- *
- * @author Basil Hosmer
  */
 public final class _toupper extends IntrinsicLambda
 {

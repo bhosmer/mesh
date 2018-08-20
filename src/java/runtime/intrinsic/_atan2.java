@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * Wraps {@link Math#atan2(double, double)}.
- *
- * @author Basil Hosmer
  */
 public final class _atan2 extends IntrinsicLambda
 {

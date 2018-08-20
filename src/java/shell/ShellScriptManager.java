@@ -29,8 +29,6 @@ import java.util.*;
 /**
  * Holds shell runtime context. Manages chained module import scheme which provides
  * shell's accumulating binding behavior.
- *
- * @author Basil Hosmer
  */
 public final class ShellScriptManager
 {

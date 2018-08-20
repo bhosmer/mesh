@@ -22,8 +22,6 @@ import java.util.List;
 /**
  * Try inlining calls to {@link runtime.intrinsic._zip}.
  * In particular, call private entry points for fixed sizes.
- *
- * @author Basil Hosmer
  */
 public class ZipInliner implements Inliner
 {

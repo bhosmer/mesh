@@ -17,8 +17,6 @@ import java.util.LinkedHashMap;
 
 /**
  * Term representing a map literal expression.
- *
- * @author Basil Hosmer
  */
 public final class MapTerm extends KeyedTerm
 {

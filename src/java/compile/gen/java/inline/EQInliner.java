@@ -22,8 +22,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.EQ}.
- *
- * @author Basil Hosmer
  */
 public class EQInliner implements Inliner
 {

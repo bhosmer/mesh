@@ -17,8 +17,6 @@ import runtime.rep.list.PersistentList;
 
 /**
  * remove(list, item) -> removes all occurences of item from list
- *
- * @author Basil Hosmer
  */
 public final class _remove extends IntrinsicLambda
 {

@@ -18,8 +18,6 @@ import compile.module.Module;
  * A unit is what a module is compiled into.
  * {@link UnitBuilder#build} drives
  * the pipeline from {@link Module} to finished {@link Unit}.
- *
- * @author Basil Hosmer
  */
 public interface Unit extends Dumpable
 {

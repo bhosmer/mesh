@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.Minus}.
- *
- * @author Basil Hosmer
  */
 public class MinusInliner implements Inliner
 {

@@ -17,8 +17,6 @@ import compile.type.Types;
 
 /**
  * Term representing a string literal.
- *
- * @author Basil Hosmer
  */
 public final class StringLiteral extends SimpleLiteralTerm
 {

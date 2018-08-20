@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * print string to System.out.
- *
- * @author Basil Hosmer
  */
 public final class _printstr extends IntrinsicLambda
 {

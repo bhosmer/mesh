@@ -17,8 +17,6 @@ import runtime.rep.Tuple;
 
 /**
  * Demo support, Processing hook
- *
- * @author Basil Hosmer
  */
 public final class _prendshape extends IntrinsicLambda
 {

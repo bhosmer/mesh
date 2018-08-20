@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 
 /**
  * if combinator
- *
- * @author Basil Hosmer
  */
 public final class _if extends IntrinsicLambda
 {

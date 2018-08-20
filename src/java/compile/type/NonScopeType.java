@@ -24,8 +24,6 @@ import java.util.Set;
  * Common base class for classes of type terms that cannot
  * be quantified.
  * TODO should go away after refactor
- *
- * @author Basil Hosmer
  */
 public abstract class NonScopeType extends AbstractType
 {

@@ -23,8 +23,6 @@ import java.util.List;
 
 /**
  * Service wrapper for Rats-generated parser.
- *
- * @author Basil Hosmer
  */
 public class RatsScriptParser
 {

@@ -39,8 +39,6 @@ import java.util.List;
  * of the context in which the compiler is being run (e.g. shell,
  * AOT).
  *
- *
- * @author Basil Hosmer
  */
 public final class Config
 {

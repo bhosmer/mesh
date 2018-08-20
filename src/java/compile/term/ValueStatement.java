@@ -13,8 +13,6 @@ package compile.term;
 /**
  * Common superinterface for statements over values:
  * {@link ValueBinding}, {@link UnboundTerm}.
- *
- * @author Basil Hosmer
  */
 public interface ValueStatement extends Statement, Typed
 {

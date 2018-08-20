@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * conditional value selection (immediate if)
- *
- * @author Basil Hosmer
  */
 public final class _iif extends IntrinsicLambda
 {

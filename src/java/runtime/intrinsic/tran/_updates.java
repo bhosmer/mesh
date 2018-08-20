@@ -20,8 +20,6 @@ import runtime.tran.TransactionManager;
  * Update a tuple of boxes with the result of a function
  * that takes tuple of values as input, returns new tuple
  * as output.
- *
- * @author Basil Hosmer
  */
 public final class _updates extends IntrinsicLambda
 {

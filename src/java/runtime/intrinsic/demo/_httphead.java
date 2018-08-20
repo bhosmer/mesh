@@ -19,8 +19,6 @@ import java.net.*;
 
 /**
  * Demo support--simple http head.
- *
- * @author Basil Hosmer
  */
 public final class _httphead extends IntrinsicLambda
 {

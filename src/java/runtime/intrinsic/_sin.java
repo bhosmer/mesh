@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * sin()
- *
- * @author Basil Hosmer
  */
 public final class _sin extends IntrinsicLambda
 {

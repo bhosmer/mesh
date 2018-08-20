@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * intrinsic greater-than-or-equal over ints
- *
- * @author Basil Hosmer
  */
 public final class _ge extends IntrinsicLambda
 {

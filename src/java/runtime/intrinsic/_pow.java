@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * int pow()
- *
- * @author Basil Hosmer
  */
 public final class _pow extends IntrinsicLambda
 {

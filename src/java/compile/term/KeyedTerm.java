@@ -18,8 +18,6 @@ import java.util.LinkedHashMap;
 /**
  * Common superclass of literal terms representing keyed values,
  * i.e. {@link RecordTerm records} and {@link MapTerm maps}.
- *
- * @author Basil Hosmer
  */
 public abstract class KeyedTerm extends AbstractTypedTerm
 {

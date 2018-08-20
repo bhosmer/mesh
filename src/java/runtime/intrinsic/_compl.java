@@ -21,8 +21,6 @@ import runtime.rep.Tuple;
  * > f = compl({ $0 % 3 }, ["One", "Two", "Three"])
  * > f(100)
  * "Two"
- *
- * @author Basil Hosmer
  */
 public final class _compl extends IntrinsicLambda
 {

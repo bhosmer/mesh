@@ -23,8 +23,6 @@ import java.net.URL;
 /**
  * Demo support--super simple http get
  * TODO variant return
- *
- * @author Basil Hosmer
  */
 public final class _httpget extends IntrinsicLambda
 {

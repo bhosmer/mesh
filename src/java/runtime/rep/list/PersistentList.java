@@ -30,8 +30,6 @@ import java.util.Iterator;
  * <p/>
  * {@link BigList} is the general implementation, others
  * take advantage of smaller data size to degenerate.
- *
- * @author Basil Hosmer
  */
 public abstract class PersistentList extends AbstractListValue
     implements PersistentConstants

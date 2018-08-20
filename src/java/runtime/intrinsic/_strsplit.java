@@ -17,8 +17,6 @@ import runtime.rep.Tuple;
 
 /**
  * wraps {@link String#split(String)}
- *
- * @author Basil Hosmer
  */
 public final class _strsplit extends IntrinsicLambda
 {

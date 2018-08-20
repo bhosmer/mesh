@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * Int mod application reducer.
- *
- * @author Basil Hosmer
  */
 public class ModReducer implements ApplyReducer
 {

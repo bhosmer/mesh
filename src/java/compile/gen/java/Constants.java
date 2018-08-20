@@ -12,8 +12,6 @@ package compile.gen.java;
 
 /**
  * java codegen constants (agreements)
- *
- * @author Basil Hosmer
  */
 public final class Constants
 {

@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 /**
  * find() for strings
  * NOTE find substring, not char
- *
- * @author Basil Hosmer
  */
 public final class _strfind extends IntrinsicLambda
 {

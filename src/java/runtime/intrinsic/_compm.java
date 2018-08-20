@@ -20,8 +20,6 @@ import runtime.rep.Tuple;
  * > f = compm({ iif($0, #ok, #err) }, [#ok: "OK", #err: "ERR"])
  * > f(false)
  * "ERR"
- *
- * @author Basil Hosmer
  */
 public final class _compm extends IntrinsicLambda
 {

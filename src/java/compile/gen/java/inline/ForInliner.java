@@ -22,8 +22,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic._for}.
- *
- * @author Basil Hosmer
  */
 public class ForInliner implements Inliner
 {

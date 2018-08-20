@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * wraps {@link String#startsWith(String)}
- *
- * @author Basil Hosmer
  */
 public final class _startswith extends IntrinsicLambda
 {

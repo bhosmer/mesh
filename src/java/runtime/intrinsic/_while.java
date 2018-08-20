@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 /**
  * while combinator.
  * run a block repeatedly while guard predicate returns true.
- *
- * @author Basil Hosmer
  */
 public final class _while extends IntrinsicLambda
 {

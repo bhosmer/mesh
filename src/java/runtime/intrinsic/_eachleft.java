@@ -24,8 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * which returns the result of applying f(x, y) for each x.
  * The prefix attribute ~ on infix operators desugars to this,
  * e.g. for +, xs ~+ y => eachleft(+)(xs, y)
- *
- * @author Basil Hosmer
  */
 public final class _eachleft extends IntrinsicLambda
 {

@@ -20,8 +20,6 @@ import java.util.ArrayDeque;
 
 /**
  * Module traversal base implementation.
- *
- * @author Basil Hosmer
  */
 public abstract class ModuleVisitor<T> extends BindingVisitorBase<T>
 {

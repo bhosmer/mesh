@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * int to float
- *
- * @author Basil Hosmer
  */
 public final class _l2f extends IntrinsicLambda
 {

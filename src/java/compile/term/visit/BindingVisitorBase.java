@@ -17,8 +17,6 @@ import compile.term.TypeDef;
 
 /**
  * Binding visitor base implementation.
- *
- * @author Basil Hosmer
  */
 public class BindingVisitorBase<T> extends TermVisitorBase<T> implements BindingVisitor<T>
 {

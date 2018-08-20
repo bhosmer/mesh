@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 
 /**
  * for combinator
- *
- * @author Basil Hosmer
  */
 public final class _for extends IntrinsicLambda
 {

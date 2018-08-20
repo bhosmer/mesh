@@ -19,8 +19,6 @@ import java.util.Map;
 
 /**
  * Return the values of a map as a list.
- *
- * @author Basil Hosmer
  */
 public final class _entries extends IntrinsicLambda
 {

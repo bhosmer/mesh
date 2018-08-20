@@ -20,8 +20,6 @@ import java.util.ArrayList;
 
 /**
  * where() for strings
- *
- * @author Basil Hosmer
  */
 public final class _strwhere extends IntrinsicLambda
 {

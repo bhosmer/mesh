@@ -26,8 +26,6 @@ import compile.type.kind.Kinds;
  * Note that due to shared subnodes, types may come through here more than once.
  * So for safety, all operations here need to be idempotent.
  * TODO move this into TC proper
- *
- * @author Basil Hosmer
  */
 public final class TypeExprPreprocessor extends TypeVisitorBase<Object>
 {

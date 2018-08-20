@@ -13,8 +13,6 @@ package runtime.rep;
 /**
  * Runtime representation class for values of type Var(...).
  * Note: in flux.
- *
- * @author Basil Hosmer
  */
 public final class Variant
 {

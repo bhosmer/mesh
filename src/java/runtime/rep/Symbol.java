@@ -15,8 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Runtime representation for values of type Symbol.
  * Symbols are interned in {@link #SYM_POOL}.
- *
- * @author Basil Hosmer
  */
 public final class Symbol
 {

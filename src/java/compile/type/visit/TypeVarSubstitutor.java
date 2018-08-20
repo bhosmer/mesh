@@ -38,8 +38,6 @@ import java.util.Set;
  * the move-don't-copy behavior, which means that nested type
  * abstractions don't work. I.e., our way of maintaining
  * param refs is BROKEN. TODO FIX ASAP
- *
- * @author Basil Hosmer
  */
 public final class TypeVarSubstitutor extends TypeTransformerBase {
   /**

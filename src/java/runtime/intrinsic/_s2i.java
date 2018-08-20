@@ -13,8 +13,6 @@ package runtime.intrinsic;
 /**
  * string to int.
  * Parse failures throw currently. TODO variants.
- *
- * @author Basil Hosmer
  */
 public final class _s2i extends IntrinsicLambda
 {

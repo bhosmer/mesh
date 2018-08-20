@@ -20,8 +20,6 @@ import java.util.*;
  * and module identity.
  *
  * TODO will need to factor out backend-agnostic Unit/UnitDictionary interfaces
- *
- * @author Basil Hosmer
  */
 public final class UnitDictionary
 {

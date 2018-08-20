@@ -18,8 +18,6 @@ import runtime.rep.Tuple;
  * Apply a list of keys to a map of items, yielding a selection list.
  * E.g. > maplm([0, 1, 2], [0: "Zero", 1: "One", 2: "Two"])
  * => ["Zero", "One", "Two"]
- *
- * @author Basil Hosmer
  */
 public final class _maplm extends IntrinsicLambda
 {

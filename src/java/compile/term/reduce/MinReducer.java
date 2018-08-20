@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * Int min application reducer.
- *
- * @author Basil Hosmer
  */
 public class MinReducer implements ApplyReducer
 {

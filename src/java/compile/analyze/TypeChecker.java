@@ -33,8 +33,6 @@ import java.util.*;
 
 /**
  * Typecheck a module.
- *
- * @author Basil Hosmer
  */
 public final class TypeChecker extends ModuleVisitor<Type> implements TypeEnv
 {

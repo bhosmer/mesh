@@ -16,8 +16,6 @@ import compile.Loc;
 
 /**
  * Common super for kinds. Kinds classify types.
- *
- * @author Basil Hosmer
  */
 public abstract class Kind implements Located, Dumpable
 {

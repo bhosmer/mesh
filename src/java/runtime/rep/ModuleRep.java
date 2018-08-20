@@ -15,8 +15,6 @@ package runtime.rep;
  * module state, definitions, bindings.
  * {@link Runnable#run} method executes
  * top-level module statements.
- *
- * @author Basil Hosmer
  */
 public interface ModuleRep extends Runnable
 {

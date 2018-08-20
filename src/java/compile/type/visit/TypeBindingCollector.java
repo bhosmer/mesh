@@ -17,8 +17,6 @@ import compile.type.kind.Kinds;
 /**
  * A type expression may carry inline type params, analogous to inline value params.
  * Here we collect and add them to the enclosing type scope.
- *
- * @author Basil Hosmer
  */
 public final class TypeBindingCollector extends StackedTypeVisitor<Object>
 {

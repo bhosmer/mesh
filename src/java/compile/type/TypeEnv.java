@@ -18,8 +18,6 @@ import java.util.Map;
 
 /**
  * Type environment interface. Supplies fresh type vars, etc.
- *
- * @author Basil Hosmer
  */
 public interface TypeEnv
 {

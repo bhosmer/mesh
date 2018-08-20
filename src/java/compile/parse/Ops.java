@@ -21,8 +21,6 @@ import java.util.Map;
 /**
  * Mesh operator precedence and associativity info.
  * Note: defined symbols need to agree with MeshParser.rats
- *
- * @author Basil Hosmer
  */
 public class Ops {
   /**

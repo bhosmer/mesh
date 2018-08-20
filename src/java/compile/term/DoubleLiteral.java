@@ -17,8 +17,6 @@ import compile.type.Types;
 
 /**
  * Double literal term
- *
- * @author Basil Hosmer
  */
 public final class DoubleLiteral extends SimpleLiteralTerm
 {

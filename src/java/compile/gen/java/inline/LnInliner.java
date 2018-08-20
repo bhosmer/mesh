@@ -15,8 +15,6 @@ import compile.term.ApplyTerm;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.Ln}.
- *
- * @author Basil Hosmer
  */
 public class LnInliner implements Inliner
 {

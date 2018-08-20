@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * float difference
- *
- * @author Basil Hosmer
  */
 public final class _fminus extends IntrinsicLambda
 {

@@ -18,8 +18,6 @@ import java.util.NoSuchElementException;
 
 /**
  * Virtualized integer list [start .. end], with start <= end.
- *
- * @author Basil Hosmer
  */
 public final class IntRange extends AbstractListValue
 {

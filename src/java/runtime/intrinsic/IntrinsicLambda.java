@@ -15,8 +15,6 @@ import runtime.rep.Lambda;
 /**
  * Extends {@link runtime.rep.Lambda} with attributes used
  * to hook up intrinsics.
- *
- * @author Basil Hosmer
  */
 public abstract class IntrinsicLambda implements Lambda
 {

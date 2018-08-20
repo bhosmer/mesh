@@ -14,8 +14,6 @@ package runtime.rep;
  * Runtime representation for values of type Rec(...).
  * Note: will be tightened up along with type system
  * changes around records.
- *
- * @author Basil Hosmer
  */
 public final class Record
 {

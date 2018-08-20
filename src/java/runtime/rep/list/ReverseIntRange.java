@@ -19,8 +19,6 @@ import java.util.NoSuchElementException;
 /**
  * Virtualized list [start .. end], with start > end.
  * Instances are created by {@link IntRange#create}.
- *
- * @author Basil Hosmer
  */
 public final class ReverseIntRange extends AbstractListValue
 {

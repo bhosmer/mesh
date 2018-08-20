@@ -12,8 +12,6 @@ package compile;
 
 /**
  * Location info object.
- *
- * @author Basil Hosmer
  */
 public final class Loc implements Comparable<Loc>
 {

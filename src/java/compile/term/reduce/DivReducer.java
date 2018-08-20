@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Int divide application reducer.
- *
- * @author Basil Hosmer
  */
 public class DivReducer implements ApplyReducer
 {

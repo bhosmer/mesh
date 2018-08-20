@@ -19,8 +19,6 @@ import compile.type.TypeRef;
 /**
  * Creates a type application term from a parameterized base
  * and a TypeParam -> Type substitution map.
- *
- * @author Basil Hosmer
  */
 public final class TypeApplier extends TypeTransformerBase
 {

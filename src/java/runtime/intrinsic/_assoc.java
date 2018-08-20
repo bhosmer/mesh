@@ -23,8 +23,6 @@ import java.util.Iterator;
  * For duplicate keys, last instance wins.
  * Equal list length is not required, value
  * list is cycled over if necessary.
- *
- * @author Basil Hosmer
  */
 public final class _assoc extends IntrinsicLambda
 {

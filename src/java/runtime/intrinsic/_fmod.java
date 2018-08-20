@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * float mod()
- *
- * @author Basil Hosmer
  */
 public final class _fmod extends IntrinsicLambda
 {

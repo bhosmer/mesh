@@ -17,8 +17,6 @@ import runtime.rep.Tuple;
 /**
  * Evolve (reduce) until stop condition is met, or inputs
  * are exhausted.
- *
- * @author Basil Hosmer
  */
 public final class _evolve_while extends IntrinsicLambda
 {

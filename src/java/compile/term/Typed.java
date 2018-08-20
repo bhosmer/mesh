@@ -16,8 +16,6 @@ import compile.type.Type;
 
 /**
  * Common interface for typed objects.
- *
- * @author Basil Hosmer
  */
 public interface Typed extends Located, Dumpable
 {

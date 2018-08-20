@@ -23,8 +23,6 @@ import java.util.List;
 
 /**
  * Type tuple term.
- *
- * @author Basil Hosmer
  */
 public final class TypeTuple extends NonScopeType
 {

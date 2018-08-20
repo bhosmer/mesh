@@ -18,8 +18,6 @@ import runtime.rep.Tuple;
 /**
  * empty(T) true if collection or structure is empty
  * TODO use TCs for poly once available
- *
- * @author Basil Hosmer
  */
 public final class _empty extends IntrinsicLambda
 {

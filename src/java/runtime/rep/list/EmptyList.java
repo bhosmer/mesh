@@ -18,8 +18,6 @@ import java.util.Iterator;
 
 /**
  * Empty list.
- *
- * @author Basil Hosmer
  */
 final class EmptyList extends PersistentList
 {

@@ -27,8 +27,6 @@ import java.util.List;
 
 /**
  * Compiler top-level entry points.
- *
- * @author Basil Hosmer
  */
 public class Compiler
 {

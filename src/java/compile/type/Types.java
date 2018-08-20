@@ -22,8 +22,6 @@ import java.util.*;
 
 /**
  * Predefined types.
- *
- * @author Basil Hosmer
  */
 public final class Types
 {

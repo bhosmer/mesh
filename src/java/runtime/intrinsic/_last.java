@@ -14,8 +14,6 @@ import runtime.rep.list.ListValue;
 
 /**
  * last(list) = last element of non-empty list
- *
- * @author Basil Hosmer
  */
 public final class _last extends IntrinsicLambda
 {

@@ -15,8 +15,6 @@ import compile.term.visit.BindingVisitor;
 
 /**
  * Binds a name within a scope.
- *
- * @author Basil Hosmer
  */
 public interface Binding extends Statement
 {

@@ -25,8 +25,6 @@ import java.util.HashSet;
  * of two type terms. Done in a hurry and seems to work, should
  * definitely be revisited to improve efficiency and verify correctness.
  * Better yet would be to find we don't need it after refactoring.
- *
- * @author Basil Hosmer
  */
 public final class EquivState
 {

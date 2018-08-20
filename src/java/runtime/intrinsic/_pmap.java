@@ -24,8 +24,6 @@ import java.util.concurrent.FutureTask;
 /**
  * Parallel version of {@link _map}. Aliased to infix
  * operator '|:' in {@link compile.parse.Ops}.
- *
- * @author Basil Hosmer
  */
 public final class _pmap extends IntrinsicLambda
 {

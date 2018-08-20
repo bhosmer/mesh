@@ -16,8 +16,6 @@ import compile.type.Type;
 
 /**
  * Term representing a named reference to a binding.
- *
- * @author Basil Hosmer
  */
 public final class RefTerm extends AbstractTerm
 {

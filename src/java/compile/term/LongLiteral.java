@@ -17,8 +17,6 @@ import compile.type.Types;
 
 /**
  * Term representing a long numeric literal value.
- *
- * @author Basil Hosmer
  */
 public final class LongLiteral extends SimpleLiteralTerm
 {

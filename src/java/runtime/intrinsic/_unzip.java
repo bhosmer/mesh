@@ -18,8 +18,6 @@ import java.util.Iterator;
 
 /**
  * the inverse of {@link _zip} (mod ragged lists)
- *
- * @author Basil Hosmer
  */
 public final class _unzip extends IntrinsicLambda
 {

@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * strcmp
- *
- * @author Basil Hosmer
  */
 public final class _strcmp extends IntrinsicLambda
 {

@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * Int minus application reducer.
- *
- * @author Basil Hosmer
  */
 public class MinusReducer implements ApplyReducer
 {

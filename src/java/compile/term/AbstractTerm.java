@@ -16,8 +16,6 @@ import compile.type.*;
 
 /**
  * Common base implementation for all value terms.
- *
- * @author Basil Hosmer
  */
 public abstract class AbstractTerm implements Term
 {

@@ -17,8 +17,6 @@ import compile.type.Types;
 
 /**
  * Term representing a symbol literal.
- *
- * @author Basil Hosmer
  */
 public final class SymbolLiteral extends SimpleLiteralTerm
 {

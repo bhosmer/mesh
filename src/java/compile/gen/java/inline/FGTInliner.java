@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.FGT}.
- *
- * @author Basil Hosmer
  */
 public class FGTInliner implements Inliner
 {

@@ -30,8 +30,6 @@ import static compile.parse.ApplyFlavor.StructAddr;
 
 /**
  * static methods for building Mesh AST nodes
- *
- * @author Basil Hosmer
  */
 public class ASTBuilder
 {

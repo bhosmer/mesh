@@ -14,8 +14,6 @@ import runtime.rep.Symbol;
 
 /**
  * sym to string
- *
- * @author Basil Hosmer
  */
 public final class _sym2s extends IntrinsicLambda
 {

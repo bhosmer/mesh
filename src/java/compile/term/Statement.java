@@ -15,8 +15,6 @@ import compile.Located;
 
 /**
  * A statement can either be a binding or a plain term.
- *
- * @author Basil Hosmer
  */
 public interface Statement extends Located, Dumpable
 {

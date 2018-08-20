@@ -16,8 +16,6 @@ import compile.type.Type;
 /**
  * Common superclass for syntactic literal terms whose types
  * are invariant, e.g. {@link StringLiteral}, {@link IntLiteral}.
- *
- * @author Basil Hosmer
  */
 public abstract class SimpleLiteralTerm extends AbstractTerm
 {

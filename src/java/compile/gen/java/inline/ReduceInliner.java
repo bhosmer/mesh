@@ -33,8 +33,6 @@ import java.util.List;
  *      mapred(r, i, vs, f)
  *
  * TODO: not a late-stage inline. Move to *Reducer stage
- *
- * @author Basil Hosmer
  */
 public class ReduceInliner implements Inliner
 {

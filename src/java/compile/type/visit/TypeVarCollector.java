@@ -17,8 +17,6 @@ import java.util.LinkedHashSet;
 
 /**
  * Collects the type variables from a type term.
- *
- * @author Basil Hosmer
  */
 public final class TypeVarCollector extends TypeVisitorBase<Object>
 {

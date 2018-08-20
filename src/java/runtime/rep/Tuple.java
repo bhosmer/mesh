@@ -12,8 +12,6 @@ package runtime.rep;
 
 /**
  * Runtime representation for values of type Tup(...).
- *
- * @author Basil Hosmer
  */
 public final class Tuple
 {

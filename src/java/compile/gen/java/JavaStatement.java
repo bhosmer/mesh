@@ -16,8 +16,6 @@ import compile.term.ValueStatement;
 
 /**
  * Java source code statement, associated with a loc or term
- *
- * @author Basil Hosmer
  */
 public final class JavaStatement
 {

@@ -21,8 +21,6 @@ import java.util.logging.Logger;
 
 /**
  * Brute-force multithreaded runtime debug messages
- *
- * @author Basil Hosmer
  */
 public final class Logging
 {

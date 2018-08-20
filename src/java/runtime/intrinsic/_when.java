@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 
 /**
  * conditional execution: when(cond, block) == guard(!cond, (), {block();()})
- *
- * @author Basil Hosmer
  */
 public final class _when extends IntrinsicLambda
 {

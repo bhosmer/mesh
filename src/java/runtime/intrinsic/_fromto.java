@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 
 /**
  * create list of ints [from..to], ascending or descending
- *
- * @author Basil Hosmer
  */
 public final class _fromto extends IntrinsicLambda
 {

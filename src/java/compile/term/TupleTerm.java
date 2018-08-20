@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Term representing a tuple literal expression.
- *
- * @author Basil Hosmer
  */
 public final class TupleTerm extends PositionalTerm
 {

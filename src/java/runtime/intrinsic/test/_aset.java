@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 /**
  * Temporary FFI to mutable typed arrays, testing inevitability.
  * TODO redo using type classes
- *
- * @author Basil Hosmer
  */
 public final class _aset extends IntrinsicLambda
 {

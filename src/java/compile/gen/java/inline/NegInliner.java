@@ -15,8 +15,6 @@ import compile.term.ApplyTerm;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.NE}.
- *
- * @author Basil Hosmer
  */
 public class NegInliner implements Inliner
 {

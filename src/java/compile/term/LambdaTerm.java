@@ -25,8 +25,6 @@ import java.util.*;
  * Note: we're both a Term and a Scope. Choosing here to extend
  * AbstractScope rather than AbstractTypedTerm for (relative)
  * cleanness of implementation.
- *
- * @author Basil Hosmer
  */
 public final class LambdaTerm extends AbstractScope implements Term
 {

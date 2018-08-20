@@ -14,8 +14,6 @@ import java.util.*;
 
 /**
  * Topological sort
- *
- * @author Basil Hosmer
  */
 public final class TopoSort
 {

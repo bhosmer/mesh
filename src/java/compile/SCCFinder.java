@@ -19,8 +19,6 @@ import java.util.*;
  * Graph is a map from children/dependency sources to collections of
  * parents/dependency targets.
  * NOTE: single-use, not threadsafe
- *
- * @author Basil Hosmer
  */
 public final class SCCFinder<Child, Parent extends Child>
 {

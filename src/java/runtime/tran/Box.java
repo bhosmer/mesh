@@ -21,8 +21,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Runtime representation class for values of type Box(T).
  * Transactional single-value store. Works in conjunction
  * with {@link Transaction}.
- *
- * @author Basil Hosmer
  */
 public final class Box
 {

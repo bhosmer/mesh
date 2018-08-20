@@ -18,8 +18,6 @@ import runtime.rep.Tuple;
 /**
  * take(list, n) = first n if n > 0, last -n if n < 0.
  * n > list size wraps
- *
- * @author Basil Hosmer
  */
 public final class _take extends IntrinsicLambda
 {

@@ -16,8 +16,6 @@ import runtime.rep.list.PersistentList;
 
 /**
  * returns the keyset of a map as a list
- *
- * @author Basil Hosmer
  */
 public final class _keys extends IntrinsicLambda
 {

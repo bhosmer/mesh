@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * returns current task id
- *
- * @author Basil Hosmer
  */
 public final class _taskid extends IntrinsicLambda
 {

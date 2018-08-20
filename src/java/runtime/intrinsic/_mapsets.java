@@ -21,8 +21,6 @@ import java.util.Iterator;
  * Create a new map with original's contents, but with
  * given keys associated with values.
  * Note that we roll over the value list.
- *
- * @author Basil Hosmer
  */
 public final class _mapsets extends IntrinsicLambda
 {

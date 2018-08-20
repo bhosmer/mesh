@@ -21,8 +21,6 @@ import java.util.List;
 
 /**
  * Inline calls to {@link runtime.intrinsic._size}.
- *
- * @author Basil Hosmer
  */
 public class SizeInliner implements Inliner
 {

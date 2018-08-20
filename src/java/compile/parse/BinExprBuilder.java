@@ -19,8 +19,6 @@ import java.util.List;
  * Binary expression builder over parameterized operand type.
  * Subclasses supply desugaring and operator precedence info.
  * See {@link #buildBinExpr}.
- *
- * @author Basil Hosmer
  */
 public abstract class BinExprBuilder<Operand>
 {

@@ -20,8 +20,6 @@ import runtime.tran.TransactionManager;
  * in program time. I.e., this function is equivalent to
  * performing individual gets on each box within a transaction
  * and returning a tuple of the results.
- *
- * @author Basil Hosmer
  */
 public final class _gets extends IntrinsicLambda
 {

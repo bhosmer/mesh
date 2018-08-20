@@ -16,8 +16,6 @@ import compile.term.TypeDef;
 
 /**
  * Visits bindings and the terms within them (hence extends TermVisitor).
- *
- * @author Basil Hosmer
  */
 public interface BindingVisitor<T> extends TermVisitor<T>
 {

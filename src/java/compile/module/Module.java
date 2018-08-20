@@ -20,8 +20,6 @@ import java.util.*;
  * A module is a sequence of executable statements,
  * bindings and typedefs. Modules may import other modules.
  * Current compiler produces one module per source file.
- *
- * @author Basil Hosmer
  */
 public class Module extends AbstractScope
 {

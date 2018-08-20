@@ -17,8 +17,6 @@ import compile.term.Term;
 
 /**
  * size application reducer.
- *
- * @author Basil Hosmer
  */
 public class SizeReducer implements ApplyReducer
 {

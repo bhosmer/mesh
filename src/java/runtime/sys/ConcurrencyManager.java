@@ -17,8 +17,6 @@ import java.util.concurrent.Executors;
  * Concurrency manager, currently just a very thin
  * wrapper over a cached thread pool.
  * TODO lots of things to try here.
- *
- * @author Basil Hosmer
  */
 public class ConcurrencyManager
 {

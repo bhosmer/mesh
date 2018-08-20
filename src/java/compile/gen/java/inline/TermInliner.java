@@ -31,8 +31,6 @@ import java.util.Map;
  * <p/>
  * We're only inlining a handful of the usual suspects currently.
  * TODO the rest, ideally after the TC functionality has settled.
- *
- * @author Basil Hosmer
  */
 public class TermInliner
 {

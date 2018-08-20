@@ -19,8 +19,6 @@ import java.util.NoSuchElementException;
 
 /**
  * Sequence of lists representing a single list.
- *
- * @author Basil Hosmer
  */
 public final class ChainedLists extends AbstractListValue
 {

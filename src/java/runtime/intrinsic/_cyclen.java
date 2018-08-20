@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 /**
  * Like cycle, but with an additional upper limit on
  * the number of times function is called.
- *
- * @author Basil Hosmer
  */
 public final class _cyclen extends IntrinsicLambda
 {

@@ -13,8 +13,6 @@ package runtime.intrinsic;
 /**
  * string to float.
  * Parse failures throw currently. TODO variants.
- *
- * @author Basil Hosmer
  */
 public final class _s2f extends IntrinsicLambda
 {

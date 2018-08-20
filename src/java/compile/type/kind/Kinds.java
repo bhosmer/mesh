@@ -14,8 +14,6 @@ import compile.Loc;
 
 /**
  * Predefined kinds. Experimental stuff at bottom.
- *
- * @author Basil Hosmer
  */
 public class Kinds
 {

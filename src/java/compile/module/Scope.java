@@ -21,8 +21,6 @@ import java.util.Map;
 /**
  * Binding scope, either a {@link compile.module.Module} or
  * {@link runtime.rep.Lambda}.
- *
- * @author Basil Hosmer
  */
 public interface Scope extends Located, Dumpable
 {

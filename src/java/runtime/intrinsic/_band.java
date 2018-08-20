@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * bitwise and
- *
- * @author Basil Hosmer
  */
 public final class _band extends IntrinsicLambda
 {

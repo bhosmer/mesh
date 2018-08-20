@@ -22,8 +22,6 @@ import java.awt.event.WindowEvent;
 
 /**
  * Demo support, Processing hook
- *
- * @author Basil Hosmer
  */
 @SuppressWarnings("serial")
 public final class Processing extends PApplet

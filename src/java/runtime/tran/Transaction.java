@@ -35,8 +35,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * with persistent data structures providing practical copy-
  * on-write semantics, is inspired by Rich Hickey's prioneering
  * work in Clojure.
- *
- * @author Basil Hosmer
  */
 final class Transaction
 {

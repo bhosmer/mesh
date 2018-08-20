@@ -15,8 +15,6 @@ import runtime.rep.list.ListValue;
 /**
  * rest(list) = all but first element of non-empty list
  * empty list throws, currently.
- *
- * @author Basil Hosmer
  */
 public final class _tail extends IntrinsicLambda
 {

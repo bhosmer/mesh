@@ -27,8 +27,6 @@ import java.util.*;
 
 /**
  * Shell harness and {@link #main(String[])}.
- *
- * @author Basil Hosmer
  */
 public final class Main
 {

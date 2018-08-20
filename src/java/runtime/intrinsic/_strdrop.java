@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 /**
  * strdrop(str, n) = drops first n if n > 0, last -n if n < 0. n > list size is held to size
  * TODO should be replaced by take over list TC, which string implements
- *
- * @author Basil Hosmer
  */
 public final class _strdrop extends IntrinsicLambda
 {

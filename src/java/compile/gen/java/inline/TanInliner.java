@@ -15,8 +15,6 @@ import compile.term.ApplyTerm;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.Tan}.
- *
- * @author Basil Hosmer
  */
 public class TanInliner implements Inliner
 {

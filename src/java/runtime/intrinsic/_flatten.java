@@ -15,8 +15,6 @@ import runtime.rep.list.ListValue;
 
 /**
  * Concatenate multiple lists together.
- *
- * @author Basil Hosmer
  */
 public final class _flatten extends IntrinsicLambda
 {

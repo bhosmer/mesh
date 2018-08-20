@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.Mod}.
- *
- * @author Basil Hosmer
  */
 public class ModInliner implements Inliner
 {

@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * intrinsic less-than over floats
- *
- * @author Basil Hosmer
  */
 public final class _flt extends IntrinsicLambda
 {

@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.ATan2}.
- *
- * @author Basil Hosmer
  */
 public class ATan2Inliner implements Inliner
 {

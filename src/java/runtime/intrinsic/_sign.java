@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * sign of integer
- *
- * @author Basil Hosmer
  */
 public final class _sign extends IntrinsicLambda
 {

@@ -36,8 +36,6 @@ import java.util.Map;
  * every subclass is responsible for ensuring the integrity
  * of transformed results w.r.t. params hosted on scopes,
  * and param refs within those scopes.
- *
- * @author Basil Hosmer
  */
 public abstract class TypeTransformerBase extends TypeVisitorBase<Type>
 {

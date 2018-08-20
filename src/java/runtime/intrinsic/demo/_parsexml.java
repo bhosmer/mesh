@@ -27,8 +27,6 @@ import java.io.StringReader;
 
 /**
  * Tempoary hookup for demos--simple xml string to xnode
- *
- * @author Basil Hosmer
  */
 public final class _parsexml extends IntrinsicLambda
 {

@@ -17,8 +17,6 @@ import compile.type.NonScopeType;
  * A type binding is either a {@link TypeDef} or a {@link compile.type.TypeParam}.
  * The targets of {@link compile.type.TypeRef} terms are type bindings.
  * Note that a type binding is also a type.
- *
- * @author Basil Hosmer
  */
 public abstract class TypeBinding extends NonScopeType implements Binding
 {

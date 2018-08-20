@@ -17,8 +17,6 @@ import runtime.tran.Box;
  * Snapshot the value held in a box.
  * Unlike {@link Get}, snap() doesn't pin, even in
  * r/w transactions. Power tool, enough rope, etc.
- *
- * @author Basil Hosmer
  */
 public final class _snap extends IntrinsicLambda
 {

@@ -15,8 +15,6 @@ import runtime.intrinsic.IntrinsicLambda;
 
 /**
  * Demo support, Processing hook
- *
- * @author Basil Hosmer
  */
 public final class _primagewidth extends IntrinsicLambda
 {

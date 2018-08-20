@@ -20,8 +20,6 @@ import java.util.Stack;
  * module dictionary, maybe more later.
  * <p/>
  * TODO eventually want to make this state global (cross-thread)
- *
- * @author Basil Hosmer
  */
 public final class Session
 {

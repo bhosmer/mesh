@@ -16,8 +16,6 @@ import compile.type.Type;
 /**
  * Term representing the phantom value (RHS) of a {@link ParamBinding}.
  * Exists to rationalize the treatment of binding RHSes.
- *
- * @author Basil Hosmer
  */
 public final class ParamValue extends AbstractTerm
 {

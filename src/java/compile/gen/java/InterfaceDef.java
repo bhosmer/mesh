@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * Parts for Java interface def, Javassist CG methods, ref to generated Class
- *
- * @author Basil Hosmer
  */
 public final class InterfaceDef
 {

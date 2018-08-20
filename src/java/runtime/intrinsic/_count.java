@@ -16,8 +16,6 @@ import runtime.rep.list.ListValue;
 /**
  * count(n) returns a list of ints [0, ..., n - 1].
  * Absolute value is taken when n < 0
- *
- * @author Basil Hosmer
  */
 public final class _count extends IntrinsicLambda
 {

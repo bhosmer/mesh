@@ -16,8 +16,6 @@ import runtime.tran.TransactionManager;
 /**
  * Return rrue if we're in a transaction.
  * TODO remove, need sufficient control over nestability.
- *
- * @author Basil Hosmer
  */
 public final class _intran extends IntrinsicLambda
 {

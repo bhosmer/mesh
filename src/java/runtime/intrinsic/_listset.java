@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 /**
  * Return new list with original list's contents,
  * but with value at index replaced.
- *
- * @author Basil Hosmer
  */
 public final class _listset extends IntrinsicLambda
 {

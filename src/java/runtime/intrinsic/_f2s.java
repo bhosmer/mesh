@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * float to string
- *
- * @author Basil Hosmer
  */
 public final class _f2s extends IntrinsicLambda
 {

@@ -24,8 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * which returns the result of applying f(x, y) for each y.
  * The postfix attribute ~ on infix operators desugars to this,
  * e.g. for +, x +~ ys => eachright(+)(x, ys)
- *
- * @author Basil Hosmer
  */
 public final class _eachright extends IntrinsicLambda
 {

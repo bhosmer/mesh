@@ -16,8 +16,6 @@ import runtime.tran.TransactionManager;
 
 /**
  * Tuplized version of put().
- *
- * @author Basil Hosmer
  */
 public final class _puts extends IntrinsicLambda
 {

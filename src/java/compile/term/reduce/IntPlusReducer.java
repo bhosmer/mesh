@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * Int plus application reducer.
- *
- * @author Basil Hosmer
  */
 public class IntPlusReducer implements ApplyReducer
 {

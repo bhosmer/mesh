@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * intrinsic greater-than over floats
- *
- * @author Basil Hosmer
  */
 public final class _fgt extends IntrinsicLambda
 {

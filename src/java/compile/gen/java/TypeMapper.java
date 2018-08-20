@@ -24,8 +24,6 @@ import runtime.tran.Box;
 
 /**
  * Map type expression to Java representation class
- *
- * @author Basil Hosmer
  */
 public final class TypeMapper extends TypeVisitorBase<Class<?>>
 {

@@ -14,8 +14,6 @@ import compile.term.LambdaTerm;
 
 /**
  * Packages information about how to generate calls to invoke().
- *
- * @author Basil Hosmer
  */
 public class InvokeInfo
 {

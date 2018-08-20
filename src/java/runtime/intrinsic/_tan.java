@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * tan()
- *
- * @author Basil Hosmer
  */
 public final class _tan extends IntrinsicLambda
 {

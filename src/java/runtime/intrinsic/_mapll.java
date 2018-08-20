@@ -17,8 +17,6 @@ import runtime.rep.Tuple;
  * Apply a list of indexes to a list of items, yielding a selection list.
  * E.g. mapll([0, 2, 4], ["Zero", "One", "Two", "Three", "Four"])
  * => ["Zero", "Two", "Four"]
- *
- * @author Basil Hosmer
  */
 public final class _mapll extends IntrinsicLambda
 {

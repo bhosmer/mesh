@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * Return number of available processors.
- *
- * @author Basil Hosmer
  */
 public final class _availprocs extends IntrinsicLambda
 {

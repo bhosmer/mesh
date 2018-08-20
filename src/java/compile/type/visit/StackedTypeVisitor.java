@@ -21,8 +21,6 @@ import java.util.ArrayDeque;
  * at most one enclosing scope, and if present it will be the root
  * type. For now HRP is disabled--{@link TypeBindingCollector}
  * traps for inner scopes being pushed.
- *
- * @author Basil Hosmer
  */
 public abstract class StackedTypeVisitor<T> extends TypeVisitorBase<T>
 {

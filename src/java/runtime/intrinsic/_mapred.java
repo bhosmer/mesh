@@ -18,8 +18,6 @@ import runtime.rep.list.ListValue;
  * map-reduce. mapred(r, i, args, f) produces the
  * same result as reduce(r, i, args | f), without
  * generating the intermediate list.
- *
- * @author Basil Hosmer
  */
 public final class _mapred extends IntrinsicLambda
 {

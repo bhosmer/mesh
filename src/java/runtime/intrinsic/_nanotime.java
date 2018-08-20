@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * return current time in nanos
- *
- * @author Basil Hosmer
  */
 public final class _nanotime extends IntrinsicLambda
 {

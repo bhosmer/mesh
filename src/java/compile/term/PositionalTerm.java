@@ -17,8 +17,6 @@ import java.util.List;
 /**
  * Common super for positional literal terms {@link ListTerm}
  * and {@link TupleTerm}.
- *
- * @author Basil Hosmer
  */
 public abstract class PositionalTerm extends AbstractTypedTerm
 {

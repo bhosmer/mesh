@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.Min}.
- *
- * @author Basil Hosmer
  */
 public class MinInliner implements Inliner
 {

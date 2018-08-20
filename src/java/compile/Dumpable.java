@@ -12,8 +12,6 @@ package compile;
 
 /**
  * Common interface for dumpable objects.
- *
- * @author Basil Hosmer
  */
 public interface Dumpable
 {

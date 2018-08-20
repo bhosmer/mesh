@@ -21,8 +21,6 @@ import runtime.rep.Tuple;
  * TODO once escape analysis is used to optimize away boxes,
  * there's no reason why this couldn't be moved to source.
  * Same with other similar intrinsics.
- *
- * @author Basil Hosmer
  */
 public final class _cycle extends IntrinsicLambda
 {

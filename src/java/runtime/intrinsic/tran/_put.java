@@ -17,8 +17,6 @@ import runtime.tran.TransactionManager;
 
 /**
  * Set a box's value. Wraps itself in a transaction if none is running.
- *
- * @author Basil Hosmer
  */
 public final class _put extends IntrinsicLambda
 {

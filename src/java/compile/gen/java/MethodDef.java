@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Parts for a Java method.
- *
- * @author Basil Hosmer
  */
 public class MethodDef
 {

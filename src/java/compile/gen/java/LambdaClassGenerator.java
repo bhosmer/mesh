@@ -25,8 +25,6 @@ import static compile.parse.ApplyFlavor.StructAddr;
 
 /**
  * Lambda ClassDef implementation generator {@link #generate}.
- *
- * @author Basil Hosmer
  */
 public final class LambdaClassGenerator extends ClassGenerator
 {

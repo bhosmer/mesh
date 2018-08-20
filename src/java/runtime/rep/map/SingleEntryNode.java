@@ -19,8 +19,6 @@ import java.util.NoSuchElementException;
 
 /**
  * single-entry map node
- *
- * @author Basil Hosmer
  */
 final class SingleEntryNode extends MapNode implements Map.Entry<Object, Object>
 {

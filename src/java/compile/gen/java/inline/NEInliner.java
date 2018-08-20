@@ -22,8 +22,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.NE}.
- *
- * @author Basil Hosmer
  */
 public class NEInliner implements Inliner
 {

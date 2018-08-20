@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * {@link String#endsWith(String)}
- *
- * @author Basil Hosmer
  */
 public final class _endswith extends IntrinsicLambda
 {

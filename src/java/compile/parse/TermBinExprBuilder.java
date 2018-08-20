@@ -21,8 +21,6 @@ import java.util.List;
 
 /**
  * Binary expr builder for value terms.
- *
- * @author Basil Hosmer
  */
 public class TermBinExprBuilder extends BinExprBuilder<Term>
 {

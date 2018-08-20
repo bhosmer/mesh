@@ -18,8 +18,6 @@ import java.util.LinkedHashMap;
 
 /**
  * Term representing a record literal expression.
- *
- * @author Basil Hosmer
  */
 public final class RecordTerm extends KeyedTerm
 {

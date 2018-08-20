@@ -17,8 +17,6 @@ import java.io.Reader;
 /**
  * Services for creating FileReaders from names,
  * given a {@link ShellConfig}
- *
- * @author Basil Hosmer
  */
 public final class FileServices
 {

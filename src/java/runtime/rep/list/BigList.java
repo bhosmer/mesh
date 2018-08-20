@@ -21,8 +21,6 @@ import java.util.NoSuchElementException;
  * {@link #NODE_SIZE}. Contents are stored in a trie, with
  * index values treated as a sequence of bitfields forming
  * a path.
- *
- * @author Basil Hosmer
  */
 public final class BigList extends PersistentList
 {

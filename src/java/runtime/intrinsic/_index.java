@@ -15,8 +15,6 @@ import runtime.rep.list.ListValue;
 
 /**
  * index(list) returns a list of ints [0, ..., size(list) - 1]
- *
- * @author Basil Hosmer
  */
 public final class _index extends IntrinsicLambda
 {

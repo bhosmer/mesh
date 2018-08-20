@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 /**
  * Return new list with original list's contents
  * with new value appended.
- *
- * @author Basil Hosmer
  */
 public final class _append extends IntrinsicLambda
 {

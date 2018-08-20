@@ -16,8 +16,6 @@ import compile.type.Type;
 /**
  * Unbound terms are the term representation of expressions
  * used as statements, e.g. print("hey");
- *
- * @author Basil Hosmer
  */
 public final class UnboundTerm implements ValueStatement
 {

@@ -23,8 +23,6 @@ import java.util.List;
  * Simple in-module constant folding and propagation.
  * Logic here is just to traverse the module, real
  * work happens in {@link compile.term.visit.ConstantTermReducer}.
- *
- * @author Basil Hosmer
  */
 public final class ConstantReducer extends ModuleVisitor<Object>
 {

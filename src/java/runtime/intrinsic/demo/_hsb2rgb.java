@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 
 /**
  * Demo support.
- *
- * @author Basil Hosmer
  */
 public final class _hsb2rgb extends IntrinsicLambda
 {

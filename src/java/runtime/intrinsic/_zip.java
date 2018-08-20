@@ -20,8 +20,6 @@ import java.util.Iterator;
 /**
  * zip over n-ary tuple of lists
  * Members:[*] => Tup(List @ Members) -> List(Tup(Members))
- *
- * @author Basil Hosmer
  */
 public final class _zip extends IntrinsicLambda
 {

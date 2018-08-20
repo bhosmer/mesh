@@ -7,8 +7,6 @@ import java.util.ListIterator;
 /**
  * Abstract super for ListValue impls, adds standard impls
  * of java.Util.List methods.
- *
- * @author Basil Hosmer
  */
 public abstract class AbstractListValue implements ListValue
 {

@@ -25,8 +25,6 @@ import java.util.List;
  * Type expression analyzer. {@link #check} method derives kinds
  * of variable-kinded type expressions, and checks agreement and
  * sets kinds of type applications.
- *
- * @author Basil Hosmer
  */
 public final class KindChecker extends TypeVisitorBase<Object>
 {

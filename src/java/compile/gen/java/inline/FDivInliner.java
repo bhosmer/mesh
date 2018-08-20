@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.FDiv}.
- *
- * @author Basil Hosmer
  */
 public class FDivInliner implements Inliner
 {

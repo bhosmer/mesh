@@ -20,8 +20,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic._guard}.
- *
- * @author Basil Hosmer
  */
 public class GuardInliner implements Inliner
 {

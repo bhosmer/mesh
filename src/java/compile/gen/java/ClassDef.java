@@ -20,8 +20,6 @@ import java.util.List;
 /**
  * Parts for Java class def, Javassist CG methods,
  * ref to generated Class
- *
- * @author Basil Hosmer
  */
 public final class ClassDef
 {

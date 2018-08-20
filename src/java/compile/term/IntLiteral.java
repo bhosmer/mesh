@@ -17,8 +17,6 @@ import compile.type.Types;
 
 /**
  * Int literal term
- *
- * @author Basil Hosmer
  */
 public final class IntLiteral extends SimpleLiteralTerm
 {

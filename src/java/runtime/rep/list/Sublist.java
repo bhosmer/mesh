@@ -18,8 +18,6 @@ import java.util.Iterator;
 
 /**
  * Position-constrained view on a backing list.
- *
- * @author Basil Hosmer
  */
 final class Sublist extends AbstractListValue
 {

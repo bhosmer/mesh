@@ -18,8 +18,6 @@ import runtime.tran.TransactionManager;
 
 /**
  * Add a reactor to a box and return it.
- *
- * @author Basil Hosmer
  */
 public final class _react extends IntrinsicLambda
 {

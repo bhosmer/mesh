@@ -15,8 +15,6 @@ import compile.type.Type;
 
 /**
  * Common superclass of {@link ParamBinding} and {@link LetBinding}.
- *
- * @author Basil Hosmer
  */
 public abstract class ValueBinding implements Binding, ValueStatement
 {

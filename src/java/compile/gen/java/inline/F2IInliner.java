@@ -15,8 +15,6 @@ import compile.term.ApplyTerm;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.F2I}.
- *
- * @author Basil Hosmer
  */
 public class F2IInliner implements Inliner
 {

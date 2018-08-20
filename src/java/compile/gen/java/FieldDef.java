@@ -15,8 +15,6 @@ import javassist.CtField;
 
 /**
  * Same as Statement, except getSource() emits declaration instead of statement
- *
- * @author Basil Hosmer
  */
 public final class FieldDef
 {

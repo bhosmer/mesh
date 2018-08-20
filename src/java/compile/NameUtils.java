@@ -14,8 +14,6 @@ import java.io.File;
 
 /**
  * Name-related string utilities
- *
- * @author Basil Hosmer
  */
 public final class NameUtils
 {

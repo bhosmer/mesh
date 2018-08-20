@@ -28,8 +28,6 @@ import java.util.Map;
  * contain a list of {@link Statement}s rather than
  * {@link Term}s. Clients of this class or its subs
  * are probably {@link compile.analyze.ModuleVisitor}s.
- *
- * @author Basil Hosmer
  */
 public abstract class TermTransformerBase extends TermVisitorBase<Term>
 {

@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.FLT}.
- *
- * @author Basil Hosmer
  */
 public class FLTInliner implements Inliner
 {

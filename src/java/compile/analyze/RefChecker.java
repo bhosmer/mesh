@@ -33,8 +33,6 @@ import java.util.Map;
  * just prohibited by {@link RefResolver}. (a) is tolerable, but (b)
  * should be fixed, as it violates the language definition and e.g.
  * prevents mutually recursive local functions.
- *
- * @author Basil Hosmer
  */
 public final class RefChecker extends ModuleVisitor<Object>
 {

@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
  * (==), defined over all values. Value equality for
  * everything except functions and boxes, which are
  * identity.
- *
- * @author Basil Hosmer
  */
 public final class _eq extends IntrinsicLambda
 {

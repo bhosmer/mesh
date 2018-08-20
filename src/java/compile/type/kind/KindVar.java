@@ -14,8 +14,6 @@ import compile.Loc;
 
 /**
  * Used for kind inference. Status in flux.
- *
- * @author Basil Hosmer
  */
 public final class KindVar extends Kind
 {

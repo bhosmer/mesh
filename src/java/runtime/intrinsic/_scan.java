@@ -17,8 +17,6 @@ import runtime.rep.Tuple;
 
 /**
  * Like reduce, but accumulates intermediate results into list.
- *
- * @author Basil Hosmer
  */
 public final class _scan extends IntrinsicLambda
 {

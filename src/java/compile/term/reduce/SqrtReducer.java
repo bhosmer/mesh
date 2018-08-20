@@ -15,8 +15,6 @@ import compile.term.Term;
 
 /**
  * sqrt application reducer.
- *
- * @author Basil Hosmer
  */
 public class SqrtReducer implements ApplyReducer
 {

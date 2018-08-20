@@ -15,8 +15,6 @@ import compile.term.ApplyTerm;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.FNeg}.
- *
- * @author Basil Hosmer
  */
 public class FNegInliner implements Inliner
 {

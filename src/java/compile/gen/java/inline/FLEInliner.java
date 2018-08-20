@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.FLE}.
- *
- * @author Basil Hosmer
  */
 public class FLEInliner implements Inliner
 {

@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 /**
  * temp: throw with message if argument is false
  * TODO variant
- *
- * @author Basil Hosmer
  */
 public final class _assert extends IntrinsicLambda
 {

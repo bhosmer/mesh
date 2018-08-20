@@ -14,8 +14,6 @@ import javassist.CtConstructor;
 
 /**
  * Parts for a Java constructor method.
- *
- * @author Basil Hosmer
  */
 public final class ConstructorDef extends MethodDef
 {

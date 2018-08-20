@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * minus() over ints
- *
- * @author Basil Hosmer
  */
 public final class _minus extends IntrinsicLambda
 {

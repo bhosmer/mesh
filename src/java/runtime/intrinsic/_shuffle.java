@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * shuffle a list.
- *
- * @author Basil Hosmer
  */
 public final class _shuffle extends IntrinsicLambda
 {

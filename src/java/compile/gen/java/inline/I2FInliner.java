@@ -15,8 +15,6 @@ import compile.term.ApplyTerm;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic._i2f}.
- *
- * @author Basil Hosmer
  */
 public class I2FInliner implements Inliner
 {

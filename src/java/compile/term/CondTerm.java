@@ -15,8 +15,6 @@ import compile.term.visit.TermVisitor;
 
 /**
  * Term representing a conditional selection expression.
- *
- * @author Basil Hosmer
  */
 public final class CondTerm extends AbstractTypedTerm
 {

@@ -18,8 +18,6 @@ import runtime.rep.Tuple;
  * Apply a map of indexes to a list of items, yielding a map of selected items.
  * E.g. mapml([#a: 0, #c: 2], ["Zero", "One", "Two"])
  * => [#a: "Zero", #c: "Two"]
- *
- * @author Basil Hosmer
  */
 public final class _mapml extends IntrinsicLambda
 {

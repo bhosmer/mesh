@@ -15,8 +15,6 @@ import runtime.rep.Symbol;
 
 /**
  * Demo support, Processing hook
- *
- * @author Basil Hosmer
  */
 public final class _prmousebutton extends IntrinsicLambda
 {

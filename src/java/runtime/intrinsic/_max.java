@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * int max()
- *
- * @author Basil Hosmer
  */
 public final class _max extends IntrinsicLambda
 {

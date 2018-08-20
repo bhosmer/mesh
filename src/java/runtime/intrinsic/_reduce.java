@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 
 /**
  * reduce
- *
- * @author Basil Hosmer
  */
 public final class _reduce extends IntrinsicLambda
 {

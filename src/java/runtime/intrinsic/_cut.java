@@ -19,8 +19,6 @@ import java.util.Iterator;
 /**
  * cut(list, indexes) returns list cuts starting at indexes.
  * Out of range indexes will throw, currently.
- *
- * @author Basil Hosmer
  */
 public final class _cut extends IntrinsicLambda
 {

@@ -15,8 +15,6 @@ import runtime.tran.Box;
 
 /**
  * Return the value held in a box.
- *
- * @author Basil Hosmer
  */
 public final class _get extends IntrinsicLambda
 {

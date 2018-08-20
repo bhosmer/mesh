@@ -20,8 +20,6 @@ import java.util.Iterator;
  * {@link PersistentList#NODE_SIZE} items or fewer.
  * Instances are created by {@link PersistentList#alloc}
  * only.
- *
- * @author Basil Hosmer
  */
 final class SmallList extends PersistentList
 {

@@ -28,8 +28,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Attempt objects may or may not be held over from one
  * transaction attempt to the next, depending on whether
  * or not owned boxes are retained.
- *
- * @author Basil Hosmer
  */
 final class Attempt
 {

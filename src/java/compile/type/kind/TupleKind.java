@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * The kind of type tuples (not tuple types).
- *
- * @author Basil Hosmer
  */
 public final class TupleKind extends Kind
 {

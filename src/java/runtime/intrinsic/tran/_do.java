@@ -16,8 +16,6 @@ import runtime.tran.TransactionManager;
 
 /**
  * Run a block in a transaction.
- *
- * @author Basil Hosmer
  */
 public final class _do extends IntrinsicLambda
 {

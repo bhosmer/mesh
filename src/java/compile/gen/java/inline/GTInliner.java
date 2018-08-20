@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.GT}.
- *
- * @author Basil Hosmer
  */
 public class GTInliner implements Inliner
 {

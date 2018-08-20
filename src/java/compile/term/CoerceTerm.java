@@ -21,8 +21,6 @@ import compile.type.Type;
  *
  * Currently used only to facilitate nominal type
  * constructors--see {@link TypeDef}.
- *
- * @author Basil Hosmer
  */
 public final class CoerceTerm extends AbstractTypedTerm
 {

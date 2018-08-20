@@ -25,9 +25,7 @@ import java.util.Set;
 
 /**
  * An enum type is an enumerated subset of a base type.
-® *
- * @author Basil Hosmer
- */
+® */
 public final class EnumType extends ScopeType
 {
     private Type baseType;

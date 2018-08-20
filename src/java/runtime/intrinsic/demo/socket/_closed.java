@@ -14,8 +14,6 @@ import runtime.intrinsic.IntrinsicLambda;
 
 /**
  * Demo support.
- *
- * @author Basil Hosmer
  */
 public final class _closed extends IntrinsicLambda
 {

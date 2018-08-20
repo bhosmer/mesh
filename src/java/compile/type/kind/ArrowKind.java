@@ -14,8 +14,6 @@ import compile.Loc;
 
 /**
  * Arrow-kinded types are type constructors.
- *
- * @author Basil Hosmer
  */
 public final class ArrowKind extends Kind
 {

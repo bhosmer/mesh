@@ -12,8 +12,6 @@ package compile;
 
 /**
  * Superinterface for location-bearing objects.
- *
- * @author Basil Hosmer
  */
 public interface Located
 {

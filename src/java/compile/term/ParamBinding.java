@@ -24,8 +24,6 @@ import compile.type.visit.TypeDumper;
  * which creates a local subclass that overrides {@link #getType} and
  * {@link #getDeclaredType} so they can create instances of this class
  * without a backing lambda.
- *
- * @author Basil Hosmer
  */
 public class ParamBinding extends ValueBinding
 {

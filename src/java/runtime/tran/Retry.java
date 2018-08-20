@@ -12,8 +12,6 @@ package runtime.tran;
 
 /**
  * Error object with optional transaction failure info.
- *
- * @author Basil Hosmer
  */
 @SuppressWarnings("serial")
 class Retry extends Error

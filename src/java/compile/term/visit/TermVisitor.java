@@ -14,8 +14,6 @@ import compile.term.*;
 
 /**
  * Term visitor interface, parameterized by return type.
- *
- * @author Basil Hosmer
  */
 public interface TermVisitor<T>
 {

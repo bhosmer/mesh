@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic._fpow}.
- *
- * @author Basil Hosmer
  */
 public class FPowInliner implements Inliner
 {

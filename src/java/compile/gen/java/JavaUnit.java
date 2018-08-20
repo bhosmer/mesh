@@ -35,8 +35,6 @@ import java.util.*;
  * <p/>
  * {@link JavaUnitBuilder#build} drives
  * the pipeline from {@link Module} to finished {@link JavaUnit}.
- *
- * @author Basil Hosmer
  */
 public class JavaUnit implements Unit
 {

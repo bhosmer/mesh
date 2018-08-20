@@ -18,8 +18,6 @@ import java.util.Map;
 
 /**
  * Map node base class.
- *
- * @author Basil Hosmer
  */
 abstract class MapNode
 {

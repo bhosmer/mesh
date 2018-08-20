@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * bool to int
- *
- * @author Basil Hosmer
  */
 public final class _b2i extends IntrinsicLambda
 {

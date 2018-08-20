@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * rand(max) returns an integer between 0 and max - 1
- *
- * @author Basil Hosmer
  */
 public final class _rand extends IntrinsicLambda
 {

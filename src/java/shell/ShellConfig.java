@@ -22,8 +22,6 @@ import java.util.List;
 
 /**
  * Container for shell configuration options.
- *
- * @author Basil Hosmer
  */
 public final class ShellConfig
 {

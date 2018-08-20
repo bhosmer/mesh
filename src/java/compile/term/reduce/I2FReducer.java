@@ -16,8 +16,6 @@ import compile.term.Term;
 
 /**
  * i2f application reducer.
- *
- * @author Basil Hosmer
  */
 public class I2FReducer implements ApplyReducer
 {

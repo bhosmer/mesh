@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * numeric negation
- *
- * @author Basil Hosmer
  */
 public final class _fneg extends IntrinsicLambda
 {

@@ -15,8 +15,6 @@ import runtime.rep.Tuple;
 
 /**
  * returns index of first occurence of item in list, or list size
- *
- * @author Basil Hosmer
  */
 public final class _find extends IntrinsicLambda
 {

@@ -12,8 +12,6 @@ package runtime.intrinsic;
 
 /**
  * exp()
- *
- * @author Basil Hosmer
  */
 public final class _exp extends IntrinsicLambda
 {

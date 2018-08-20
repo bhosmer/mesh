@@ -26,8 +26,6 @@ import java.util.*;
  * occurs last in the module's body) from the closure of lets reachable
  * from the RHS of L by reference (considering L as reachable in 0 steps).
  * Return a map from let bindings to these locations.
- *
- * @author Basil Hosmer
  */
 public final class LastReached extends ModuleVisitor<Object>
 {

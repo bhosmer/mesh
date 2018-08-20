@@ -14,8 +14,6 @@ import compile.term.visit.TermVisitor;
 
 /**
  * Common interface for all value terms.
- *
- * @author Basil Hosmer
  */
 public interface Term extends Typed
 {

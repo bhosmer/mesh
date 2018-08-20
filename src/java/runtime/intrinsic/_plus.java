@@ -18,8 +18,6 @@ import runtime.rep.Tuple;
 /**
  * intrinsic plus() - typed over all types, structures give RTE currently
  * TODO tighten up once TC-like functionality becomes available
- *
- * @author Basil Hosmer
  */
 public final class _plus extends IntrinsicLambda
 {

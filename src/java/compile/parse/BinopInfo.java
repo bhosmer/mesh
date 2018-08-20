@@ -12,8 +12,6 @@ package compile.parse;
 
 /**
  * Holds binary operator info: precedence, associativity and a function name.
- *
- * @author Basil Hosmer
  */
 public class BinopInfo
 {

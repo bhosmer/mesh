@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * Int times application reducer.
- *
- * @author Basil Hosmer
  */
 public class TimesReducer implements ApplyReducer
 {

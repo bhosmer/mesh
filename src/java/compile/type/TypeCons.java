@@ -22,8 +22,6 @@ import compile.type.visit.TypeVisitor;
  * This class is used to represent both type constructors
  * and type abstractions, the latter with a non-null body
  * that is returned by reduce.
- *
- * @author Basil Hosmer
  */
 public final class TypeCons extends NonScopeType
 {

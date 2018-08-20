@@ -16,8 +16,6 @@ import runtime.rep.Lambda;
 
 /**
  * thread(block) runs block asynchronously in a new thread.
- *
- * @author Basil Hosmer
  */
 public final class _spawn extends IntrinsicLambda
 {

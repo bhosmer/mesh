@@ -18,8 +18,6 @@ import java.util.NoSuchElementException;
 
 /**
  * Pair of lists representing a single list.
- *
- * @author Basil Hosmer
  */
 public final class ChainedListPair extends AbstractListValue
 {

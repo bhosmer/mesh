@@ -17,8 +17,6 @@ import compile.term.Term;
  * A particular implementation will reduce an applications
  * of a particular, implicit base term, e.g. {@link IntPlusReducer}
  * reduces applications of plus over ints
- *
- * @author Basil Hosmer
  */
 public interface ApplyReducer
 {

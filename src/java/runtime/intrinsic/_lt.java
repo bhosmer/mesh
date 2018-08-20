@@ -14,8 +14,6 @@ import runtime.rep.Tuple;
 
 /**
  * intrinsic less-than over ints
- *
- * @author Basil Hosmer
  */
 public final class _lt extends IntrinsicLambda
 {

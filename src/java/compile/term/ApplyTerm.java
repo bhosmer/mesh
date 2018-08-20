@@ -16,8 +16,6 @@ import compile.term.visit.TermVisitor;
 
 /**
  * Application term: argument applied to base
- *
- * @author Basil Hosmer
  */
 public final class ApplyTerm extends AbstractTypedTerm
 {

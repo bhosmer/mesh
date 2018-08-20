@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Double minus application reducer.
- *
- * @author Basil Hosmer
  */
 public class FMinusReducer implements ApplyReducer
 {

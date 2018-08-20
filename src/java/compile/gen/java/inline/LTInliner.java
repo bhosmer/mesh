@@ -19,8 +19,6 @@ import java.util.List;
 
 /**
  * Try inlining calls to {@link runtime.intrinsic.LT}.
- *
- * @author Basil Hosmer
  */
 public class LTInliner implements Inliner
 {

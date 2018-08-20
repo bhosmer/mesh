@@ -20,8 +20,6 @@ import compile.type.visit.TypeVisitor;
 /**
  * Wildcard type, used to represent to-be-inferred "holes" in
  * larger compound type terms, e.g. unannotated function params.
- *
- * @author Basil Hosmer
  */
 public final class WildcardType extends NonScopeType
 {

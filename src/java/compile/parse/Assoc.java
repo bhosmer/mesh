@@ -12,8 +12,6 @@ package compile.parse;
 
 /**
  * Operator associativity.
- *
- * @author Basil Hosmer
  */
 public enum Assoc
 {

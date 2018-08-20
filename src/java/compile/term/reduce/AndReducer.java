@@ -16,8 +16,6 @@ import java.util.List;
 
 /**
  * And application reducer.
- *
- * @author Basil Hosmer
  */
 public class AndReducer implements ApplyReducer
 {

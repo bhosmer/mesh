@@ -27,8 +27,6 @@ import java.util.Set;
 
 /**
  * Type variable.
- *
- * @author Basil Hosmer
  */
 public final class TypeVar extends NonScopeType
 {

@@ -23,8 +23,6 @@ import java.util.Iterator;
  * group by - given a list of keys and a list of values,
  * returns a map from keys to collections of values.
  * Note that we roll over the key list.
- *
- * @author Basil Hosmer
  */
 public final class _group extends IntrinsicLambda
 {

@@ -16,8 +16,6 @@ import runtime.rep.Tuple;
 
 /**
  * join string list using separator
- *
- * @author Basil Hosmer
  */
 public final class _strjoin extends IntrinsicLambda
 {

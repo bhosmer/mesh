@@ -16,8 +16,6 @@ import compile.term.Term;
 
 /**
  * f2i application reducer.
- *
- * @author Basil Hosmer
  */
 public class F2IReducer implements ApplyReducer
 {

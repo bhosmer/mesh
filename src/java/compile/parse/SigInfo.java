@@ -19,8 +19,6 @@ import java.util.List;
  * Lambda value signature info.
  * This is just Pair<List<ParamBinding>, Type>. It works around
  * a problem Rats has with nested generic class names.
- *
- * @author Basil Hosmer
  */
 public class SigInfo
 {

@@ -16,8 +16,6 @@ import runtime.tran.TransactionManager;
 
 /**
  * Tuplized version of own()
- *
- * @author Basil Hosmer
  */
 public final class _owns extends IntrinsicLambda
 {
