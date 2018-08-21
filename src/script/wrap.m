@@ -114,7 +114,7 @@ testwrap(wid)
 
 
 // indexes of all paras with overflowing lines
-overs = { paras, wid => where(paras, { any(_, { strlen _ > wid }) }) };
+overs = { paras, wid -> where(paras, { any(_, { strlen _ > wid }) }) };
 
 print "--- wrap to 100 columns ---";
 w100 = testwrap 100;

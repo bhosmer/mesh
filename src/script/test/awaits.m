@@ -18,11 +18,11 @@ ctask() {
             sleep(rand(100));
 
             // wait until done or some box is > 0
-            // awaits((done, a, b), { b, i, j => b || { i + j > 0 } });
+            // awaits((done, a, b), { b, i, j -> b || { i + j > 0 } });
             awaits((done, a, b), (
-                { $0 },
-                { $0 > 0 },
-                { $0 > 0 }
+                { _ },
+                { _ > 0 },
+                { _ > 0 }
             ));
 
             // choose which box to consume from
@@ -32,10 +32,10 @@ ctask() {
             (*done &&
                 { print(taskid(), "done"); true }) ||
             { !choice &&
-                { tau(a, {$0 > 0}, dec).0 } &&
+                { tau(a, {_ > 0}, dec).0 } &&
                 { print(taskid(), "consumed a, boxes:", a, b); true } } ||
             { choice &&
-                { tau(b, {$0 > 0}, dec).0 } &&
+                { tau(b, {_ > 0}, dec).0 } &&
                 { print(taskid(), "consumed b, boxes:", a, b); true } } ||
             { print(taskid(), "already consumed, boxes:", a, b);
               false
@@ -57,7 +57,7 @@ print("produced");
 // wait a while, then set kill switch, then wait until they've all exited
 sleep(1000);
 put(done, true);
-await(running, { $0 == 0 });
+await(running, { _ == 0 });
 
 print("should be 0:", *a + *b);
 assert_equals({0}, {*a + *b});

@@ -39,7 +39,7 @@ bumpedvalue(xpos, bumps:[Bump]) {
         v +. b.height *. dy             // displace existing value
     };
 
-    reduce({ addbump($0, $1) }, 0.0, bumps)
+    reduce({ addbump(_.0, _.1) }, 0.0, bumps)
 };
 
 // -----------------
@@ -80,7 +80,7 @@ letterbox() {
 // sum a matrix of floats by column
 sumcols(mat:[[Double]]) {
     (nrows, ncols) = (size(mat), size(head(mat)));
-    count(ncols) | { c => fsum(count(nrows) | { mat[$0][c] }) }
+    count(ncols) | { c -> fsum(count(nrows) | { mat[_][c] }) }
 };
 
 // worker: draw layers on a baseline.
@@ -103,12 +103,12 @@ drawlayers(keys:[String], layermap:[String : [Double]], basefunc:[[Double]]->[Do
 
         x(i) { vl +. iw *. i2f(i) };
 
-        bots = ixs | { vb -. ih *. base[$0] };
-        tops = ixs | { bots[$0] -. ih *. layer[$0] + 1.0 };
+        bots = ixs | { vb -. ih *. base[_] };
+        tops = ixs | { bots[_] -. ih *. layer[_] + 1.0 };
 
         prbeginshape();
-        reverse(ixs) | {i => prvertex(x(i), tops[i])};
-        ixs | {i => prvertex(x(i), bots[i])};
+        reverse(ixs) | {i -> prvertex(x(i), tops[i])};
+        ixs | {i -> prvertex(x(i), bots[i])};
         prendshape();
     };
 
@@ -125,13 +125,13 @@ drawlayers(keys:[String], layermap:[String : [Double]], basefunc:[[Double]]->[Do
         prfill(brighten(layercolor(i), 1.2));
         prrect(i2f(labx), i2f(VBORDER - 60), 10.0, 10.0);
         prtext(label, i2f(labx + 15), i2f(VBORDER - 50));
-        update(labxaccum, { $0 + round(prtextwidth(label + " ") + 20.0) });
+        update(labxaccum, { _ + round(prtextwidth(label + " ") + 20.0) });
 
         // draw this layer, and add it to the accumulating baseline
         layer = layers[i];
         prfill(layercolor(i));
         drawlayer(get(baseaccum), layer);
-        update(baseaccum, { b => ixs | { b[$0] +. layer[$0] } });
+        update(baseaccum, { b -> ixs | { b[_] +. layer[_] } });
     };
 
     // draw
@@ -152,7 +152,7 @@ flatbase(layers:[[Double]]) {
 centeredbase(layers:[[Double]]) {
     heights = sumcols(layers);
     maxh = reduce(fmax, 0.0, heights);
-    index(head(layers)) | { (maxh -. heights[$0]) /. 2.0 }
+    index(head(layers)) | { (maxh -. heights[_]) /. 2.0 }
 };
 
 // min-wiggle baseline
@@ -166,7 +166,7 @@ minwigglebase(layers:[[Double]]) {
     };
     heights = count(nitems) | calc;
     maxh = reduce(fmax, 0.0, heights);
-    count(nitems) | { (maxh -. heights[$0]) /. 2.0 }
+    count(nitems) | { (maxh -. heights[_]) /. 2.0 }
 };
 
 // ------------
@@ -179,7 +179,7 @@ BASEFUNCS = [flatbase, centeredbase, minwigglebase];
 
 BUFSIZE = 1000;
 NSERIES = 10;
-DATAKEYS = range(1, NSERIES) | i2s | { "Series " + $0 };
+DATAKEYS = range(1, NSERIES) | i2s | { "Series " + _ };
 
 PAUSE = 1000/60;  // ms
 
@@ -203,7 +203,7 @@ addsamples(samplemap : [String : [Double]]) {
         dropped = max(0, ncur + nnew - BUFSIZE);
         curdata = maplm(DATAKEYS, dmap);
         newdata = maplm(DATAKEYS, samplemap);
-        data = zip(curdata, newdata) | { drop(dropped, $0 + $1) };
+        data = zip(curdata, newdata) | { drop(dropped, _.0 + _.1) };
         put(datamap, mapsets(dmap, DATAKEYS, data));
         dropped
     }
@@ -235,13 +235,13 @@ animate() {
 
             newix = datasize(get(datamap));
             n = get(nsamples);
-            newvals = bumplists | { bumps => range(newix, n) | { bumpedvalue($0, bumps) } };
+            newvals = bumplists | { bumps -> range(newix, n) | { bumpedvalue(_, bumps) } };
             shift = addsamples(assoc(DATAKEYS, newvals));
 
             if(off - n <= 0, {
-                (BUFSIZE - off - n, bumplists |: { slide(shift, nextbumps($0)) })
+                (BUFSIZE - off - n, bumplists |: { slide(shift, nextbumps(_)) })
             }, {
-                (off - n, bumplists |: { slide(shift, $0) })
+                (off - n, bumplists |: { slide(shift, _) })
             })
         })
     }
@@ -251,9 +251,9 @@ animate() {
 pause() { paused <- not };
 
 faster() { nsamples <- inc };
-slower() { nsamples <- { max(1, dec($0)) } };
+slower() { nsamples <- { max(1, dec(_)) } };
 
-changestyle() { update(style, {inc($0) % size(BASEFUNCS)}); () };
+changestyle() { update(style, {inc(_) % size(BASEFUNCS)}); () };
 
 // open a processing window
 propen("streamgraph - +/- to change sampling rate, p to pause, s to change style", [

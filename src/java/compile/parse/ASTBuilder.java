@@ -455,20 +455,6 @@ public class ASTBuilder {
     }
 
     /**
-     * inline parameter reference
-     */
-    public static RefTerm inlineParam(final Loc loc, final String prefix,
-                                      final String strpos) {
-        final String name = prefix + strpos;
-
-        final RefTerm paramRefTerm = new RefTerm(loc, name);
-
-        paramRefTerm.setBinding(new ParamBinding(loc, name, null));
-
-        return paramRefTerm;
-    }
-
-    /**
      * enum literal
      */
     public static VariantTerm enumLit(final Term lit) {

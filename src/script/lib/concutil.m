@@ -32,7 +32,7 @@ produce(c, q, n, f)
         when(*c, {
             v = f();
             while({*c && {
-                !tau(q, nf, { append($0, v) }).0
+                !tau(q, nf, { append(_, v) }).0
             }}, {()})
         })
     })

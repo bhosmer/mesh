@@ -22,7 +22,7 @@ randomgen =
         // Initialize members (i, j, m)
         actualseed = guard(seed != 0, seed, { l2i(millitime()) });
 
-        makeodd = { guard($0 % 2 != 0, $0, { dec($$0) }) };
+        makeodd = { guard(_ % 2 != 0, _, { dec($_) }) };
         jseed = (min $ makeodd)(abs(actualseed), M1);
 
         initseeds = {

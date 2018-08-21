@@ -28,7 +28,7 @@ bitreverse(data:[Double]) -> [Double] {
             { m });
 
         // Calculate next j
-        ( nk, nj ) = cycle(( k, j ), { $0 <= $1 }, { ( $0 / 2, $1 - $0 ) });
+        ( nk, nj ) = cycle(( k, j ), { _.0 <= _.1 }, { ( _.0 / 2, _.1 - _.0 ) });
         ( i + 1, nj + nk, mapping )
     });
 
@@ -199,7 +199,7 @@ transform_internal(data:[Double], direction:Int) -> [Double] {
             t = sin(theta /. 2.0);
             s2 = 2.0 *. t *. t;
 
-            D1 = cycle((D, 0), { $1 < n }, { D, b =>
+            D1 = cycle((D, 0), { _.1 < n }, { D, b ->
                 i = 2*b;
                 j = 2*(b + dual);
 
@@ -223,7 +223,7 @@ transform_internal(data:[Double], direction:Int) -> [Double] {
                     wreal = curr_real -. s *. curr_imag -. s2 *. curr_real;
                     wimag = curr_imag + s *. curr_real -. s2 *. curr_imag;
 
-                    D3 = cycle( (D, 0), { $1 < n }, { D, b =>
+                    D3 = cycle( (D, 0), { _.1 < n }, { D, b ->
                         i = 2 * (b + a);
                         j = 2 * (b + a + dual);
 

@@ -254,24 +254,10 @@ transient compile.Pair<Term, ApplyFlavor> AppRHS
 //
 Term BaseExpr
 
-    //
-    // An inline parameter reference is ($+)n, i.e. a string of
-    // one or more dollar signs followed by a natural number. The
-    // quantity of dollar signs indicates scope depth (a single $
-    // is the current lambda), and the number indicates param index,
-    // 0 being the first.
-    //
-    = <InlineParam>    pre:InlineParamPrefix ix:NatConstant
-        { yyValue = inlineParam(loc(yyStart), pre, ix); }
-
-    //
     // value literal
-    //
-    / <Literal> lit:LitExpr
+    = <Literal> lit:LitExpr
 
-    //
     // id reference
-    //
     / <IdRef>       id:Id
         { yyValue = idRef(loc(yyStart), id); }
 
@@ -282,10 +268,10 @@ Term BaseExpr
     / <OpSym>       LeftParen op:RefOpSym RightParen
         { yyValue = opRef(loc(yyStart), op); }
 
-    //
     // parenthesized expressions
-    //
-    / LeftParen Expr RightParen ;
+    / LeftParen Expr RightParen
+
+    ;
 
 //
 // literals
@@ -352,22 +338,12 @@ Term LitExpr
     / <Lambda>      Lambda ;
 
 //
-// rule translates a sequence of dollar signs into its depth
-//
-transient String InlineParamPrefix
-    = Dollar p:InlineParamPrefix
-        { yyValue = "$" + p; }
-    / Dollar
-        { yyValue = "$"; }
-    ;
-
-//
 // Lambda expressions
 //
 Term Lambda
     = tparams:(LessThan TypeParamList GreaterThan)?
         LeftBrace
-        sig:(LambdaSig EqArrow)?
+        sig:(LambdaSig Arrow)?
         body:StatementList
         RightBrace
             { yyValue = lambda(loc(yyStart), tparams,
@@ -383,7 +359,7 @@ Term Lambda
 // TODO full decomposing assignment sugar for params
 //
 SigInfo LambdaSig
-    = LeftParen params:ParamList? RightParen Arrow rtype:TypeExpr
+    = LeftParen params:ParamList? Arrow rtype:TypeExpr RightParen
         { yyValue = new SigInfo(params, rtype); }
     / LeftParen params:ParamList RightParen
         { yyValue = new SigInfo(params, null); }

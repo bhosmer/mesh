@@ -96,7 +96,7 @@ intrinsic <T> if(c : Bool, y : () -> T, z : () -> T) -> T;
 <T> ifelse(cases : [(() -> Bool, () -> T)], default : () -> T) -> T
 {
     n = size(cases);
-    c = cycle(0, { i => i < n && { !cases[i].0() } }, inc);
+    c = cycle(0, { i -> i < n && { !cases[i].0() } }, inc);
     if(c == n, default, { cases[c].1() })
 };
 
@@ -360,7 +360,7 @@ intrinsic <A, B> scan(f: (A, B) -> A, v : A, l : [B]) -> [A];
  */
 scan_while(pred, init, f, args)
 {
-    result = evolve_while(last $ pred, [init], { as, b => append(as, f(last(as), b)) }, args);
+    result = evolve_while(last $ pred, [init], { as, b -> append(as, f(last(as), b)) }, args);
     drop(1, result)
 };
 
@@ -453,7 +453,7 @@ apply = { _.0(_.1) };
  * Compose a function with a list, yielding a composite function
  * that uses the original function's result to index the list.
  * @code
- * f = compl({ $0 % 3 }, ["One", "Two", "Three"])
+ * f = compl({ _ % 3 }, ["One", "Two", "Three"])
  * f(100)
  * "Two"
  * @endcode
@@ -468,7 +468,7 @@ intrinsic <X, Y> compl(x : X -> Int, y : [Y]) -> X -> Y;
  * Compose a function with a map, yielding a composite function
  * that uses the original function's result to index the map.
  * @code
- * f = compm({ iif($0, #ok, #err) }, [#ok: "OK", #err: "ERR"])
+ * f = compm({ iif(_, #ok, #err) }, [#ok: "OK", #err: "ERR"])
  * f(false)
  * "ERR"
  * @endcode
@@ -488,7 +488,7 @@ intrinsic <X, K, Y> compm(x : X -> K, y : [K : Y]) -> X -> Y;
  * for each <code>x : X</code>.
  * The prefix attribute <code>@</code> on infix operators desugars
  * to <code>eachleft</code>,
- * e.g. <code>xs @+ y</code> => <code>eachleft(+)(xs, y)</code>.
+ * e.g. <code>xs @+ y</code> -> <code>eachleft(+)(xs, y)</code>.
  * @param f binary function to transform
  * @return transformed function
  */
@@ -503,7 +503,7 @@ intrinsic <A, B, C> eachleft(f : (A, B) -> C) -> ([A], B) -> [C];
  * for each <code>y : Y</code>.
  * The postfix attribute <code>@</code> on infix operators desugars
  * to <code>eachright</code>,
- * e.g. <code>x +@ ys</code> => <code>eachright(+)(x, ys)</code>.
+ * e.g. <code>x +@ ys</code> -> <code>eachright(+)(x, ys)</code>.
  * @param f binary function to transform
  * @return transformed function
  */
@@ -618,7 +618,7 @@ memo(f)
 {
     m = box([:]);
 
-    { a =>
+    { a ->
         if(iskey(*m, a), { (*m)[a] }, {
             v = f(a);
             m <- { mapset(_, a, v) };
@@ -639,10 +639,10 @@ look(m, k) {
 
 memoize(f) {
     m = box([:]);
-    { a =>
+    { a ->
         look(*m, a) ? (true: id, false: {
             v = f(a);
-            m <- { mapset($0, a, v) };
+            m <- { mapset(_, a, v) };
             v
         })
     }
@@ -1623,7 +1623,7 @@ intrinsic <T> drop(x:Int, y:[T]) -> [T];
 eachpair(init, f, args)
 {
     list = [init] + args;
-    index(args) | { i => f(list[i], list[i + 1]) }
+    index(args) | { f(list[_], list[_ + 1]) }
 };
 
 /**
@@ -1688,8 +1688,8 @@ intrinsic <T> find(x:[T], y:T) -> Int;
  */
 first_where(pred, vals)
 {
-    n = size(vals);
-    cycle(0, { i => i < n && { !pred(vals[i]) } }, inc)
+    n = size vals;
+    cycle(0, { i -> i < n && { !pred(vals[i]) } }, inc)
 };
 
 /**
@@ -2057,8 +2057,8 @@ fsum(fs : [Double]) -> Double
  * Is predicate true for any value in a list?
  *
  * @code
- * any([1, 2, 1], { $0 == 2 }) // returns true
- * any([1, 2, 1], { $0 > 2 }) // returns false
+ * any([1, 2, 1], { _ == 2 }) // returns true
+ * any([1, 2, 1], { _ > 2 }) // returns false
  * @endcode
  *
  * @param vals list of values.
@@ -2066,14 +2066,14 @@ fsum(fs : [Double]) -> Double
  * @return true iff any value in the given list
  * satisfies the given predicate (shortcuts).
  */
-any = { xs, p => evolve_while(not, false, { p(_.1) }, xs) };
+any = { xs, p -> evolve_while(not, false, { p(_.1) }, xs) };
 
 /**
  *  Is predicate true for all values in a list?
  *
  * @code
- * all([1, 2, 1], { $0 >= 1 }) // returns true
- * all([1, 2, 1], { $0 == 1 }) // returns false
+ * all([1, 2, 1], { _ >= 1 }) // returns true
+ * all([1, 2, 1], { _ == 1 }) // returns false
  * @endcode
  *
  * @param vals list of values.
@@ -2081,7 +2081,7 @@ any = { xs, p => evolve_while(not, false, { p(_.1) }, xs) };
  * @return true iff all values in the given list
  * satisfy the given predicate (shortcuts).
  */
-all = { xs, p => evolve_while (id, true, { p(_.1) }, xs) };
+all = { xs, p -> evolve_while (id, true, { p(_.1) }, xs) };
 
 /**
  * set intersection on lists
@@ -2471,7 +2471,7 @@ intrinsic <T:[*]> updates(x:Tup(T | Box), y:(Tup(T) -> Tup(T))) -> ();
  * that happens between retrieving the prior value and setting the
  * new one.
  *
- * Note: equivalent to <code>{ b, v => act(b, { (v, $0) }) }</code>
+ * Note: equivalent to <code>{ b, v -> act(b, { (v, _) }) }</code>
  *
  * @param b box to modify
  * @param v new value to place in the box
@@ -2490,7 +2490,7 @@ getput(b, v)
  * Run update function f on current value of box b.
  * Update b with the result, and also return it.
  *
- * Note: equivalent to <code>{ act(b, { v = f($0); (v, v) }) }</code>
+ * Note: equivalent to <code>{ act(b, { v = f(_); (v, v) }) }</code>
  *
  * @param b box to update
  * @param f update function
@@ -2510,7 +2510,7 @@ preupdate(b, f)
  * Update b with the result, and return b's original
  * value.
  *
- * Note: equivalent to <code>{ act(b, { (f($0), $0) }) }</code>
+ * Note: equivalent to <code>{ act(b, { (f(_), _) }) }</code>
  *
  * @param b box to update
  * @param f update function

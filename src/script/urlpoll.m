@@ -31,7 +31,7 @@ pollsvc(urls)
     status = box([:]);
 
     // work queue of (url, error count)
-    urlq = box(urls | { ($0, 0) });
+    urlq = box(urls | { (_, 0) });
 
     // circuit breaker
     cb = box(true);
@@ -39,13 +39,13 @@ pollsvc(urls)
     // polling tasks
     repeat(NUM_POLLERS, {
         spawn {
-            consume(cb, urlq, { url, errct =>
+            consume(cb, urlq, { url, errct ->
                 stat = poll(url);
-                status <- { mapset($0, url, stat) };
+                status <- { mapset(_, url, stat) };
                 spawn {
                     newerr = guard(stat == "ok", 0, { errct + 1 });
                     sleep(POLL_INTERVAL + ERR_TIMEOUT * newerr);
-                    urlq <- { append($0, (url, newerr)) }
+                    urlq <- { append(_, (url, newerr)) }
                 }
             });
             print(taskid(), "polling task stopping");

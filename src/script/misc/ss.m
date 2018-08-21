@@ -10,7 +10,7 @@ handler(req) {
     cmd = strsplit(strsplit(req, "\n\n")[0], "\n")[0];
 
     // increment count for our request in counts map
-    counts <- { reqs =>
+    counts <- { reqs ->
         cur = mapgetd(reqs, cmd, 0);
         mapset(reqs, cmd, 1 + cur)
     };

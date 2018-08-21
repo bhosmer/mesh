@@ -57,8 +57,8 @@ CELLIXS = cross(count(CELLCOLS), count(CELLROWS));      // precalculated list of
 // NABE[y][x] is a list oc (x, y) coordinates of adjacent cells.
 // e.g. NABE[1][1] = [(0, 0), (0, 1), (0, 2), ..., (2, 2)]
 //
-NABE = count(CELLROWS) | { r =>
-    count(CELLCOLS) | { c =>
+NABE = count(CELLROWS) | { r ->
+    count(CELLCOLS) | { c ->
         adjx = fromto(max(0, c - 1), min(CELLCOLS - 1, c + 1));
         adjy = fromto(max(0, r - 1), min(CELLROWS - 1, r + 1));
         cross(adjx, adjy)
@@ -331,7 +331,7 @@ collisions(pbox:Box(Player), qboxes:[Box(Player)])
 
     // bump with everyone after us in creation order -
     // ensures each pair is bumped at most once
-    after = filter(qboxes, { qb:*Player => (*qb).id > p.id });
+    after = filter(qboxes, { (qb:*Player) -> (*qb).id > p.id });
     for(after, { bump(pbox, _) });
 };
 
@@ -424,7 +424,7 @@ turn(last)
         { pforn(*players, { age(_, elapsedms) }, ct) });
 
     // remove dead players
-    dead = filter(*players, { pb:*Player => (*pb).health <=. MORBID });
+    dead = filter(*players, { (pb:*Player) -> (*pb).health <=. MORBID });
     when(!empty(dead), { removeplayers(dead) });
 
     // return our start time
@@ -464,7 +464,7 @@ newbatch(pos, n)
 startturntask()
 {
     spawn {
-        cycle(nanotime(), {_ => *calctasks > 0 && prisopen}, turn)
+        cycle(nanotime(), { _ -> *calctasks > 0 && prisopen }, turn)
     }
 };
 
@@ -533,7 +533,7 @@ initdrag()
 updatedraghist()
 {
     state = (pos: v2(prmouse()), time: nanotime());
-    draghist <- { hist => append(take(-min(size(hist), HISTMAX - 1), hist), state) };
+    draghist <- { hist -> append(take(-min(size(hist), HISTMAX - 1), hist), state) };
     state
 };
 
@@ -654,7 +654,7 @@ drawplayers()
 // roll through diagnostic modes
 nextdiag()
 {
-    xray <- { diag => DIAGS[(find(DIAGS, diag) + 1) % size(DIAGS)] };
+    xray <- { diag -> DIAGS[(find(DIAGS, diag) + 1) % size(DIAGS)] };
 };
 
 // draw the checkerboard of cells

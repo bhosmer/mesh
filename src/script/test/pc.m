@@ -11,7 +11,7 @@ NSECS = 1;
 q = box([]);
 
 // print queue to console whenever updated
-qw = react(q, {l => print("q", l)});
+qw = react(q, {l -> print("q", l)});
 
 // producer function
 prod() {

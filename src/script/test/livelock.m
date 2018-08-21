@@ -11,7 +11,7 @@ b = box(0);
 running = box(2);
 
 trana() {
-    cycle(0, { i => get(cont) }, { i =>
+    cycle(0, { i -> get(cont) }, { i ->
         do {
             //print("a...");
             update(a, inc);
@@ -25,7 +25,7 @@ trana() {
 };
 
 tranb() {
-    cycle(0, {i => get(cont)}, {i =>
+    cycle(0, {i -> get(cont)}, {i ->
         do {
             //print("    b...");
             update(b, inc);
@@ -44,4 +44,4 @@ cont = box(true);
 
 sleep(5000);
 put(cont, false);
-await(running, { $0 == 0 })
+await(running, { _ == 0 })

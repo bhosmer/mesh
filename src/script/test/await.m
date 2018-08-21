@@ -8,23 +8,23 @@ test(n)
     b = box(-1);
     ntasks = box(0);
 
-    for(count(n), { i =>
+    for(count(n), { i ->
         spawn {
             await(b, {
                 when(*b == -1, { ntasks <- inc });
-                $0 == i });
+                _ == i });
             ntasks <- dec;
         }
     });
 
-    await(ntasks, { $0 == n });
+    await(ntasks, { _ == n });
 
-    for(count(n), { b := $0 });
+    for(count(n), { b := _ });
 
     timeout = box(false);
     spawn { sleep(10000); timeout := true };
 
-    awaits((timeout, ntasks), (id, { $0 == 0 }));
+    awaits((timeout, ntasks), (id, { _ == 0 }));
 
     when(*ntasks != 0, {
         print("*** DROPPED TASKS: ", *ntasks, "***")
@@ -33,7 +33,7 @@ test(n)
     (*ntasks == 0, *ntasks)
 };
 
-runs = count(100) | { print("test", $0); test(100) };
+runs = count(100) | { print("test", _); test(100) };
 
 (oks, drops) = unzip(runs);
 print("total bad runs, total dropped tasks:", (size(filter(oks, not)), sum(drops)));

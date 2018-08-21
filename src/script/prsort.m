@@ -71,7 +71,7 @@ again()
         src = *source;
 
         while({ *data != src }, {
-            data <- { zip($0, src) | tween };
+            data <- { zip(_, src) | tween };
             sleep(100)
         });
 
@@ -111,7 +111,7 @@ animsort(listbox:*[Int], cmp:(Int, Int)->Bool)
     // helper - swaps list values at the given positions
     swap(i, j)
     {
-        listbox <- { listsets($0, [i, j], [$0[j], $0[i]]) };
+        listbox <- { listsets(_, [i, j], [_[j], _[i]]) };
         nap(SORTDELAY);
     };
 
@@ -124,7 +124,7 @@ animsort(listbox:*[Int], cmp:(Int, Int)->Bool)
             pivot = (*listbox)[r];
 
             // update animation info
-            sortinfo <- { mapset($0, taskid(), (l, r, l, pivot)) };
+            sortinfo <- { mapset(_, taskid(), (l, r, l, pivot)) };
 
             // partition our region of list around pivot
             partstep(storepos, i)
@@ -134,7 +134,7 @@ animsort(listbox:*[Int], cmp:(Int, Int)->Bool)
                     when(storepos != i, { swap(storepos, i) });
 
                     // update animation info
-                    sortinfo <- { mapset($0, taskid(), (l, r, storepos + 1, pivot)) };
+                    sortinfo <- { mapset(_, taskid(), (l, r, storepos + 1, pivot)) };
                     storepos + 1
                 })
             };
@@ -149,7 +149,7 @@ animsort(listbox:*[Int], cmp:(Int, Int)->Bool)
 
             // animation: pause for breath, then clear animation info
             nap(SORTDELAY * 16 * f2i(i2f(r - l) ^. 0.25));
-            sortinfo <- { mapdel($0, taskid()) };
+            sortinfo <- { mapdel(_, taskid()) };
 
             // sort the partitions
             parts = [(l, mid - 1), (mid + 1, r)];
@@ -211,7 +211,7 @@ drawfunc()
     // draw scatter plot of list data
     prfill(ITEMFILL);
     list = *data;
-    count(DATASIZE) | { prellipse(x($0), y(list[$0]), ITEMDIAM, ITEMDIAM) };
+    count(DATASIZE) | { prellipse(x(_), y(list[_]), ITEMDIAM, ITEMDIAM) };
 
     // use per-task sort info to overlay regions
     srtinfo = *sortinfo;

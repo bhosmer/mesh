@@ -69,7 +69,7 @@ bestsizeurl(info:XNode, w, h)
         sizeinfos = rsp.elems[0].elems;
         dims = sizeinfos | { n:XNode => (s2i(n.attrs[#width]), s2i(n.attrs[#height])) };
 
-        fitixs = where(dims, { picw, pich => picw <= w && { pich <= h } });
+        fitixs = where(dims, { picw, pich -> picw <= w && { pich <= h } });
 
         if(empty(fitixs), {
             // note: default to thumb url if nothing fits our dims
@@ -115,7 +115,7 @@ startspinner()
     {
         while(prisopen, {
             sleep(f2i(1000.0 /. SPINUPDATEHZ));
-            spinangle <- { ($0 + SPININC ) %. TWO_PI}
+            spinangle <- { (_ + SPININC ) %. TWO_PI}
         })
     }
 };
@@ -208,7 +208,7 @@ reset()
 ensurethumbs()
 {
     // background task will download pages of thumbs in parallel
-    for(getnewpages(), { page => spawn { loadpage(page) } })
+    for(getnewpages(), { page -> spawn { loadpage(page) } })
 };
 
 // calculate pages to load, grabbing entries in global loader map
@@ -224,7 +224,7 @@ getnewpages()
         pagelist = range(hipage + 1, max(0, needpage - hipage));
 
         // add entries for these pages in pageloads
-        pageloads <- { mapsets($0, pagelist, [()]) };
+        pageloads <- { mapsets(_, pagelist, [()]) };
 
         pagelist
     }
@@ -242,11 +242,11 @@ loadpage(p)
     // otherwise, add image infos to global list, and do concurrent download.
     // downloaded images are retained even if tag has changed during download.
     when(*tag == curtag, {
-        picinfo <- { $0 + newinfos };
-        for(newinfos, { info =>
+        picinfo <- { _ + newinfos };
+        for(newinfos, { info ->
             spawn {
                 img = prloadimage(thumburl(info));
-                thumbs <- { mapset($0, info, img) }
+                thumbs <- { mapset(_, info, img) }
             }
         })
     });
@@ -259,17 +259,17 @@ loadpage(p)
 ensurefull(info)
 {
     // test and (maybe) update imageloads map
-    needimage = tau(imageloads, { !iskey($0, info) }, { mapset($0, info, ()) }).0;
+    needimage = tau(imageloads, { !iskey(_, info) }, { mapset(_, info, ()) }).0;
 
     when(needimage, {
         spawn {
             // get best url, load and add image to map
             url = bestsizeurl(info, W, H);
             img = prloadimage(url);
-            fulls <- { mapset($0, info, img) };
+            fulls <- { mapset(_, info, img) };
 
             // now clear loader entry
-            imageloads <- { mapdel($0, info) }
+            imageloads <- { mapdel(_, info) }
         }
     })
 };
@@ -308,7 +308,7 @@ pt2cell(x, y)
 center(ground:(Double, Double, Double, Double), figw:Int, figh:Int)
 {
     (fw, fh) = ( i2f(figw), i2f(figh) );
-    [dx, dy] = [ground.2 -. fw, ground.3 -. fh] | { $0 /. 2.0 };
+    [dx, dy] = [ground.2 -. fw, ground.3 -. fh] | { _ /. 2.0 };
     (ground.0 + dx, ground.1 + dy, fw, fh)
 };
 
@@ -359,7 +359,7 @@ visiblecells()
 {
     ((locol, lorow), (hicol, hirow)) = (locell(), hicell());
     cells = cross(fromto(locol, hicol), fromto(lorow, hirow));
-    filter(cells, { x, y => x >= 0 && { y >= 0 && { y < GRIDROWS } } })
+    filter(cells, { x, y -> x >= 0 && { y >= 0 && { y < GRIDROWS } } })
 };
 
 // draw all visible thumbnails
@@ -452,7 +452,7 @@ mouseDrag()
     when(*viewstate == THUMBVIEW, {
         (mouse, last) = (prmouse(), prpmouse());
         (dx,dy) = (last.0 - mouse.0, last.1 - mouse.1);
-        corner <- { ($0 - dx, $1 - dy) }
+        corner <- { (_.0 - dx, _.1 - dy) }
     })
 };
 
@@ -467,10 +467,10 @@ setup()
     ensurethumbs();
 
     // initiate thumbnail loads when corner location changes
-    react(corner, { _ => ensurethumbs() });
+    react(corner, { _ -> ensurethumbs() });
 
     // clear image data when tag changes
-    react(tag, { _ => reset() });
+    react(tag, { _ -> reset() });
     ()
 };
 

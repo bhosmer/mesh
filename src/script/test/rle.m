@@ -2,10 +2,10 @@
 import unittest;
 
 // encode list of T into sequence of (#occs, T) pairs
-encode(list) { runs(list) | { l => (size(l), head(l)) } };
+encode(list) { runs(list) | { l -> (size(l), head(l)) } };
 
 // decode (#occs, T) pairs into list
-decode(runs) { reduce({ l, r => l + rep(r) }, [], runs) };
+decode(runs) { reduce({ l, r -> l + rep(r) }, [], runs) };
 
 // -------------------------
 
@@ -17,9 +17,9 @@ test(list) {
     enc = encode(list);
     dec = decode(enc);
     print(list);
-    print("=>");
+    print("->");
     print(enc);
-    print("=>");
+    print("->");
     print(dec);
     assert_equals({list}, {dec});
 };

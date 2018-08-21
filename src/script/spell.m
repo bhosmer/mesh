@@ -19,28 +19,28 @@ alphabet = strcut("abcdefghijklmnopqrstuvwxyz", count(26));
 // (deletions, transpositions, replacements and insertions)
 // with edit distance 1
 //
-edits1 = { word =>
+edits1 = { word ->
 
     // list of pairs, word split at each position
-    splits =  count(strlen(word) + 1) | {i => (strtake(i, word), strdrop(i, word))};
+    splits =  count(strlen(word) + 1) | {i -> (strtake(i, word), strdrop(i, word))};
 
     // splits with right fragment of at least 1 char
-    splits1 = filter(splits, {a, b => strlen(b) > 0});
+    splits1 = filter(splits, {a, b -> strlen(b) > 0});
 
     // splits with right fragment of at least 2 chars
-    splits2 = filter(splits1, {a, b => strlen(b) > 1});
+    splits2 = filter(splits1, {a, b -> strlen(b) > 1});
 
     // list of deletions at each position
-    deletes = splits1 | {a, b => a + strdrop(1, b)};
+    deletes = splits1 | {a, b -> a + strdrop(1, b)};
 
     // list of transpositions at each position
-    transposes = splits2 | {a, b => a + substr(b,1,1) + substr(b,0,1) + strdrop(2,b)};
+    transposes = splits2 | {a, b -> a + substr(b,1,1) + substr(b,0,1) + strdrop(2,b)};
 
     // list of lists - each position replaced by every letter
-    replaces = splits1 | {a, b => alphabet | {c => a + c + strdrop(1, b)}};
+    replaces = splits1 | {a, b -> alphabet | {c -> a + c + strdrop(1, b)}};
 
     // list of lists - every letter inserted at each position
-    inserts = splits | {a, b => alphabet | {c => a + c + b}};
+    inserts = splits | {a, b -> alphabet | {c -> a + c + b}};
 
     // return a single flat list
     flatten([deletes, transposes] + replaces + inserts)
@@ -68,7 +68,7 @@ correct(word)
     // candidates are first of
     // (original word, edit-1 words, edit-2 words)
     // that yields a nonempty list
-    candidates = evolve_while(empty, [], {_, f => f()},
+    candidates = evolve_while(empty, [], {_, f -> f()},
         [ {known([word])}, {known(edits1(word))}, {known_edits2(word)} ]);
 
     // find word count of most popular candidate

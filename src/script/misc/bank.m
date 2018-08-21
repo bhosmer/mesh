@@ -21,7 +21,7 @@ openAccount(owner, balance)
     do {
         id = newId();
         account = (id: id, owner: owner, balance: box(balance));
-        accounts <- { m => mapset(m, id, account) };
+        accounts <- { m -> mapset(m, id, account) };
         account
     }
 };
@@ -35,7 +35,7 @@ deposit(account:Account, amount:Int)
     do {
         sleep(50);  // simulate a long-running operation
         (*account.balance + amount >= 0) && {
-            account.balance <- { $0 + amount };
+            account.balance <- { _ + amount };
             true
         }
     }
@@ -82,13 +82,13 @@ test()
     spawn { withdraw(mark, 75); countdown <- dec };
 
     // wait for tasks to finish
-    await(countdown, { $0 == 0 });
+    await(countdown, { _ == 0 });
 
     print("after transactions: ");
     values(*accounts) | print;
 
     // are all accounts non-negative? returns bool
-    all(values(*accounts), { a:Account => *a.balance >= 0 })
+    all(values(*accounts), { a:Account -> *a.balance >= 0 })
 };
 
 // can call this in shell after $load - winning operation will vary per above

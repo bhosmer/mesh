@@ -39,10 +39,10 @@ afetch(p : Page) -> Data {
     fetched = box([:]);
 
     fsub(p : Page) {
-        tasks <- { $0 + size(p.top) };
-        p.top | { f =>
-            async({ dispatch(f) }, { d =>
-                fetched <- { mapset($0, f, d) };
+        tasks <- { _ + size(p.top) };
+        p.top | { f ->
+            async({ dispatch(f) }, { d ->
+                fetched <- { mapset(_, f, d) };
                 tasks <- dec
             })
         };
@@ -51,7 +51,7 @@ afetch(p : Page) -> Data {
     };
 
     fsub(p);
-    await(tasks, { $0 == 0 });
+    await(tasks, { _ == 0 });
 
     build(p : Page) -> Data {
         (top: maplm(p.top, *fetched), subs: p.subs | build)

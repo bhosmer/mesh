@@ -52,7 +52,7 @@ bump(n)
     buf.do({ buf.write(n, buf.read(n) + 1) })
 };
 
-pfor(flatten(count(LEN) | { rep(NTASKS, $0) }), bump);
+pfor(flatten(count(LEN) | { rep(NTASKS, _) }), bump);
 
 buf.do({ print(count(LEN) | buf.read) });
 

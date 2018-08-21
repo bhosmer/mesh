@@ -18,10 +18,10 @@ import unittest;
     blists = repeat(ntasks, { shuffle(blist) });
 
     // in parallel, run mut repeatedly over shuffled box lists
-    pfor(blists, { blist => repeat(niters, { for(blist, mut) }) });
+    pfor(blists, { blist -> repeat(niters, { for(blist, mut) }) });
 
     // afterwards, all boxes should contain term
-    guard(all(blist, { *$0 == term }), true, {
+    guard(all(blist, { *_ == term }), true, {
         print("ERROR, expected all: ": term, "got: ": counts(blist));
         false
     })
@@ -60,7 +60,7 @@ append_by_put_own(b) {
 
 // append by updating. box is owned prior to inc invocation, so is inevitable
 append_by_update(b) {
-    update(b, { l => append(l, size(l))})
+    update(b, { l -> append(l, size(l))})
 };
 
 // run each of our test mutators with the given number of boxes, iters, tasks

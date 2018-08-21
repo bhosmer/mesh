@@ -19,7 +19,7 @@ assert_equals({ "" }, { apply(getenv, ("NoSuchValue")) });
 assert_false({ "" == getenv("PATH") });
 
 
-// guard : (T => (Bool, T, () -> T) -> T) = <intrinsic>
+// guard : (T -> (Bool, T, () -> T) -> T) = <intrinsic>
 assert_equals({ 0 }, {
         guard_data = box(0);
         guard(true, *guard_data, { guard_data <- inc; *guard_data });
@@ -44,7 +44,7 @@ assert_equals({ "true" }, { apply(if, (true, { "true" }, { "false" })) });
 
 // ifelse = <T> { (cases: [(() -> Bool, () -> T)], default: () -> T) -> T => cascade(cases, default)() }
 assert_equals({ ["neg", "little", "med", "big"] }, {
-    [-1, 0, 10, 100] | { x =>
+    [-1, 0, 10, 100] | { x ->
         ifelse([
             ({x < 0}, {"neg"}),
             ({x < 10}, {"little"}),
@@ -80,119 +80,119 @@ assert_equals({ 1 }, {
         *when_data;
         });
 
-// converge = { func, init => diff = { x, y => and(ne(x, y), { ne(y, init) }) }; next = { x, y => (y, func(y)) }; cycle((init, diff, func(init)), next).0 }
-assert_equals({ 9 }, { converge({inc($0) % 10}, 0) });
+// converge = { func, init -> diff = { x, y -> and(ne(x, y), { ne(y, init) }) }; next = { x, y -> (y, func(y)) }; cycle((init, diff, func(init)), next).0 }
+assert_equals({ 9 }, { converge({inc(_) % 10}, 0) });
 
 
 // cycle : (T => (T, T -> Bool, T -> T) -> T) = <intrinsic>
-assert_equals({ 4 }, { cycle(0, { $0 < 4 }, inc) });
-assert_equals({ 4 }, { apply(cycle, (0, { $0 < 4 }, inc)) });
+assert_equals({ 4 }, { cycle(0, { _ < 4 }, inc) });
+assert_equals({ 4 }, { apply(cycle, (0, { _ < 4 }, inc)) });
 
 // cyclen : (T => (T, Int, T -> T) -> T) = <intrinsic>
 assert_equals({ 4 }, { cyclen(0, 4, inc) });
 assert_equals({ 4 }, { apply(cyclen, (0, 4, inc)) });
 
-// evolve = { init, f, list => reduce(f, init, list) }
-assert_equals({ 6 }, { evolve(0, { a, b => a+b  }, [1,2,3]) });
+// evolve = { init, f, list -> reduce(f, init, list) }
+assert_equals({ 6 }, { evolve(0, { a, b -> a+b  }, [1,2,3]) });
 
 // evolve_while : (A, B => (A -> Bool, A, (A, B) -> A, [B]) -> A) = <intrinsic>
-assert_equals({ 4 }, { evolve_while({$0 < 4}, 1, (+), [1,1,1,1,1]) });
-assert_equals({ 4 }, { apply(evolve_while, ({$0 < 4}, 1, (+), [1,1,1,1,1])) });
+assert_equals({ 4 }, { evolve_while({_ < 4}, 1, (+), [1,1,1,1,1]) });
+assert_equals({ 4 }, { apply(evolve_while, ({_ < 4}, 1, (+), [1,1,1,1,1])) });
 
 
 // for : (X, Y => ([X], X -> Y) -> ()) = <intrinsic>
 assert_equals({ 6 }, {
         for_data = box(0);
-        for([1,2,3], { for_data <- {$$0 + $0} });
+        for([1,2,3], { n -> for_data <- {n + _} });
         *for_data
         });
 assert_equals({ 6 }, {
         for_data = box(0);
-        apply(for, ([1,2,3], { for_data <- {$$0 + $0} }));
+        apply(for, ([1,2,3], { n -> for_data <- {n + _} }));
         *for_data
         });
 // for over various list types, note the for function simple udates the box value with the current list item
-assert_equals({ 1 }, { for_data = box(0); for([1], { for_data <- {$0; $$0} }); *for_data }); // singletonlist
+assert_equals({ 1 }, { for_data = box(0); for([1], { n -> for_data <- {_; n} }); *for_data }); // singletonlist
 assert_equals({ 3 }, {
                         for_data = box(0);
                         sublist = take(3, take(4, [1,2,3]));
-                        for(sublist, { for_data <- {$0; $$0} });
+                        for(sublist, { n -> for_data <- {_; n} });
                         *for_data }); // sublist
 assert_equals({ 0 }, {
                         for_data = box(0);
                         biglist = take(34, count(33));
-                        for(biglist, { for_data <- {$0; $$0} });
+                        for(biglist, { n -> for_data <- {_; n} });
                         *for_data }); // biglist
-assert_equals({ 0 }, { for_data = box(0); for([], { for_data <- {$0; $$0} }); *for_data }); // emptylist
-assert_equals({ 1 }, { for_data = box(0); for(rep(3, 1), { for_data <- {$0; $$0} }); *for_data }); // repeatedlist
-assert_equals({ 3 }, { for_data = box(0); for(fromto(6, 3), { for_data <- {$0; $$0} }); *for_data }); // reverseIntlist
-assert_equals({ 3 }, { for_data = box(0); for(flatten([[0,1], [2,3]]), { for_data <- {$0; $$0} }); *for_data }); // ChainedListPair.run()
-assert_equals({ 3 }, { for_data = box(0); for(flatten([[0,1], [2], [3]]), { for_data <- {$0; $$0} }); *for_data }); // ChainedLists.run()
-assert_equals({ 5 }, { for_data = box(0); for(flatten([[0,1] ,[2,3], [4,5]]), { for_data <- {$0; $$0} }); *for_data }); // MatrixList.run()
+assert_equals({ 0 }, { for_data = box(0); for([], { n -> for_data <- {_; n} }); *for_data }); // emptylist
+assert_equals({ 1 }, { for_data = box(0); for(rep(3, 1), { n -> for_data <- {_; n} }); *for_data }); // repeatedlist
+assert_equals({ 3 }, { for_data = box(0); for(fromto(6, 3), { n -> for_data <- {_; n} }); *for_data }); // reverseIntlist
+assert_equals({ 3 }, { for_data = box(0); for(flatten([[0,1], [2,3]]), { n -> for_data <- {_; n} }); *for_data }); // ChainedListPair.run()
+assert_equals({ 3 }, { for_data = box(0); for(flatten([[0,1], [2], [3]]), { n -> for_data <- {_; n} }); *for_data }); // ChainedLists.run()
+assert_equals({ 5 }, { for_data = box(0); for(flatten([[0,1] ,[2,3], [4,5]]), { n -> for_data <- {_; n} }); *for_data }); // MatrixList.run()
 
 
-// iter = { p => while(p, { () }); () }
+// iter = { p -> while(p, { () }); () }
 assert_equals({ 10 }, { b = box(0); iter({ b <- inc; *b < 10 }); *b });
 
 
-// pfiltern = { lst, pred, n => list:flatten(pmap(chunks(lst, n), { $0_245_36 => list:filter($0_245_36, pred) })) }
-assert_equals({ [0, 2, 4, 6, 8, 10, 12, 14, 16, 18] }, { pfiltern(count(20), {($0 % 2) == 0}, 4) });
-assert_equals({ filter(count(20), {($0 % 2) == 0}) }, { pfiltern(count(20), {($0 % 2) == 0}, 4) });
+// pfiltern = { lst, pred, n -> list:flatten(pmap(chunks(lst, n), { $0_245_36 -> list:filter($0_245_36, pred) })) }
+assert_equals({ [0, 2, 4, 6, 8, 10, 12, 14, 16, 18] }, { pfiltern(count(20), {(_ % 2) == 0}, 4) });
+assert_equals({ filter(count(20), {(_ % 2) == 0}) }, { pfiltern(count(20), {(_ % 2) == 0}, 4) });
 
 // pfor : (X, Y => ([X], X -> Y) -> ()) = <intrinsic>
 assert_equals({ 6 }, {
         pfor_data = box(0);
-        pfor([1,2,3], { pfor_data <- {$$0 + $0} });
+        pfor([1,2,3], { n -> pfor_data <- {n + _} });
         *pfor_data;
         });
 
 assert_equals({
         pfor_data = box(0);
-        pfor([1,2,3], { pfor_data <- {$$0 + $0} });
+        pfor([1,2,3], { n -> pfor_data <- {n + _} });
         *pfor_data;
         },
         {
         for_data = box(0);
-        for([1,2,3], { for_data <- {$$0 + $0} });
+        for([1,2,3], { n -> for_data <- {n + _} });
         *for_data
         });
 
 assert_equals({ 6 }, {
         pfor_data = box(0);
-        apply(pfor, ([1,2,3], { pfor_data <- {$$0 + $0} }));
+        apply(pfor, ([1,2,3], { n -> pfor_data <- {n + _} }));
         *pfor_data;
         });
 
-// pforn = { lst, f, n => lang:pfor(chunks(lst, n), { $0_235_31 => list:for($0_235_31, f); () }); () }
+// pforn = { lst, f, n -> lang:pfor(chunks(lst, n), { $0_235_31 -> list:for($0_235_31, f); () }); () }
 assert_equals({ 45 }, {
         for_data = box(0);
-        pforn(count(10), { for_data <- {$$0 + $0} }, 4);
+        pforn(count(10), { n -> for_data <- {n + _} }, 4);
         *for_data
         });
 
 assert_equals({
         for_data = box(0);
-        for(count(10), { for_data <- {$$0 + $0} });
+        for(count(10), { n -> for_data <- {n + _} });
         *for_data
         }, {
         for_data = box(0);
-        pforn(count(10), { for_data <- {$$0 + $0} }, 4);
+        pforn(count(10), { n -> for_data <- {n + _} }, 4);
         *for_data
         });
 
 assert_equals({
         for_data = box(0);
-        pfor(count(10), { for_data <- {$$0 + $0} });
+        pfor(count(10), { n -> for_data <- {n + _} });
         *for_data
         }, {
         for_data = box(0);
-        pforn(count(10), { for_data <- {$$0 + $0} }, 4);
+        pforn(count(10), { n -> for_data <- {n + _} }, 4);
         *for_data
         });
 
-// pwheren = { lst, pred, n => list:flatten(pmap(chunks(lst, n), { $0_253_36 => list:where($0_253_36, pred) })) }
-assert_equals({ [0, 1, 3] }, { pwheren([4,4,7,4,7], {$0 < 5}, 3) });
-assert_equals({ where([4,4,7,4,7], {$0 < 5}) }, { pwheren([4,4,7,4,7], {$0 < 5}, 3) });
+// pwheren = { lst, pred, n -> list:flatten(pmap(chunks(lst, n), { $0_253_36 -> list:where($0_253_36, pred) })) }
+assert_equals({ [0, 1, 3] }, { pwheren([4,4,7,4,7], {_ < 5}, 3) });
+assert_equals({ where([4,4,7,4,7], {_ < 5}) }, { pwheren([4,4,7,4,7], {_ < 5}, 3) });
 
 // reduce : (A, B => ((A, B) -> A, A, [B]) -> A) = <intrinsic>
 assert_equals({ 13 }, { reduce((+), 1, [2,4,6]) });
@@ -203,16 +203,16 @@ assert_equals({ 13 }, { apply(reduce, ((+), 1, [2,4,6])) });
 assert_equals({ [1, 3, 7, 13] }, { scan((+), 1, [2,4,6]) });
 assert_equals({ [1, 3, 7, 13] }, { apply(scan, ((+), 1, [2,4,6])) });
 
-// scan_while = { pred, init, f, args => result = evolve_while(compose(list:last, pred), [init], { as, b => list:append(as, f(list:last(as), b)) }, args); list:drop(1, result) }
-assert_equals({ [2, 3, 4] }, { scan_while({$0 < 4}, 1, (+), [1,1,1,1,1]) });
+// scan_while = { pred, init, f, args -> result = evolve_while(compose(list:last, pred), [init], { as, b -> list:append(as, f(list:last(as), b)) }, args); list:drop(1, result) }
+assert_equals({ [2, 3, 4] }, { scan_while({_ < 4}, 1, (+), [1,1,1,1,1]) });
 
-// tconverge = { func, init => diff = { accum, x, y => and(ne(x, y), { ne(y, init) }) }; next = { accum, x, y => (list:append(accum, y), y, func(y)) }; cycle(([init], diff, init, func(init)), next).0 }
-assert_equals({ [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] }, { tconverge({inc($0) % 10}, 0) });
+// tconverge = { func, init -> diff = { accum, x, y -> and(ne(x, y), { ne(y, init) }) }; next = { accum, x, y -> (list:append(accum, y), y, func(y)) }; cycle(([init], diff, init, func(init)), next).0 }
+assert_equals({ [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] }, { tconverge({inc(_) % 10}, 0) });
 
-// trace = { p, v, f => cycle([v], compose(last, p), { $0_43_26 => append($0_43_26, f(last($0_43_26))) }) }
-assert_equals({ [0, 1, 2, 3, 4] }, { trace(0, { $0 < 4 }, inc) });
+// trace = { p, v, f -> cycle([v], compose(last, p), { $0_43_26 -> append($0_43_26, f(last($0_43_26))) }) }
+assert_equals({ [0, 1, 2, 3, 4] }, { trace(0, { _ < 4 }, inc) });
 
-// tracen = { n, v, f => cyclen([v], n, { $0_57_20 => append($0_57_20, f(last($0_57_20))) }) }
+// tracen = { n, v, f -> cyclen([v], n, { $0_57_20 -> append($0_57_20, f(last($0_57_20))) }) }
 assert_equals({ [0, 1, 2, 3, 4] }, { tracen(0, 4, inc) });
 
 // while : (T => (() -> Bool, () -> T) -> ()) = <intrinsic>
@@ -227,33 +227,33 @@ assert_equals({ 5 }, {
         *while_data;
         });
 
-// apply = { f, x => f(x) }
+// apply = { f, x -> f(x) }
 assert_equals({ 4 }, { apply(inc, 3) });
 
-// compose = { f, g => { x => g(f(x)) } }
+// compose = { f, g -> { x -> g(f(x)) } }
 assert_equals({ 4 }, { compose(inc, inc)(2); });
 
 // compl : <X, Y> (X -> Int, [Y]) -> (X -> Y)
 assert_equals({ "odd" },
               {
-              compl_func = compl({ $0 % 2 }, ["even", "odd"]);
+              compl_func = compl({ _ % 2 }, ["even", "odd"]);
               compl_func(7)
               });
 assert_equals({ "odd" },
               {
-              compl_func = apply(compl, ({ $0 % 2 }, ["even", "odd"]));
+              compl_func = apply(compl, ({ _ % 2 }, ["even", "odd"]));
               compl_func(7)
               });
 
 // compm : <X, K, Y> (X -> K, [K : Y]) -> (X -> Y)
 assert_equals({ "ODD" },
               {
-              compm_func = compm({ if(eq(0, $0 % 2), {#even}, {#odd}) }, [#even: "EVEN", #odd: "ODD"]);
+              compm_func = compm({ if(eq(0, _ % 2), {#even}, {#odd}) }, [#even: "EVEN", #odd: "ODD"]);
               compm_func(7)
               });
 assert_equals({ "ODD" },
               {
-              compm_func = apply(compm, ({ if(eq(0, $0 % 2), {#even}, {#odd}) }, [#even: "EVEN", #odd: "ODD"]));
+              compm_func = apply(compm, ({ if(eq(0, _ % 2), {#even}, {#odd}) }, [#even: "EVEN", #odd: "ODD"]));
               compm_func(7)
               });
 
@@ -347,15 +347,15 @@ assert_equals({ [] }, { pmap([], inc) });
 assert_equals({ map([1,2,3], inc) }, { pmap([1,2,3], inc) });
 assert_equals({ [2,3,4] }, { apply(pmap, ([1,2,3], inc)) });
 
-// pmapn = { lst, f, n => list:flatten(pmap(chunks(lst, n), { $0_227_36 => map($0_227_36, f) })) }
+// pmapn = { lst, f, n -> list:flatten(pmap(chunks(lst, n), { $0_227_36 -> map($0_227_36, f) })) }
 assert_equals({ [1,2,3,4,5] }, { pmapn(count(5), inc, 2) });
 assert_equals({ map(count(5), inc) }, { pmapn(count(5), inc, 2) });
 assert_equals({ pmap(count(5), inc) }, { pmapn(count(5), inc, 2) });
 
-// run = { b => b() }
+// run = { b -> b() }
 assert_equals({ 3 }, { run({3}) });
 
-// id = { v => v }
+// id = { v -> v }
 assert_equals({ "a" }, { id("a") });
 assert_equals({ 3 }, { id(3) });
 
@@ -530,31 +530,31 @@ assert_equals({ 1 }, { abs(1) });
 assert_equals({ 0 }, { abs(0) });
 assert_equals({ 0 }, { abs(-0) });
 
-// constrain = { lo, n, hi => max(lo, min(hi, n)) }
+// constrain = { lo, n, hi -> max(lo, min(hi, n)) }
 assert_equals({ 2 }, { constrain(2, 1, 4) });
 assert_equals({ 3 }, { constrain(2, 3, 4) });
 assert_equals({ 4 }, { constrain(2, 5, 4) });
 
-// dec = { n => minus(n, 1) }
+// dec = { n -> minus(n, 1) }
 assert_equals({ -1 }, { dec(0) });
 assert_equals({ 0 }, { dec(1) });
 
-// divz = { n, d => guard(eq(d, 0), 0, { div(n, d) }) }
+// divz = { n, d -> guard(eq(d, 0), 0, { div(n, d) }) }
 assert_equals({ 2 }, { divz(4, 2) });
 assert_equals({ 0 }, { divz(0, 2) });
 assert_equals({ 0 }, { divz(3, 0) });
 
-// even : { n => eq(mod(n, 2), 0) }
+// even : { n -> eq(mod(n, 2), 0) }
 assert_true({ even(12) });
 assert_true({ even(0) });
 assert_false({ even(1) });
 assert_false({ even(-1) });
 
-// inc = { n => plus(n, 1) }
+// inc = { n -> plus(n, 1) }
 assert_equals({ 0 }, { inc(-1) });
 assert_equals({ 2 }, { inc(1) });
 
-// inrange = { x, base, extent => and(ge(x, base), { lt(x, plus(base, extent)) }) }
+// inrange = { x, base, extent -> and(ge(x, base), { lt(x, plus(base, extent)) }) }
 assert_equals({ true }, { inrange(4, 2, 5) });
 assert_equals({ true }, { inrange(2, 2, 1) });
 assert_equals({ false }, { inrange(1, 2, 1) });
@@ -573,11 +573,11 @@ assert_equals({ 4 }, { min(4, 4) });
 assert_equals({ 3 }, { apply(min, (3, 4)) });
 
 
-// modz = { n, d => guard(eq(d, 0), 0, { mod(n, d) }) }
+// modz = { n, d -> guard(eq(d, 0), 0, { mod(n, d) }) }
 assert_equals({ 1 }, { modz(4, 3) });
 assert_equals({ 0 }, { modz(4, 0) });
 
-// odd : { n => ne(mod(n, 2), 0) }
+// odd : { n -> ne(mod(n, 2), 0) }
 assert_false({ odd(12) });
 assert_false({ odd(0) });
 assert_true({ odd(1) });
@@ -589,7 +589,7 @@ assert_equals({ -1 }, { sign(-2) });
 assert_equals({ 1 }, { sign(2) });
 assert_equals({ 0 }, { apply(sign, 0) });
 
-// sq = { i => times(i, i) }
+// sq = { i -> times(i, i) }
 assert_equals({ 4 }, { sq(2) });
 
 // lminus : (Long, Long) -> Long = <intrinsic>
@@ -664,54 +664,54 @@ assert_equals({ 27.0 }, { apply(fpow, (9.0, 1.5)) });
 assert_equals({ 7.38905609893065 }, { exp(2.0) });
 assert_equals({ 7.38905609893065 }, { apply(exp, 2.0) });
 
-// fabs = { f => guard(fge(f, 0.0), f, { fminus(0.0, f) }) }
+// fabs = { f -> guard(fge(f, 0.0), f, { fminus(0.0, f) }) }
 assert_equals({ 1.0 }, { fabs(-1.0) });
 assert_equals({ 1.0 }, { fabs(1.0) });
 assert_equals({ 0.0 }, { fabs(0.0) });
 assert_equals({ 0.0 }, { fabs(-0.0) });
 
 
-// finrange = { f, fbase, fextent => and(fge(f, fbase), { flt(f, plus(fbase, fextent)) }) }
+// finrange = { f, fbase, fextent -> and(fge(f, fbase), { flt(f, plus(fbase, fextent)) }) }
 assert_equals({ true }, { finrange(4.0, 2.0, 5.0) });
 assert_equals({ true }, { finrange(2.0, 2.0, 1.0) });
 assert_equals({ false }, { finrange(1.0, 2.0, 1.0) });
 assert_equals({ false }, { finrange(3.0, 2.0, 1.0) });
 
-// fmax = { x, y => iif(fge(x, y), x, y) }
+// fmax = { x, y -> iif(fge(x, y), x, y) }
 assert_equals({ 1.0 }, { fmax(1.0, 1.0) });
 assert_equals({ 1.0 }, { fmax(1.0, -1.0) });
 assert_equals({ 1.0 }, { fmax(-0.0, 1.0) });
 assert_equals({ 0.0 }, { fmax(0.0, -0.0) });
 
-// fmin = { x, y => iif(fge(x, y), y, x) }
+// fmin = { x, y -> iif(fge(x, y), y, x) }
 assert_equals({ 1.0 }, { fmin(1.0, 1.0) });
 assert_equals({ -1.0 }, { fmin(1.0, -1.0) });
 assert_equals({ -0.0 }, { fmin(-0.0, 1.0) });
 assert_equals({ -0.0 }, { fmin(0.0, -0.0) });
 
-// fsign = { f => guard(fgt(f, 0.0), 1, { iif(flt(f, 0.0), -1, 0) }) }
+// fsign = { f -> guard(fgt(f, 0.0), 1, { iif(flt(f, 0.0), -1, 0) }) }
 assert_equals({ 1 }, { fsign(1.0) });
 assert_equals({ -1 }, { fsign(-1.0) });
 assert_equals({ 0 }, { fsign(-0.0) });
 assert_equals({ 0 }, { fsign(0.0) });
 
-// fdivz = { n, d => guard(eq(d, 0.0), 0.0, { fdiv(n, d) }) }
+// fdivz = { n, d -> guard(eq(d, 0.0), 0.0, { fdiv(n, d) }) }
 assert_equals({ 2.0 }, { fdivz(4.0, 2.0) });
 assert_equals({ 0.0 }, { fdivz(0.0, 2.0) });
 assert_equals({ 0.0 }, { fdivz(3.0, 0.0) });
 
-// fmodz = { n, d => guard(eq(d, 0.0), 0.0, { fmod(n, d) }) }
+// fmodz = { n, d -> guard(eq(d, 0.0), 0.0, { fmod(n, d) }) }
 assert_equals({ 0.125 }, { fmodz(3.125, 1.0) });
 assert_equals({ 0.0 }, { fmodz(3.125, 0.0) });
 
-// fsq = { f => ftimes(f, f) }
+// fsq = { f -> ftimes(f, f) }
 assert_equals({ 9.0 }, { fsq(3.0) });
 
 // ln : Double -> Double = <intrinsic>
 assert_equals({ 0.0 }, { ln(1.0) });
 assert_equals({ 0.0 }, { apply(ln, 1.0) });
 
-// log = { b, n => fdiv(ln(n), ln(b)) }
+// log = { b, n -> fdiv(ln(n), ln(b)) }
 assert_equals({ 2.0 }, { log(10.0, 100.0) });
 
 // ilog2 : (Int) -> Int = <intrinsic>
@@ -722,7 +722,7 @@ assert_equals({ 0 }, { ilog2(-1) });
 assert_equals({ 30 }, { ilog2(0x40000000) });
 
 
-// round = { f => f2i(plus(f, 0.5)) }
+// round = { f -> f2i(plus(f, 0.5)) }
 assert_equals({ 1 }, { round(1.49) });
 assert_equals({ 2 }, { round(1.50) });
 assert_equals({ 0 }, { round(0.0) });
@@ -840,9 +840,9 @@ assert_equals({ "eabcde" }, { strtake(-6, "abcde") });
 assert_equals({ "hello" }, { apply(strtake, (5, "hello world")) });
 
 // strwhere : (String, String -> Bool) -> [Int] = <intrinsic>
-assert_equals({ [3,7,10,12] }, { strwhere("abcZdefZghZiZjk", { $0 == "Z" }) });
-assert_equals({ [] }, { strwhere("", { $0 == "Z" }) });
-assert_equals({ [3,7,10,12] }, { apply(strwhere, ("abcZdefZghZiZjk", { $0 == "Z" })) });
+assert_equals({ [3,7,10,12] }, { strwhere("abcZdefZghZiZjk", { _ == "Z" }) });
+assert_equals({ [] }, { strwhere("", { _ == "Z" }) });
+assert_equals({ [3,7,10,12] }, { apply(strwhere, ("abcZdefZghZiZjk", { _ == "Z" })) });
 
 // substr : (String, Int, Int) -> String = <intrinsic>
 assert_equals({ "lo w" }, { substr("hello world", 3, 4) });
@@ -957,7 +957,7 @@ assert_equals({ [[0], [1, 2], [3, 4]] }, { chunks(count(5), 3) });
 assert_equals({ [[0], [1], [2], [3, 4]] }, { chunks(count(5), 4) });
 assert_equals({ [[0], [1], [2], [3], [4]] }, { chunks(count(5), 5) });
 
-// contains = { list, item => lt(find(list, item), size(list)) }
+// contains = { list, item -> lt(find(list, item), size(list)) }
 assert_equals({ false }, { contains([3,4,5], 2) });
 assert_equals({ true }, { contains([3,4,5], 4) });
 assert_equals({ false }, { contains(["cat", "dog", "fish"], "mouse") });
@@ -998,16 +998,16 @@ assert_equals({ [0, 0, 0] }, { apply(draw, (3, 1)) });
 assert_equals({ [4, 5] }, { drop(3, [1,2,3,4,5]) });
 assert_equals({ [4, 5] }, { apply(drop, (3, [1,2,3,4,5])) });
 
-// eachpair = { init, f, args => list = plus([init], args); map(index(args), { i => f(list[i], list[plus(i, 1)]) }) }
+// eachpair = { init, f, args -> list = plus([init], args); map(index(args), { i -> f(list[i], list[plus(i, 1)]) }) }
 assert_equals({ [false, false, true, false, false] }, { eachpair(0, gt, [1,3,2,4,5]) });
 
-// edges = { list => plus([0], filter(drop(1, index(list)), { $0_92_40 => ne(list[minus($0_92_40, 1)], list[$0_92_40]) })) }
+// edges = { list -> plus([0], filter(drop(1, index(list)), { $0_92_40 -> ne(list[minus($0_92_40, 1)], list[$0_92_40]) })) }
 assert_equals({ [0, 1, 4] }, { edges([3,2,2,2,8,8]) });
 
-// enlist = { v => [v] }
+// enlist = { v -> [v] }
 assert_equals({ [2] }, { enlist(2) });
 
-// filet = { list, n => s = size(list); cut(list, eachleft(times)(count(plus(divz(s, n), sign(modz(s, n)))), n)) }
+// filet = { list, n -> s = size(list); cut(list, eachleft(times)(count(plus(divz(s, n), sign(modz(s, n)))), n)) }
 assert_equals({ [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]] }, { filet(count(10), 2) });
 assert_equals({ [[0, 1, 2, 3], [4]] }, { filet(count(5), 4) });
 assert_equals({ [[0, 1, 2, 3, 4]]}, { filet(count(5), 5) });
@@ -1017,10 +1017,10 @@ assert_equals({ [] }, { filet(count(3), 0) });
 
 
 // filter : (T => ([T], T -> Bool) -> [T]) = <intrinsic>
-assert_equals({ [0,1] } , { filter([0,1,2,3], {$0 < 2}) });
-assert_equals({ [] } , { filter([], {$0 < 2}) });
-assert_equals({ [] } , { filter([0,1,2,3], {$0 > 4}) });
-assert_equals({ [0,1] } , { apply(filter, ([0,1,2,3], {$0 < 2})) });
+assert_equals({ [0,1] } , { filter([0,1,2,3], {_ < 2}) });
+assert_equals({ [] } , { filter([], {_ < 2}) });
+assert_equals({ [] } , { filter([0,1,2,3], {_ > 4}) });
+assert_equals({ [0,1] } , { apply(filter, ([0,1,2,3], {_ < 2})) });
 
 // find : (T => ([T], T) -> Int) = <intrinsic>
 assert_equals({ 4 }, { find(["cat", "dog", "bird", "snake"], "fox") });
@@ -1053,8 +1053,8 @@ assert_equals({ "cat" }, { head(["cat", "dog", "bird", "dog", "snake"]) });
 assert_equals({ "cat" }, { apply(head, ["cat", "dog", "bird", "dog", "snake"]) });
 
 
-// first_where = { pred, vals => n = list:size(vals); cycle(0, { i => and(lt(i, n), { not(pred(vals[i])) }) }, inc) }
-assert_equals({ 4 }, { first_where({ 3 < $0 }, [0,1,2,3,4,5]) });
+// first_where = { pred, vals -> n = list:size(vals); cycle(0, { i -> and(lt(i, n), { not(pred(vals[i])) }) }, inc) }
+assert_equals({ 4 }, { first_where({ 3 < _ }, [0,1,2,3,4,5]) });
 
 // flatten : (A => [[A]] -> [A]) = <intrinsic>
 assert_equals({ [1,2,3,4,9,11] }, { flatten([[1,2,3,4], [9,11]]) });
@@ -1115,16 +1115,16 @@ assert_equals({ [1, 2, 7, 1, 11] }, { listsets([3,5,7,9,11], [0,1,3], [1,2]) });
 assert_equals({ [1, 2, 7, 1, 11] }, { apply(listsets, ([3,5,7,9,11], [0,1,3], [1,2])) });
 
 // part = { vals, f => group(map(vals, f), vals) }
-assert_equals({ [true: [1, 2], false: [3, 4, 5]] }, { part([1,2,3,4,5], { gt(3, $0) }); });
+assert_equals({ [true: [1, 2], false: [3, 4, 5]] }, { part([1,2,3,4,5], { gt(3, _) }); });
 
 // ppart = { vals, f => list:group(pmap(vals, f), vals) }
-assert_equals({ [true: [1, 2], false: [3, 4, 5]] }, { ppart([1,2,3,4,5], { gt(3, $0) }); });
-assert_equals({ part([1,2,3,4,5], { gt(3, $0) }) }, { ppart([1,2,3,4,5], { gt(3, $0) }); });
+assert_equals({ [true: [1, 2], false: [3, 4, 5]] }, { ppart([1,2,3,4,5], { gt(3, _) }); });
+assert_equals({ part([1,2,3,4,5], { gt(3, _) }) }, { ppart([1,2,3,4,5], { gt(3, _) }); });
 
 // ppartn = { vals, f, n => list:group(list:flatten(pmap(chunks(vals, n), { $0_266_48 => map($0_266_48, f) })), vals) }
-assert_equals({ [true: [1, 2], false: [3, 4, 5]] }, { ppartn([1,2,3,4,5], { gt(3, $0) }, 2); });
-assert_equals({ part([1,2,3,4,5], { gt(3, $0) }) }, { ppartn([1,2,3,4,5], { gt(3, $0) }, 2); });
-assert_equals({ ppart([1,2,3,4,5], { gt(3, $0) }) }, { ppartn([1,2,3,4,5], { gt(3, $0) }, 2); });
+assert_equals({ [true: [1, 2], false: [3, 4, 5]] }, { ppartn([1,2,3,4,5], { gt(3, _) }, 2); });
+assert_equals({ part([1,2,3,4,5], { gt(3, _) }) }, { ppartn([1,2,3,4,5], { gt(3, _) }, 2); });
+assert_equals({ ppart([1,2,3,4,5], { gt(3, _) }) }, { ppartn([1,2,3,4,5], { gt(3, _) }, 2); });
 
 // range : (Int, Int) -> [Int] = <intrinsic>
 assert_equals({ [1, 2, 3, 4] }, { range(1,4) });
@@ -1204,9 +1204,9 @@ assert_equals({ (["a", "b", "a", "b"], [1, 2, 3, 4], [true, false, true, true]) 
               { apply(unzip, ([("a", 1, true), ("b", 2, false), ("a", 3, true), ("b", 4, true)])) });
 
 // where : (T => ([T], T -> Bool) -> [Int]) = <intrinsic>
-assert_equals({ [0, 1, 3] }, { where([4,4,7,4,7], {$0 < 5}) });
-assert_equals({ [] }, { where([], {$0 < 5}) });
-assert_equals({ [0, 1, 3] }, { apply(where, ([4,4,7,4,7], {$0 < 5})) });
+assert_equals({ [0, 1, 3] }, { where([4,4,7,4,7], {_ < 5}) });
+assert_equals({ [] }, { where([], {_ < 5}) });
+assert_equals({ [0, 1, 3] }, { apply(where, ([4,4,7,4,7], {_ < 5})) });
 
 // zip : (Types.. => Tup(List @ Types) -> [Tup(Types)]) = <intrinsic>
 assert_equals({ [("a", 1), ("b", 2), ("a", 3), ("b", 4)] }, { zip(["a", "b"], [1,2,3,4]) });
@@ -1238,12 +1238,12 @@ assert_equals({ [1.0, 3.0, 6.0] }, { fruntot([1.0, 2.0, 3.0]) });
 assert_equals({ 6.0 }, { fsum([1.0, 2.0, 3.0]) });
 
 // any = { vals, pred => evolve_while(not, false, compose(snd, pred), vals) }
-assert_equals({ true }, { any([1,2,1], { eq(2, $0) }) });
-assert_equals({ false }, { any([3,2,4,3], { eq(1, $0) }) });
+assert_equals({ true }, { any([1,2,1], { eq(2, _) }) });
+assert_equals({ false }, { any([3,2,4,3], { eq(1, _) }) });
 
 // all = { vals, pred => evolve_while(id, true, compose(snd, pred), vals) }
-assert_equals({ true }, { all([3,2,4,3], { lt(1, $0) }) });
-assert_equals({ false }, { all([3,2,4,3], { gt(1, $0) }) });
+assert_equals({ true }, { all([3,2,4,3], { lt(1, _) }) });
+assert_equals({ false }, { all([3,2,4,3], { gt(1, _) }) });
 
 // intersection = { list1, list2 => map2 = mapns:assoc(list2, [()]); list:unique(list:filter(list1, { $0_16_36 => mapns:iskey(map2, $0_16_36) })) }
 assert_equals({ [2, 4] }, { intersection([2,2,3,4], [5,4,4,2,1]) });
@@ -1441,36 +1441,36 @@ assert_equals({ "abc" }, {
                         done = box(false);
                         b = box("a");
                         // Spawn a thread that will update an owned box after sleeping
-                        spawn { do{ own(b); sleep(1000); b <- {$0 + "b"}; done := true; } };
+                        spawn { do{ own(b); sleep(1000); b <- {_ + "b"}; done := true; } };
                         // Need to sleep a little here so that the thread has time to spawn
                         // and own the box "b".
                         sleep(50);
-                        b <- {$0 + "c"};
-                        await(done, { eq(true, $0) });
+                        b <- {_ + "c"};
+                        await(done, { eq(true, _) });
                         *b;
                         });
 assert_equals({ "abc" }, {
                         done = box(false);
                         b = box("a");
                         // Spawn a thread that will update an owned box after sleeping
-                        spawn { do{ own(b); sleep(1000); own(b); b <- {$0 + "b"}; done := true; } };
+                        spawn { do{ own(b); sleep(1000); own(b); b <- {_ + "b"}; done := true; } };
                         // Need to sleep a little here so that the thread has time to spawn
                         // and own the box "b".
                         sleep(50);
-                        b <- {$0 + "c"};
-                        await(done, { eq(true, $0) });
+                        b <- {_ + "c"};
+                        await(done, { eq(true, _) });
                         *b;
                         });
 assert_equals({ "abc" }, {
                         done = box(false);
                         b = box("a");
                         // Spawn a thread that will update an owned box after sleeping
-                        spawn { do{ apply(own, b); sleep(1000); b <- {$0 + "b"}; done := true; } };
+                        spawn { do{ apply(own, b); sleep(1000); b <- {_ + "b"}; done := true; } };
                         // Need to sleep a little here so that the thread has time to spawn
                         // and own the box "b".
                         sleep(50);
-                        b <- {$0 + "c"};
-                        await(done, { eq(true, $0) });
+                        b <- {_ + "c"};
+                        await(done, { eq(true, _) });
                         *b;
                         });
 
@@ -1480,13 +1480,13 @@ assert_equals({ ("abc", "123") }, {
                         box1 = box("a");
                         box2 = box("1");
                         // Spawn a thread that will update an owned box after sleeping
-                        spawn { do{ owns((box1, box2)); sleep(1000); box1 <- {$0 + "b"}; box2 <- {$0 + "2"}; done := true; } };
+                        spawn { do{ owns((box1, box2)); sleep(1000); box1 <- {_ + "b"}; box2 <- {_ + "2"}; done := true; } };
                         // Need to sleep a little here so that the thread has time to spawn
                         // and own the boxes.
                         sleep(50);
-                        box1 <- {$0 + "c"};
-                        box2 <- {$0 + "3"};
-                        await(done, { eq(true, $0) });
+                        box1 <- {_ + "c"};
+                        box2 <- {_ + "3"};
+                        await(done, { eq(true, _) });
                         (*box1, *box2);
                         });
 assert_equals({ ("abc", "123") }, {
@@ -1494,13 +1494,13 @@ assert_equals({ ("abc", "123") }, {
                         box1 = box("a");
                         box2 = box("1");
                         // Spawn a thread that will update an owned box after sleeping
-                        spawn { do{ apply(owns, ((box1, box2))); sleep(1000); box1 <- {$0 + "b"}; box2 <- {$0 + "2"}; done := true; } };
+                        spawn { do{ apply(owns, ((box1, box2))); sleep(1000); box1 <- {_ + "b"}; box2 <- {_ + "2"}; done := true; } };
                         // Need to sleep a little here so that the thread has time to spawn
                         // and own the boxes.
                         sleep(50);
-                        box1 <- {$0 + "c"};
-                        box2 <- {$0 + "3"};
-                        await(done, { eq(true, $0) });
+                        box1 <- {_ + "c"};
+                        box2 <- {_ + "3"};
+                        await(done, { eq(true, _) });
                         (*box1, *box2);
                         });
 
@@ -1621,7 +1621,7 @@ assert_equals({ (2, 3) }, {
                             source2 = box(2);
                             target1 = box(9);
                             target2 = box(10);
-                            transfers((target1, target2), { a, b => ( a+ 1, b + 1) }, (source1, source2));
+                            transfers((target1, target2), { a, b -> ( a+ 1, b + 1) }, (source1, source2));
                             (*target1, *target2);
                             });
 assert_equals({ (2, 3) }, {
@@ -1629,7 +1629,7 @@ assert_equals({ (2, 3) }, {
                             source2 = box(2);
                             target1 = box(9);
                             target2 = box(10);
-                            apply(transfers, ((target1, target2), { a, b => ( a+ 1, b + 1) }, (source1, source2)));
+                            apply(transfers, ((target1, target2), { a, b -> ( a+ 1, b + 1) }, (source1, source2)));
                             (*target1, *target2);
                             });
 assert_equals({ (2, 3) }, {
@@ -1638,7 +1638,7 @@ assert_equals({ (2, 3) }, {
                             target1 = box(9);
                             target2 = box(10);
                             do { 
-                                transfers((target1, target2), { a, b => ( a+ 1, b + 1) }, (source1, source2));
+                                transfers((target1, target2), { a, b -> ( a+ 1, b + 1) }, (source1, source2));
                                 (*target1, *target2);
                             }
                             });
@@ -1740,7 +1740,7 @@ assert_equals({ true }, { apply(sleep, 3); true });
 assert_equals({ 5 }, {
                     spawndata = box(0);
                     spawn { while({ *spawndata < 5 }, { sleep(100); spawndata <- inc }); };
-                    await(spawndata, { $0 == 5 });
+                    await(spawndata, { _ == 5 });
                     *spawndata;
                     });
 
@@ -1752,21 +1752,21 @@ assert_equals({ 1L }, { apply(taskid, ()) });
 assert_equals({ 5 }, {
                     awaitdata = box(0);
                     spawn { while({ *awaitdata < 5 }, { sleep(100); awaitdata <- inc }); };
-                    await(awaitdata, { $0 == 5 });
+                    await(awaitdata, { _ == 5 });
                     *awaitdata;
                     });
 /* FIXME: This test does not work properly
 assert_equals({ 5 }, {
                     awaitdata = box(0);
                     spawn { while({ *awaitdata < 5 }, { sleep(100); awaitdata <- inc }); };
-                    do { await(awaitdata, { $0 == 5 }) };
+                    do { await(awaitdata, { _ == 5 }) };
                     *awaitdata;
                     });
 */
 assert_equals({ 5 }, {
                     awaitdata = box(0);
                     spawn { while({ *awaitdata < 5 }, { sleep(100); awaitdata <- inc }); };
-                    apply(await, (awaitdata, { $0 == 5 }));
+                    apply(await, (awaitdata, { _ == 5 }));
                     *awaitdata;
                     });
 
@@ -1778,7 +1778,7 @@ assert_equals({ true }, {
                     spawn { while({ *awaitdata1 < 5 }, { sleep(rand(100)); awaitdata1 <- inc }); };
                     spawn { while({ *awaitdata2 < 5 }, { sleep(rand(100)); awaitdata2 <- inc }); };
 
-                    awaits((awaitdata1, awaitdata2), ({ $0 == 5 }, { $0 == 5 }));
+                    awaits((awaitdata1, awaitdata2), ({ _ == 5 }, { _ == 5 }));
                     result = *awaitdata1 == 5 || { *awaitdata2 == 5 };
 
                     // wait for bump threads to finish before returning
@@ -1794,7 +1794,7 @@ assert_equals({ true }, {
                     spawn { while({ *awaitdata1 < 5 }, { sleep(rand(100)); awaitdata1 <- inc }); };
                     spawn { while({ *awaitdata2 < 5 }, { sleep(rand(100)); awaitdata2 <- inc }); };
 
-                    apply(awaits, ((awaitdata1, awaitdata2), ({ $0 == 5 }, { $0 == 5 })));
+                    apply(awaits, ((awaitdata1, awaitdata2), ({ _ == 5 }, { _ == 5 })));
                     result = *awaitdata1 == 5 || { *awaitdata2 == 5 };
 
                     // wait for bump threads to finish before returning
@@ -1806,7 +1806,7 @@ assert_equals({ true }, {
 // react : <T, X> (*T, T -> X) -> (T -> X)
 assert_equals({ 2 }, { 
                     status = box(0);
-                    stat(v) { status <- { max($0, v) } };
+                    stat(v) { status <- { max(_, v) } };
                     f = box(0);
                     w = react(f, stat);
                     f <- inc;
@@ -1814,14 +1814,14 @@ assert_equals({ 2 }, {
 
                     timeout = box(false);
                     spawn { sleep(100); timeout := true };
-                    awaits((timeout, status), (id, { $0 == 2 }));
+                    awaits((timeout, status), (id, { _ == 2 }));
 
                     unreact(f, w);
                     *status;
                      });
 assert_equals({ 2 }, {
                     status = box(0);
-                    stat(v) { status <- { max($0, v) } };
+                    stat(v) { status <- { max(_, v) } };
                     f = box(0);
                     w = apply(react, (f, stat));
                     f <- inc;
@@ -1829,7 +1829,7 @@ assert_equals({ 2 }, {
 
                     timeout = box(false);
                     spawn { sleep(100); timeout := true };
-                    awaits((timeout, status), (id, { $0 == 2 }));
+                    awaits((timeout, status), (id, { _ == 2 }));
 
                     *status;
                 });
@@ -1837,7 +1837,7 @@ assert_equals({ 2 }, {
 // unreact : <T, X> (*T, T -> X) -> *T
 assert_equals({ 2 }, {
                     status = box(0);
-                    stat(v) { status <- { max($0, v) } };
+                    stat(v) { status <- { max(_, v) } };
                     f = box(0);
                     w = react(f, stat);
                     f <- inc;
@@ -1845,7 +1845,7 @@ assert_equals({ 2 }, {
 
                     timeout = box(false);
                     spawn { sleep(100); timeout := true };
-                    awaits((timeout, status), (id, { $0 == 2 }));
+                    awaits((timeout, status), (id, { _ == 2 }));
 
                     unreact(f, w);
                     f <- inc;
@@ -1853,7 +1853,7 @@ assert_equals({ 2 }, {
                 });
 assert_equals({ 2 }, {
                     status = box(0);
-                    stat(v) { status <- { max($0, v) } };
+                    stat(v) { status <- { max(_, v) } };
                     f = box(0);
                     w = react(f, stat);
                     f <- inc;
@@ -1861,7 +1861,7 @@ assert_equals({ 2 }, {
 
                     timeout = box(false);
                     spawn { sleep(100); timeout := true };
-                    awaits((timeout, status), (id, { $0 == 2 }));
+                    awaits((timeout, status), (id, { _ == 2 }));
 
                     apply(unreact, (f, w));
                     f <- inc;

@@ -23,7 +23,7 @@ factor_recursive(M:Int, N:Int, A:[[Double]]) -> ([[Double]], [Int]) {
         // Find the row with the largest abs max value in the first column.  
         col0 = A | head;
         pivot_pos = reduce(
-            { iif(fabs(col0[$1]) >. fabs(col0[$0]), $1, $0) }, 
+            { iif(fabs(col0[_.1]) >. fabs(col0[_.0]), _.1, _.0) },
             0, fromto(1, M-1));
 
         // extract pivot row 
@@ -54,7 +54,7 @@ factor_recursive(M:Int, N:Int, A:[[Double]]) -> ([[Double]], [Int]) {
 
         // Now put it all back together again
         solution = [ [ pivot_value ] + pivot_row ] + 
-            (zip(pivot_col, solvedsub) | { [ $0 ] + $1 });
+            (zip(pivot_col, solvedsub) | { [ _.0 ] + _.1 });
 
         // adjust subpivot array depth
         pivots =  [ pivot_pos ] + (subpivots | inc);

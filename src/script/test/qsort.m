@@ -12,7 +12,7 @@ check(list, diff)
 {
     sorted = qsort(list, diff);
 
-    (sorted: !any(count(size(list) - 1), { diff(sorted[$0 + 1], sorted[$0]) < 0 }),
+    (sorted: !any(count(size(list) - 1), { diff(sorted[_ + 1], sorted[_]) < 0 }),
      isperm: isperm(list, sorted),
      first10: take(10, sorted))
 };
@@ -34,7 +34,7 @@ asc = check(nlist, (-));
 assert_equals({true}, {asc.sorted});
 assert_equals({true}, {asc.isperm});
 
-desc = check(nlist, { $1 - $0 });
+desc = check(nlist, { _.1 - _.0 });
 assert_equals({true}, {desc.sorted});
 assert_equals({true}, {desc.isperm});
 
@@ -61,7 +61,7 @@ asc_str = check(slist, strcmp);
 assert_equals({true}, {asc_str.sorted});
 assert_equals({true}, {asc_str.isperm});
 
-desc_str = check(slist, { strcmp($1, $0) });
+desc_str = check(slist, { strcmp(_.1, _.0) });
 assert_equals({true}, {desc_str.sorted});
 assert_equals({true}, {desc_str.isperm});
 

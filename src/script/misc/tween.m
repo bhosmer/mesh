@@ -43,7 +43,7 @@ tween(box, goal, duration, twf)
     starttime = millitime();
 
     // set ourselves as tweener for this box, after start time
-    tweeners <- { mapset($0, box, taskid()) };
+    tweeners <- { mapset(_, box, taskid()) };
 
     // save initial value
     start = get(box);
@@ -64,7 +64,7 @@ tween(box, goal, duration, twf)
         next = twf(elapsed, start, change, duration);
 
         // note: if this step goes past goal, converge to goal
-        box <- { iif(sign(goal - $0) != sign(goal - next), goal, next) }
+        box <- { iif(sign(goal - _) != sign(goal - next), goal, next) }
     })
 };
 

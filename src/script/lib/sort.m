@@ -17,7 +17,7 @@
  */
 insertion_point(val, list)
 {
-    first_where({ val <= $0 }, list)
+    first_where({ val <= _ }, list)
 };
 
 /**
@@ -28,7 +28,7 @@ insertion_point(val, list)
  */
 iqsort(lst, cmp)
 {
-   qsort(index(lst), { cmp(lst[$0], lst[$1]) })
+   qsort(index(lst), { cmp(lst[_.0], lst[_.1]) })
 };
 
 /**
@@ -41,7 +41,7 @@ iqsort(lst, cmp)
  */
 isort(lst, cmp)
 {
-    sort(index(lst), { cmp(lst[$0], lst[$1]) })
+    sort(index(lst), { cmp(lst[_.0], lst[_.1]) })
 };
 
 /**
@@ -86,8 +86,8 @@ sort(lst, cmp)
         (asize, bsize) = (size(a), size(b));
         (merged, asuf, bsuf) = cycle(
             ([], 0, 0),
-            { m, i, j => i < asize && {j < bsize} },
-            { m, i, j =>
+            { m, i, j -> i < asize && {j < bsize} },
+            { m, i, j ->
                 if(cmp(a[i], b[j]) <= 0,
                     { (append(m, a[i]), i + 1, j) },
                     { (append(m, b[j]), i, j + 1) })

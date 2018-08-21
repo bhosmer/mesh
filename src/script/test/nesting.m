@@ -29,7 +29,7 @@ test() {
         do {
             print("start T1");
             x = get(b);                 // b is now owned by parent task
-            pfor(count(1), { _ =>
+            pfor(count(1), { _ ->
                 do {
                     elapsed = l2i(lminus(millitime(), starttime));
                     if (elapsed > 3000, {

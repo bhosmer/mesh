@@ -40,7 +40,7 @@ tormesh:*[[(Double, Double, Double)]] = box(take(0, [[(0.0, 0.0, 0.0)]]));   // 
 
 // derived
 // TODO check transactionality
-scalexy = dep(dims, { cols, rows => (Wf /. i2f(cols), Hf /. i2f(rows)) });
+scalexy = dep(dims, { cols, rows -> (Wf /. i2f(cols), Hf /. i2f(rows)) });
 
 // settings
 bgproc = box(true);                             // background processing on/off
@@ -60,7 +60,7 @@ stepfps = box(0.0);
 num_fps_samples = box(0);
 
 update_stepfps(newfps) {
-    stepfps <- { f =>
+    stepfps <- { f ->
         n = postinc(num_fps_samples);
         ((f *. i2f(n)) + newfps) /. i2f(n + 1)
     }
@@ -186,9 +186,9 @@ compute(cells:[Int], check:[Int], regions:[[Int]])
 
     // filter predicates
     preds = [
-        { i => cells[i] == ON },
-        { i => cells[i] == DYING },
-        { i => cells[i] == OFF && { nabes(i) == 2 } }
+        { i -> cells[i] == ON },
+        { i -> cells[i] == DYING },
+        { i -> cells[i] == OFF && { nabes(i) == 2 } }
     ];
 
     // collect indexes of changing cells (parallel filters)
@@ -314,8 +314,8 @@ drawgrid()
     prnostroke();
 
 /*
-    for(count(rows), { y =>
-        for(count(cols), { x =>
+    for(count(rows), { y ->
+        for(count(cols), { x ->
             c = cur[y * cols + x];
             fill = FILL[c];
             prfillrgba(fill);

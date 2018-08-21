@@ -14,7 +14,7 @@ delay_dep(src, f, millis)
     dest = box(f(get(src)));
 
     // on src change, update dest with f(val) after delay
-    react(src, { val =>
+    react(src, { val ->
         spawn {
             sleep(millis);
             dest := f(val)

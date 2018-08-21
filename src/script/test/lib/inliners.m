@@ -20,7 +20,7 @@ assert_true({ fminus(10.0, 1.0+3.0); true });
 assert_true({ fmod(10.0, 1.0+3.0); true });
 assert_true({ fneg(1.0+3.0); true });
 // ForInliner
-assert_true({ for(index([1,2,3]), { $0 }); true }); // index for index arg
+assert_true({ for(index([1,2,3]), { _ }); true }); // index for index arg
 assert_true({ for(count(s2i("2")), inc); true });   // count with applyTerm
 assert_true({ for(count(2), neg ); true });         // lambdaBody == null
 assert_true({ fpow(10.0, 1.0+3.0); true });
@@ -34,8 +34,8 @@ assert_true({ lt(4, 1+3); true });
 assert_true({ ln(1.0+1.1); true });
 
 // Map inliner
-assert_equals({ [("a", 1), ("b", 2)] }, { zip(["a", "b"], [1,2]) | { a:(String, Int) => (a.0, a.1) } });
-assert_equals({ [(1, 3, 5), (2, 4, 6)] }, { zip([1,2], [3,4], [5,6]) | { a:(Int, Int, Int) => (a.0, a.1, a.2) } });
+assert_equals({ [("a", 1), ("b", 2)] }, { zip(["a", "b"], [1,2]) | { (a:(String, Int)) -> (a.0, a.1) } });
+assert_equals({ [(1, 3, 5), (2, 4, 6)] }, { zip([1,2], [3,4], [5,6]) | { (a:(Int, Int, Int)) -> (a.0, a.1, a.2) } });
 
 assert_true({ max(inc(3), 1+3); true });
 assert_true({ min(inc(3), 1+3); true });

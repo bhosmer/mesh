@@ -4,7 +4,7 @@
 
 mag(v) { sqrt(fsum(v | fsq)) };
 
-dot(v, w) { fsum(index(v) | { v[$0] *. w[$0] }) };
+dot(v, w) { fsum(index(v) | { v[_] *. w[_] }) };
 
 cos(v, w) { dot(v, w) /. (mag(v) *. mag(w)) };
 
@@ -29,7 +29,7 @@ mvcs(a)
     // or start a new one.
     // also tracks and returns position of winning subsequence.
     //
-    (b, win, _) = reduce({ state, v =>
+    (b, win, _) = reduce({ state, v ->
         (b, win, n) = state;
         // if max at i - 1 is > 0, extend, otherwise start new
         (start, tot) = last(b);
@@ -71,7 +71,7 @@ knap01a(items, wlim)
                     res = guard(m1.v >= m2v, m1, {
                         (items: m2.items + [item], w: m2.w + item.w, v: m2v)
                     });
-                    mem <- { mapset($0, (i, w), res) };
+                    mem <- { mapset(_, (i, w), res) };
                     res
                 })
             })
@@ -95,8 +95,8 @@ knap01b(items, wlim)
 {
     comps = box(0);
 
-    m = reduce({ m, i =>
-        r = count(wlim + 1) | { w =>
+    m = reduce({ m, i ->
+        r = count(wlim + 1) | { w ->
             comps <- inc;
             item = items[i];
             if(w < item.w, { m[i][w] }, {
@@ -139,14 +139,14 @@ items = [
     ("towel",                   18,      12),
     ("socks",                   4,       50),
     ("book",                    30,      10)
-] | { t => (name: t.0, w: t.1, v: t.2) };
+] | { t -> (name: t.0, w: t.1, v: t.2) };
 
 // choose m items from array a, simple recursion.
 // incoming m is limited to size(a)
 //
 choose(a, m) {
     guard(m <= 0, [[]], {
-        flatten(count(max(0, size(a) - m + 1)) | { i =>
+        flatten(count(max(0, size(a) - m + 1)) | { i ->
             [a[i]] +@ choose(drop(i + 1, a), m - 1);
         })
     })
