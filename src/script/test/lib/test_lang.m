@@ -248,12 +248,12 @@ assert_equals({ "odd" },
 // compm : <X, K, Y> (X -> K, [K : Y]) -> (X -> Y)
 assert_equals({ "ODD" },
               {
-              compm_func = compm({ if(eq(0, _ % 2), {#even}, {#odd}) }, [#even: "EVEN", #odd: "ODD"]);
+              compm_func = compm({ if(eq(0, _ % 2), {'even}, {'odd}) }, ['even: "EVEN", 'odd: "ODD"]);
               compm_func(7)
               });
 assert_equals({ "ODD" },
               {
-              compm_func = apply(compm, ({ if(eq(0, _ % 2), {#even}, {#odd}) }, [#even: "EVEN", #odd: "ODD"]));
+              compm_func = apply(compm, ({ if(eq(0, _ % 2), {'even}, {'odd}) }, ['even: "EVEN", 'odd: "ODD"]));
               compm_func(7)
               });
 
@@ -305,8 +305,8 @@ assert_equals({ [1, 1, 3, 3, 4, 5] }, { mapll(flatten([[1,1] ,[3,3], [4,5]]), co
 
 
 // maplm : <K, V> ([K], [K : V]) -> [V]
-assert_equals({ ["ZERO", "TWO"] }, { maplm([#zero, #two], [#zero:"ZERO", #one:"ONE", #two:"TWO"]) });
-assert_equals({ ["ZERO", "TWO"] }, { apply(maplm, ([#zero, #two], [#zero:"ZERO", #one:"ONE", #two:"TWO"])) });
+assert_equals({ ["ZERO", "TWO"] }, { maplm(['zero, 'two], ['zero:"ZERO", 'one:"ONE", 'two:"TWO"]) });
+assert_equals({ ["ZERO", "TWO"] }, { apply(maplm, (['zero, 'two], ['zero:"ZERO", 'one:"ONE", 'two:"TWO"])) });
 // maplm for various list types
 assert_equals({ rep(34, 1) }, { maplm(take(34, count(33)), counts(count(33))) }); // biglist
 assert_equals({ [] }, { maplm([], [1:1, 2:2]) }); // emptylist
@@ -321,16 +321,16 @@ assert_equals({ [1, 1, 3, 3, 2, 2] }, { maplm(flatten([[1,1] ,[3,3], [2,2]]), [0
 
 
 // mapmf : <X, Y, Z> ([X : Y], Y -> Z) -> [X : Z]
-assert_equals({ [#a: 4, #b:6] }, { mapmf([#a: (2, 2), #b: (3, 3)], (+)) });
-assert_equals({ [#a: 4, #b:6] }, { apply(mapmf, ([#a: (2, 2), #b: (3, 3)], (+))) });
+assert_equals({ ['a: 4, 'b:6] }, { mapmf(['a: (2, 2), 'b: (3, 3)], (+)) });
+assert_equals({ ['a: 4, 'b:6] }, { apply(mapmf, (['a: (2, 2), 'b: (3, 3)], (+))) });
 
 // mapml : <K, V> ([K : Int], [V]) -> [K : V]
-assert_equals({ [#a: "Zero", #c: "Two"] }, { mapml([#a: 0, #c: 2], ["Zero", "One", "Two"]) });
-assert_equals({ [#a: "Zero", #c: "Two"] }, { apply(mapml, ([#a: 0, #c: 2], ["Zero", "One", "Two"])) });
+assert_equals({ ['a: "Zero", 'c: "Two"] }, { mapml(['a: 0, 'c: 2], ["Zero", "One", "Two"]) });
+assert_equals({ ['a: "Zero", 'c: "Two"] }, { apply(mapml, (['a: 0, 'c: 2], ["Zero", "One", "Two"])) });
 
 // mapmm : <X, Y, Z> ([X : Y], [Y : Z]) -> [X : Z]
-assert_equals({ [#a: "One", #b: "Two"] }, { mapmm([#a: 1, #b: 2], [1: "One", 2: "Two"]) });
-assert_equals({ [#a: "One", #b: "Two"] }, { apply(mapmm, ([#a: 1, #b: 2], [1: "One", 2: "Two"])) });
+assert_equals({ ['a: "One", 'b: "Two"] }, { mapmm(['a: 1, 'b: 2], [1: "One", 2: "Two"]) });
+assert_equals({ ['a: "One", 'b: "Two"] }, { apply(mapmm, (['a: 1, 'b: 2], [1: "One", 2: "Two"])) });
 
 // mapz : <T.., X> (Tup(List @ T), Tup(T) -> X) -> [X]
 assert_equals({ [6, 8, 8, 10] }, { mapz(([5, 6], [1,2,3,4]) , (+)) });
@@ -926,9 +926,9 @@ assert_equals({ 5L }, { apply(s2l, "5") });
 
 //tostr : (T => T -> String) = <intrinsic>
 assert_equals({ "\"String\"" }, { tostr("String") });       // string
-assert_equals({ "[#a: 2]" }, { tostr([#a:2]) });            // symbol, this will hit Symbol after map
+assert_equals({ "['a: 2]" }, { tostr(['a:2]) });            // symbol, this will hit Symbol after map
 assert_equals({ "[1, 2, 3]" }, { tostr([1,2,3]) });         // list
-assert_equals({ "[#a: 2]" }, { tostr([#a:2]) });            // map
+assert_equals({ "['a: 2]" }, { tostr(['a:2]) });            // map
 assert_equals({ "[:]" }, { tostr([:]) });                   // empty map
 assert_equals({ "(1, \"b\", 3)" }, { tostr((1, "b", 3)) }); // tuple
 assert_equals({ "()" }, { tup=(); tostr(tup) }); // tuple
@@ -1271,41 +1271,41 @@ assert_equals({ [:] }, { assoc([1,2,3,4], []) });
 assert_equals({ [1: "a", 2: "b", 3: "c", 4: "d"] }, { apply(assoc, ([1,2,3,4], ["a", "b", "c", "d"])) });
 
 // entries : (K, V => [K : V] -> [(K, V)]) = <intrinsic>
-assert_true({ isperm([(#a, "A"), (#b, "B")], entries([#a:"A", #b:"B"])) });
-assert_true({ isperm([(#a, "A"), (#b, "B")], apply(entries, [#a:"A", #b:"B"])) });
+assert_true({ isperm([('a, "A"), ('b, "B")], entries(['a:"A", 'b:"B"])) });
+assert_true({ isperm([('a, "A"), ('b, "B")], apply(entries, ['a:"A", 'b:"B"])) });
 
 // iskey : (K, V => ([K : V], K) -> Bool) = <intrinsic>
-assert_true({ iskey([#a:"A", #b:"B"], #a) });
-assert_false({ iskey([#a:"A", #b:"B"], #c) });
-assert_true({ apply(iskey, ([#a:"A", #b:"B"], #a)) });
+assert_true({ iskey(['a:"A", 'b:"B"], 'a) });
+assert_false({ iskey(['a:"A", 'b:"B"], 'c) });
+assert_true({ apply(iskey, (['a:"A", 'b:"B"], 'a)) });
 
 // keys : (K, V => [K : V] -> [K]) = <intrinsic>
-assert_true({ isperm([#a, #b, #c], keys([#a:"A", #b:"B", #c:"C"])) });
-assert_true({ isperm([#a, #b, #c], apply(keys, [#a:"A", #b:"B", #c:"C"])) });
+assert_true({ isperm(['a, 'b, 'c], keys(['a:"A", 'b:"B", 'c:"C"])) });
+assert_true({ isperm(['a, 'b, 'c], apply(keys, ['a:"A", 'b:"B", 'c:"C"])) });
 
 // mapdel : (K, V => ([K : V], K) -> [K : V]) = <intrinsic>
-assert_equals({ [#a: "A", #c: "C"] }, { mapdel([#a:"A", #b:"B", #c:"C"], #b) });
-assert_equals({ [#a: "A", #c: "C"] }, { apply(mapdel, ([#a:"A", #b:"B", #c:"C"], #b)) });
+assert_equals({ ['a: "A", 'c: "C"] }, { mapdel(['a:"A", 'b:"B", 'c:"C"], 'b) });
+assert_equals({ ['a: "A", 'c: "C"] }, { apply(mapdel, (['a:"A", 'b:"B", 'c:"C"], 'b)) });
 
 // mapset : (K, V => ([K : V], K, V) -> [K : V]) = <intrinsic>
-assert_equals({ [#a: "A", #b:"B", #c: "C"] }, { mapset([#a:"A", #b:"B"], #c, "C") });
-assert_equals({ [#a: "A", #b:"B", #c: "C"] }, { apply(mapset, ([#a:"A", #b:"B"], #c, "C")) });
+assert_equals({ ['a: "A", 'b:"B", 'c: "C"] }, { mapset(['a:"A", 'b:"B"], 'c, "C") });
+assert_equals({ ['a: "A", 'b:"B", 'c: "C"] }, { apply(mapset, (['a:"A", 'b:"B"], 'c, "C")) });
 
 // mapsets : (K, V => ([K : V], [K], [V]) -> [K : V]) = <intrinsic>
-assert_equals({ [#a: "A", #b:"B", #c: "C"] }, { mapsets([#a:"A", #b:"B"], [#c], ["C"]) });
-assert_equals({ [#a: "A", #b:"B", #c: "C", #d: "D"] }, { mapsets([#a:"A", #b:"B"], [#c,#d], ["C","D"]) });
-assert_equals({ [#a: "A", #b:"B", #c: "C"] }, { mapsets([#a:"A", #b:"B"], [#c], ["C","D"]) });
-assert_equals({ [#a: "A", #b:"B", #c: "CD", #d: "CD"] }, { mapsets([#a:"A", #b:"B"], [#c,#d], ["CD"]) });
-assert_equals({ [#a: "A", #b:"B", #c: "C"] }, { apply(mapsets, ([#a:"A", #b:"B"], [#c], ["C"])) });
+assert_equals({ ['a: "A", 'b:"B", 'c: "C"] }, { mapsets(['a:"A", 'b:"B"], ['c], ["C"]) });
+assert_equals({ ['a: "A", 'b:"B", 'c: "C", 'd: "D"] }, { mapsets(['a:"A", 'b:"B"], ['c,'d], ["C","D"]) });
+assert_equals({ ['a: "A", 'b:"B", 'c: "C"] }, { mapsets(['a:"A", 'b:"B"], ['c], ["C","D"]) });
+assert_equals({ ['a: "A", 'b:"B", 'c: "CD", 'd: "CD"] }, { mapsets(['a:"A", 'b:"B"], ['c,'d], ["CD"]) });
+assert_equals({ ['a: "A", 'b:"B", 'c: "C"] }, { apply(mapsets, (['a:"A", 'b:"B"], ['c], ["C"])) });
 
 // mplus : (K, V => ([K : V], [K : V]) -> [K : V])
-assert_equals({ [#c: "C", #b: "B", #a: "A"] }, { mplus([#a:"A", #b:"B"], [#c:"C"]) });
-assert_equals({ [#b: "b", #a: "A"] }, { mplus([#a:"A", #b:"B"], [#b:"b"]) });
-assert_equals({ [#c: "C", #b: "B", #a: "A"] }, { apply(mplus, ([#a:"A", #b:"B"], [#c:"C"])) });
+assert_equals({ ['c: "C", 'b: "B", 'a: "A"] }, { mplus(['a:"A", 'b:"B"], ['c:"C"]) });
+assert_equals({ ['b: "b", 'a: "A"] }, { mplus(['a:"A", 'b:"B"], ['b:"b"]) });
+assert_equals({ ['c: "C", 'b: "B", 'a: "A"] }, { apply(mplus, (['a:"A", 'b:"B"], ['c:"C"])) });
 
 // values : (K, V => [K : V] -> [V]) = <intrinsic>
-assert_true({ isperm(["A", "B", "C"], values([#a:"A", #b:"B", #c: "C"])) });
-assert_true({ isperm(["A", "B", "C"], apply(values, [#a:"A", #b:"B", #c: "C"])) });
+assert_true({ isperm(["A", "B", "C"], values(['a:"A", 'b:"B", 'c: "C"])) });
+assert_true({ isperm(["A", "B", "C"], apply(values, ['a:"A", 'b:"B", 'c: "C"])) });
 
 // counts = { list => inckey = { map, key => mapset(map, key, plus(1, mapgetd(map, key, 0))) }; loop:reduce(inckey, [:], list) }
 assert_equals({ [1: 2, 2: 1, 3: 3] }, { counts([1,2,3,1,3,3]) });

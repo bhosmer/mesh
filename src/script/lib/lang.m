@@ -26,7 +26,7 @@ intrinsic type Long;
 intrinsic type Float;
 intrinsic type Double;
 intrinsic type String;
-intrinsic type Symbol;      // #symbol
+intrinsic type Symbol;      // 'symbol
 intrinsic type Opaque;      // used in conjunction with New for FFI hookups
 intrinsic type Unit;        // singleton type with value (), sugar (also) ()
 
@@ -337,7 +337,7 @@ intrinsic <X, Y> pfor(x : [X], y : X -> Y) -> ();
 intrinsic <A, B> reduce(f : (A, B) -> A, v : A, l : [B]) -> A;
 
 /**
- * Traced version of {@link #reduce}:
+ * Traced version of {@link 'reduce}:
  * <code>last(scan(f, v, l)) == reduce(f, v, l)</code>
  * @param f reducing function
  * @param v initial value
@@ -381,7 +381,7 @@ tconverge(func, init)
 };
 
 /**
- * Traced version of {@link #cycle}:
+ * Traced version of {@link 'cycle}:
  * <code>last(trace(v, p, f)) == cycle(v, p, f)</code>.
  * @param v initial value
  * @param p predicate function
@@ -468,7 +468,7 @@ intrinsic <X, Y> compl(x : X -> Int, y : [Y]) -> X -> Y;
  * Compose a function with a map, yielding a composite function
  * that uses the original function's result to index the map.
  * @code
- * f = compm({ iif(_, #ok, #err) }, [#ok: "OK", #err: "ERR"])
+ * f = compm({ iif(_, 'ok, 'err) }, ['ok: "OK", 'err: "ERR"])
  * f(false)
  * "ERR"
  * @endcode
@@ -699,7 +699,7 @@ intrinsic not(b : Bool) -> Bool;
 intrinsic <T> eq(x : T, y : T) -> Bool;
 
 /**
- * Not equals. Inverse of {@link #eq}.
+ * Not equals. Inverse of {@link 'eq}.
  * Also aliased to infix operator !=
  * @param x value
  * @param y value
@@ -811,7 +811,7 @@ intrinsic neg(x : Int) -> Int;
  * - Int, Long, Float, Double: arithmetic addition
  * - Boolean: or
  * - String: concatenation
- * - List: {@link #lplus} = concatenation
+ * - List: {@link 'lplus} = concatenation
  * - Map: {@link #mplus} = directional union (right operand wins)
  *
  * Also aliased to infix +

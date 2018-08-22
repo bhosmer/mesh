@@ -588,15 +588,15 @@ release()
 // drawing
 
 // local mode
-DIAGS = [#none,#vel,#cells,#health];        // diagnostic states
-xray = box(#none);                          // current diagnostic mode
+DIAGS = ['none,'vel,'cells,'health];        // diagnostic states
+xray = box('none);                          // current diagnostic mode
 
 // local state
 lastdraw = box(0L);                         // nanotime of last render, used to calc FPS
 lastrenderturn = box(0L);                   // nanotime of last in-task turn, need when running single-tasked
 
 // convenience - drives some display decisions
-diagmode() { *xray != #none };
+diagmode() { *xray != 'none };
 
 // helper - unpack an rgb int into a triple
 unpack(rgb) { (rgb / 0x10000 % 0x100, rgb / 0x100 % 0x100, rgb % 0x100) };
@@ -700,18 +700,18 @@ drawinfo(pbox:*Player)
     // get diag text for mode
     s = switch(*xray,
     [
-        #none: { "" },
-        #vel:
+        'none: { "" },
+        'vel:
         {
             pv = playervel(pbox);
             ffmt(pv.0 *. 1000.0, 1) + "," + ffmt(pv.1 *. 1000.0, 1)
         },
-        #cells:
+        'cells:
         {
             (cx, cy) = poscellxy(p.pos);
             i2s(cx) + "," + i2s(cy) + "(" + i2s(size(*(cells[cy][cx]))) + ")"
         },
-        #health:
+        'health:
         {
             ffmt(p.health, 3)
         }
@@ -723,7 +723,7 @@ drawinfo(pbox:*Player)
     prtext(s, p.pos.0 -. prtextwidth(s) /. 2.0, p.pos.1 + 4.0);
 
     // if we're doing velocity, draw velocity vector as a seres of red dots
-    when(*xray == #vel,
+    when(*xray == 'vel,
     {
         prfill(0xff0000);
         pv = playervel(pbox);
@@ -873,12 +873,12 @@ fonts : *[Symbol:Font] = box([:]);
 
 loadfonts()
 {
-    fonts <- { mapset(_, #splash, prloadfont("data/AmericanTypewriter-24.vlw")) };
-    fonts <- { mapset(_, #diag, prloadfont("data/SansSerif.plain-12.vlw")) };
+    fonts <- { mapset(_, 'splash, prloadfont("data/AmericanTypewriter-24.vlw")) };
+    fonts <- { mapset(_, 'diag, prloadfont("data/SansSerif.plain-12.vlw")) };
 };
 
-splashfont() { (*fonts)[#splash] };
-diagfont() { (*fonts)[#diag] };
+splashfont() { (*fonts)['splash] };
+diagfont() { (*fonts)['diag] };
 
 // -----------------
 
@@ -888,7 +888,7 @@ diagfont() { (*fonts)[#diag] };
 // kills players under mouse
 click()
 {
-    switch(find([#LEFT,#RIGHT], prmousebutton()),
+    switch(find(['LEFT,'RIGHT], prmousebutton()),
     [
         0: { newbatch(v2(prmouse()), BATCH) },
         1: killplayers,
@@ -923,7 +923,7 @@ spawn
 {
     propen("bouncy balls - click for more balls, +/- for more/fewer tasks. other keys show help",
     [
-        #setup:
+        'setup:
         {
             prsize(W, H);
             prnostroke();
@@ -931,27 +931,27 @@ spawn
             loadfonts();
             startsplash()
         },
-        #draw:
+        'draw:
         {
             if(*splashing, drawsplash, drawplayers)
         },
-        #mouseClicked:
+        'mouseClicked:
         {
             if(*splashing, togglesplash, click)
         },
-        #mousePressed:
+        'mousePressed:
         {
             when(!*splashing, grab)
         },
-        #mouseDragged:
+        'mouseDragged:
         {
             when(!*splashing, drag)
         },
-        #mouseReleased:
+        'mouseReleased:
         {
             when(!*splashing, release)
         },
-        #keyTyped:
+        'keyTyped:
         {
             if(*splashing, togglesplash,
             {

@@ -17,8 +17,8 @@ primesieve = {
     generator(init, makenext) {
         state = box(init);
         ( 
-            #value: { *state; },
-            #next: { state := makenext(*state); *state }
+            'value: { *state; },
+            'next: { state := makenext(*state); *state }
         )
     };
 

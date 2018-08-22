@@ -59,21 +59,21 @@ drawchar(i) {
 // open processing window 
 propen("time flies",
 [
-    #setup: {
+    'setup: {
         // initialize size, font
         prsize(640, 640);
         prnostroke();
         prsmooth();
         prtextfont(prcreatefont("SansSerif", 32));
     },
-    #draw: {
+    'draw: {
         // redraw
         prbackground(0);
         prfill(255);
         count(strlen(MSG)) | drawchar;
         ()
     },
-    #mouseMoved: {
+    'mouseMoved: {
         // update global mpos when mouse moves
         mpos := prmouse()
     }

@@ -1,12 +1,12 @@
-/**
- * ADOBE SYSTEMS INCORPORATED
- * Copyright 2009-2013 Adobe Systems Incorporated
- * All Rights Reserved.
- *
- * NOTICE: Adobe permits you to use, modify, and distribute
- * this file in accordance with the terms of the MIT license,
- * a copy of which can be found in the LICENSE.txt file or at
- * http://opensource.org/licenses/MIT.
+/*
+  ADOBE SYSTEMS INCORPORATED
+  Copyright 2009-2013 Adobe Systems Incorporated
+  All Rights Reserved.
+
+  NOTICE: Adobe permits you to use, modify, and distribute
+  this file in accordance with the terms of the MIT license,
+  a copy of which can be found in the LICENSE.txt file or at
+  http://opensource.org/licenses/MIT.
  */
 package runtime.intrinsic;
 
@@ -50,7 +50,7 @@ public final class _tostr extends IntrinsicLambda
         }
         else if (value instanceof Symbol)
         {
-            return "#" + ((Symbol)value).getValue();
+            return "'" + ((Symbol)value).getValue();
         }
         else if (value instanceof ListValue)
         {
@@ -90,7 +90,7 @@ public final class _tostr extends IntrinsicLambda
 
     private static String printList(final ListValue list)
     {
-        final ArrayList<String> prints = new ArrayList<String>(list.size());
+        final ArrayList<String> prints = new ArrayList<>(list.size());
         for (final Object item : list)
             prints.add(invoke(item));
 
@@ -102,7 +102,7 @@ public final class _tostr extends IntrinsicLambda
         if (map.isEmpty())
             return "[:]";
 
-        final ArrayList<String> prints = new ArrayList<String>(map.size());
+        final ArrayList<String> prints = new ArrayList<>(map.size());
         for (final Map.Entry<?, ?> entry : map.entrySet())
             prints.add(invoke(entry.getKey()) + ": " + invoke(entry.getValue()));
 
@@ -112,7 +112,7 @@ public final class _tostr extends IntrinsicLambda
     private static String printTuple(final Tuple tuple)
     {
         final int n = tuple.size();
-        final ArrayList<String> prints = new ArrayList<String>(n);
+        final ArrayList<String> prints = new ArrayList<>(n);
 
         for (int i = 0; i < n; i++)
             prints.add(invoke(tuple.get(i)));
@@ -128,7 +128,7 @@ public final class _tostr extends IntrinsicLambda
         if (n == 0)
             return "(:)";
 
-        final ArrayList<String> prints = new ArrayList<String>(n);
+        final ArrayList<String> prints = new ArrayList<>(n);
         for (int i = 0; i < record.size(); i++)
         {
             prints.add(dumpKey(record.getKey(i)) + ": " +

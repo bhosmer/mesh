@@ -29,7 +29,7 @@ search(tag, quant, page) -> [XNode]
 
     rsp = httpgetxml(url);
 
-    guard(rsp.name != "rsp" || {rsp.attrs[#stat] != "ok"}, [], {
+    guard(rsp.name != "rsp" || {rsp.attrs['stat] != "ok"}, [], {
         rsp.elems[0].elems
     })
 };
@@ -44,8 +44,8 @@ picurl(picinfo:XNode, sizeparam:String)
 {
     a = picinfo.attrs;
 
-    "http://farm" + a[#farm] + ".static.flickr.com/" + a[#server] + "/" +
-        a[#id] + "_" + a[#secret] +
+    "http://farm" + a['farm] + ".static.flickr.com/" + a['server] + "/" +
+        a['id] + "_" + a['secret] +
         guard(empty(sizeparam), "", {"_" + sizeparam}) +
         ".jpg"
 };
@@ -59,15 +59,15 @@ thumburl(info)
 // get url for biggest size available that fits in passed dims
 bestsizeurl(info:XNode, w, h)
 {
-    url = GETSIZES + "&photo_id=" + info.attrs[#id];
+    url = GETSIZES + "&photo_id=" + info.attrs['id];
     rsp = httpgetxml(url);
 
-    if(rsp.name != "rsp" || {rsp.attrs[#stat] != "ok"}, {
+    if(rsp.name != "rsp" || {rsp.attrs['stat] != "ok"}, {
         // default to thumb url if something bad happened to query
         thumburl(info)
     }, {
         sizeinfos = rsp.elems[0].elems;
-        dims = sizeinfos | { n:XNode => (s2i(n.attrs[#width]), s2i(n.attrs[#height])) };
+        dims = sizeinfos | { n:XNode => (s2i(n.attrs['width]), s2i(n.attrs['height])) };
 
         fitixs = where(dims, { picw, pich -> picw <= w && { pich <= h } });
 
@@ -82,7 +82,7 @@ bestsizeurl(info:XNode, w, h)
             };
 
             bestix = evolve(head(fitixs), maxarea, tail(fitixs));
-            sizeinfos[bestix].attrs[#source]
+            sizeinfos[bestix].attrs['source]
         })
     })
 };
@@ -476,11 +476,11 @@ setup()
 
 // open processing window
 propen("rothko on flickr - drag to slide, click to zoom in/out", [
-    #setup: setup,
-    #draw: draw,
-    #mouseClicked: mouseClick,
-    #mouseMoved: mouseMove,
-    #mouseDragged: mouseDrag
+    'setup: setup,
+    'draw: draw,
+    'mouseClicked: mouseClick,
+    'mouseMoved: mouseMove,
+    'mouseDragged: mouseDrag
 ]);
 
 // convenience for console interaction -

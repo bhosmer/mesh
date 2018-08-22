@@ -1,12 +1,12 @@
-/**
- * ADOBE SYSTEMS INCORPORATED
- * Copyright 2009-2013 Adobe Systems Incorporated
- * All Rights Reserved.
- * <p>
- * NOTICE: Adobe permits you to use, modify, and distribute
- * this file in accordance with the terms of the MIT license,
- * a copy of which can be found in the LICENSE.txt file or at
- * http://opensource.org/licenses/MIT.
+/*
+  ADOBE SYSTEMS INCORPORATED
+  Copyright 2009-2013 Adobe Systems Incorporated
+  All Rights Reserved.
+  <p>
+  NOTICE: Adobe permits you to use, modify, and distribute
+  this file in accordance with the terms of the MIT license,
+  a copy of which can be found in the LICENSE.txt file or at
+  http://opensource.org/licenses/MIT.
  */
 package compile.term.visit;
 
@@ -25,11 +25,7 @@ import java.util.*;
  */
 public final class TermDumper extends TermVisitorBase<String> {
   public static final ThreadLocal<TermDumper> LOCAL =
-      new ThreadLocal<TermDumper>() {
-        protected TermDumper initialValue() {
-          return new TermDumper();
-        }
-      };
+          ThreadLocal.withInitial(() -> new TermDumper());
 
   public static TermDumper getThreadLocal() {
     return LOCAL.get();
@@ -40,7 +36,7 @@ public final class TermDumper extends TermVisitorBase<String> {
   }
 
   public static List<String> dumpEach(final Iterable<? extends Term> terms) {
-    final List<String> dumps = new ArrayList<String>();
+    final List<String> dumps = new ArrayList<>();
     for (final Term term : terms)
       dumps.add(dump(term));
     return dumps;
@@ -93,7 +89,7 @@ public final class TermDumper extends TermVisitorBase<String> {
 
   @Override
   public String visit(final SymbolLiteral symbolLiteral) {
-    return "#" + symbolLiteral.getValue();
+    return "'" + symbolLiteral.getValue();
   }
 
   @Override
@@ -156,7 +152,7 @@ public final class TermDumper extends TermVisitorBase<String> {
     if (sig.length() > 0)
       buf.append(sig).append(" => ");
 
-    final List<String> dumps = new ArrayList<String>();
+    final List<String> dumps = new ArrayList<>();
 
     for (final Statement statement : lambda.getBody())
       dumps.add(statement.dump());
@@ -181,7 +177,7 @@ public final class TermDumper extends TermVisitorBase<String> {
       return "";
     }
 
-    final List<String> paramDumps = new ArrayList<String>();
+    final List<String> paramDumps = new ArrayList<>();
 
     for (final ParamBinding param : paramBindings.values())
       paramDumps.add(param.dump());
@@ -205,7 +201,7 @@ public final class TermDumper extends TermVisitorBase<String> {
   private List<String> visitEntrySet(final Set<Map.Entry<Term, Term>> entrySet,
                                      final String sep,
                                      final boolean keySymSugar) {
-    final List<String> visitedList = new ArrayList<String>();
+    final List<String> visitedList = new ArrayList<>();
 
     for (final Map.Entry<Term, Term> pair : entrySet) {
       final String keyDump;

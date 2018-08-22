@@ -315,7 +315,7 @@ Term LitExpr
     //
     // A Symbol literal is a pound sign followed by a lexical id.
     //
-    / <SymLit>      void:"#" id:Id
+    / <SymLit>      void:"'" id:Id
         { yyValue = symLiteral(loc(yyStart), id); }
 
     //

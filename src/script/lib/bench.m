@@ -6,8 +6,8 @@
 /**
  * run a block, return elapsed time and result.
  * @param b block of code to benchmark
- * @return record containing #time, milliseconds taken to execute the block of code,
- *         #result, the result of the block of code.
+ * @return record containing 'time, milliseconds taken to execute the block of code,
+ *         'result, the result of the block of code.
  */
 bench(b)
 {

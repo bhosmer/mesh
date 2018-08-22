@@ -6,6 +6,9 @@ import processing;
 // inspired by clojure version (and followups) at
 // http://www.bestinclass.dk/index.php/2009/10/brians-functional-brain/
 
+// goal: no information through formatting. all clustering from data structures.
+// - naming members, so nesting doesn't mandate path exprs.
+
 //
 // constants
 //
@@ -279,7 +282,7 @@ drawtor() {
             prvertex3d(m0.0, m0.1, m0.2);
             prvertex3d(m1.0, m1.1, m1.2);
         };
-        prbeginshapemode(#QUAD_STRIP);
+        prbeginshapemode('QUAD_STRIP);
         for(count(cols + 1), drawcell);
         prendshape()
     };
@@ -479,18 +482,18 @@ rescale(fact) {
 
 // open a processing window
 // some handler functions given inline for brevity
-propen("brian's brain - click to toggle 3D, drag to rotate, +/-: #tasks, </>: #cells, p: pause", [
-    #setup: {
-        prsizemode(W, H, #P3D);
+propen("brian's brain - click to toggle 3D, drag to rotate, +/-: 'tasks, </>: 'cells, p: pause", [
+    'setup: {
+        prsizemode(W, H, 'P3D);
         prtextfont(prloadfont("data/ArialMT-18.vlw"));
         reset(INITCOLS, INITROWS);
         when(*bgproc, startbgtask)     // start background task if needed
     },
-    #draw: drawview,
-    #mousePressed: { when(prmousebutton() == #LEFT, grab) },
-    #mouseDragged: { when(prmousebutton() == #LEFT, drag) },
-    #mouseClicked: { when(prmousebutton() == #LEFT, { draw3d <- not }) },
-    #keyTyped: {
+    'draw: drawview,
+    'mousePressed: { when(prmousebutton() == 'LEFT, grab) },
+    'mouseDragged: { when(prmousebutton() == 'LEFT, drag) },
+    'mouseClicked: { when(prmousebutton() == 'LEFT, { draw3d <- not }) },
+    'keyTyped: {
         switch(strfind("+-ap<>", prkey()), [
             0: addtask,
             1: removetask,

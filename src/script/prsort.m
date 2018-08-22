@@ -258,10 +258,10 @@ keytyped()
 // open processing window
 propen("animated quicksort - click to start/skip/repeat, p to toggle serial/parallel",
 [
-    #setup: setupfunc,
-    #draw: drawfunc,
-    #mouseClicked: mouseclick,
-    #keyTyped: keytyped
+    'setup: setupfunc,
+    'draw: drawfunc,
+    'mouseClicked: mouseclick,
+    'keyTyped: keytyped
 ]);
 
 printstr("***\n*** $q to close shell\n***");

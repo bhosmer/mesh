@@ -136,7 +136,7 @@ status(p : Phil)
 //
 
 // philosopher names
-names = [#Aristotle, #Bentham, #Carnap, #Deleuze, #Engels];
+names = ['Aristotle, 'Bentham, 'Carnap, 'Deleuze, 'Engels];
 
 // number of philosophers
 nphils = size(names);

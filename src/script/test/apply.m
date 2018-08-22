@@ -54,8 +54,8 @@ list = reverse(count(10));   // [9, 8, 7, ..., 0]
 assert_equals({9}, {list[0]});
 
 // map indexing
-map = [#a: 5, #b: 4, #c: 3, #d: 2, #e: 1, #f: 0];
-assert_equals({5}, {map[#a]});
+map = ['a: 5, 'b: 4, 'c: 3, 'd: 2, 'e: 1, 'f: 0];
+assert_equals({5}, {map['a]});
 
 // ------------------------------
 
@@ -85,7 +85,7 @@ rec = (age: 30, name: "bob");
 assert_equals({30}, {rec.age});
 
 // addressing a record by a symbol literal, unsugared
-assert_equals({30}, {rec.(#age)});
+assert_equals({30}, {rec.('age)});
 
 // addressing a record by a string literal
 rec2 = ("age": 30, "name": "bob");

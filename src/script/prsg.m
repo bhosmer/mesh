@@ -26,7 +26,7 @@ bumpgen(x, wid) {
 
 // shift bumps a given x-distance
 shiftbumps(dx, bumps:[Bump]) {
-    bumps | {b:Bump => (height: b.height, xoff: b.xoff + dx, rate: b.rate)}
+    bumps | {(b:Bump) -> (height: b.height, xoff: b.xoff + dx, rate: b.rate)}
 };
 
 // compute the value at a given x-position, given a list of bumps
@@ -223,10 +223,10 @@ animate() {
 
         slide(n, bumps) {
             shifted = shiftbumps(i2f(-n), bumps);
-            filter(shifted, {b:Bump => b.xoff >=. i2f(-BUFSIZE)})
+            filter(shifted, { (b:Bump) -> b.xoff >=. i2f(-BUFSIZE)} )
         };
 
-        cycle((BUFSIZE, repeat(NSERIES, initbumps)), {_ => true}, { off, bumplists:[[Bump]] =>
+        cycle((BUFSIZE, repeat(NSERIES, initbumps)), {true}, { (off, bumplists:[[Bump]]) ->
 
             sleep(PAUSE);
 
@@ -257,19 +257,19 @@ changestyle() { update(style, {inc(_) % size(BASEFUNCS)}); () };
 
 // open a processing window
 propen("streamgraph - +/- to change sampling rate, p to pause, s to change style", [
-    #setup: {
+    'setup: {
         prsize(W, H);
         prnostroke();
         prsmooth();
         prbackground(0);
         animate()
     },
-    #draw: {
+    'draw: {
         drawlayers(DATAKEYS, get(datamap), BASEFUNCS[get(style)])
     },
-    #mouseClicked:
+    'mouseClicked:
         changestyle,
-    #keyTyped: {
+    'keyTyped: {
         switch(strfind("+-ps", prkey()), [
             0: faster,
             1: slower,
