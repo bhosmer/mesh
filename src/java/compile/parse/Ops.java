@@ -82,6 +82,10 @@ public class Ops {
 
   final static String DOUBLE_TIMES_SYM = "**";
 
+  // these are in apply's precedence tier, don't show up in binops map
+  final static String ADDRESS_SYM = ".";
+  final static String INDEX_SYM = "#";
+
   /**
    * binary (value) operator info table
    * entries with null BinopInfo.name are handled specially,

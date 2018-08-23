@@ -241,7 +241,10 @@ transient compile.Pair<Term, ApplyFlavor> AppRHS
     / <StructAddr>  Dot e:BaseExpr
         { yyValue = new compile.Pair<Term, ApplyFlavor>(e, ApplyFlavor.StructAddr); }
 
-    / <CollIndex> LeftBracket e:Expr RightBracket
+//    / <CollIndex> LeftBracket e:Expr RightBracket
+//        { yyValue = new compile.Pair<Term, ApplyFlavor>(e, ApplyFlavor.CollIndex); }
+
+    / <CollIndex> void:"#" WhiteSpace e:BaseExpr
         { yyValue = new compile.Pair<Term, ApplyFlavor>(e, ApplyFlavor.CollIndex); }
 
     / e:BaseExpr
@@ -313,7 +316,7 @@ Term LitExpr
         { yyValue = recLiteral(loc(yyStart), m); }
 
     //
-    // A Symbol literal is a pound sign followed by a lexical id.
+    // A Symbol literal is a single quote followed by a lexical id.
     //
     / <SymLit>      void:"'" id:Id
         { yyValue = symLiteral(loc(yyStart), id); }

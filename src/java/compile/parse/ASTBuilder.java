@@ -31,19 +31,28 @@ import static compile.parse.ApplyFlavor.StructAddr;
 /**
  * static methods for building Mesh AST nodes
  */
-public class ASTBuilder {
+public class ASTBuilder
+{
     /**
      * typedef statement
      */
-    public static List<Statement> typeDefStmt(final Loc loc, final String name,
-                                              final Type type) {
-        if (type.hasParams()) {
-            Session.error(type.getLoc(),
-                    "nested polymorphic types not allowed in type defs: {0}",
-                    type.dump());
+    public static List<Statement> typeDefStmt(
+        final Loc loc, final String name,
+        final Type type
+    )
+    {
+        if (type.hasParams())
+        {
+            Session.error(
+                type.getLoc(),
+                "nested polymorphic types not allowed in type defs: {0}",
+                type.dump()
+            );
 
             return Collections.emptyList();
-        } else {
+        }
+        else
+        {
             final TypeDef typeDef = new TypeDef(loc, name, type);
 
             return Collections.singletonList(typeDef);
@@ -56,17 +65,22 @@ public class ASTBuilder {
      * namespace == null indicates local (unqualified) namespace,
      * namespace == "" indicates module name as namespace.
      */
-    public static List<Statement> importStmt(final Loc loc,
-                                             final List<String> syms, final String module, final String namespace) {
+    public static List<Statement> importStmt(
+        final Loc loc,
+        final List<String> syms, final String module, final String namespace
+    )
+    {
         final ImportStatement stmt = syms == null ?
-                (namespace == null ? ImportStatement.openUnqualified(loc, module) :
-                        ImportStatement.openQualified(loc, module,
-                                namespace.isEmpty() ? module : namespace)) :
-                // syms != null
-                (namespace == null ?
-                        ImportStatement.enumUnqualified(loc, syms, module) : ImportStatement
-                        .enumQualified(loc, syms, module,
-                                namespace.isEmpty() ? module : namespace));
+            (namespace == null ? ImportStatement.openUnqualified(loc, module) :
+                ImportStatement.openQualified(loc, module,
+                    namespace.isEmpty() ? module : namespace
+                )) :
+            // syms != null
+            (namespace == null ?
+                ImportStatement.enumUnqualified(loc, syms, module) : ImportStatement
+                .enumQualified(loc, syms, module,
+                    namespace.isEmpty() ? module : namespace
+                ));
 
         return Collections.singletonList(stmt);
     }
@@ -75,10 +89,13 @@ public class ASTBuilder {
      * export statement
      * syms == ["*"] indicates open export.
      */
-    public static List<Statement> exportStmt(final Loc loc,
-                                             final List<String> syms) {
+    public static List<Statement> exportStmt(
+        final Loc loc,
+        final List<String> syms
+    )
+    {
         final ExportStatement stmt = syms.size() == 1 && syms.get(0).equals("*") ?
-                ExportStatement.open(loc) : ExportStatement.enumerated(loc, syms);
+            ExportStatement.open(loc) : ExportStatement.enumerated(loc, syms);
 
         return Collections.singletonList(stmt);
     }
@@ -86,18 +103,25 @@ public class ASTBuilder {
     /**
      * type abstraction (parameterized type def) statement
      */
-    public static List<Statement> typeAbsStmt(final Loc loc, final String name,
-                                              final List<TypeParam> params, final Type body) {
-        if (params.isEmpty()) {
+    public static List<Statement> typeAbsStmt(
+        final Loc loc, final String name,
+        final List<TypeParam> params, final Type body
+    )
+    {
+        if (params.isEmpty())
+        {
             return typeDefStmt(loc, name, body);
         }
 
         // type def can be declared with param list on LHS, or as part of RHS expr
         // ...but not both
-        if (body.hasParams()) {
-            Session.error(body.getLoc(),
-                    "nested polymorphic types not allowed in type defs: {0}",
-                    body.dump());
+        if (body.hasParams())
+        {
+            Session.error(
+                body.getLoc(),
+                "nested polymorphic types not allowed in type defs: {0}",
+                body.dump()
+            );
 
             return Collections.emptyList();
         }
@@ -108,10 +132,12 @@ public class ASTBuilder {
         // adjust body kind
         final List<Kind> paramKinds = new ArrayList<>();
         for (final TypeParam param : params)
+        {
             paramKinds.add(param.getKind());
+        }
 
         final Kind paramKind = paramKinds.size() == 1 ? paramKinds.get(0) :
-                new TupleKind(loc, paramKinds);
+            new TupleKind(loc, paramKinds);
 
         final ArrowKind absKind = new ArrowKind(loc, paramKind, Kinds.STAR);
 
@@ -122,38 +148,51 @@ public class ASTBuilder {
         return Collections.singletonList(def);
     }
 
-    public static FunctionDeclaration funcDecl(final Loc loc, final String name,
-                                               final List<TypeParam> typeParams, final List<ParamBinding> params,
-                                               final Type returnType) {
+    public static FunctionDeclaration funcDecl(
+        final Loc loc, final String name,
+        final List<TypeParam> typeParams, final List<ParamBinding> params,
+        final Type returnType
+    )
+    {
         return new FunctionDeclaration(loc, name, typeParams, params, returnType);
     }
 
     /**
      * function declaration statement
      */
-    public static List<Statement> funDecStmt(final Loc loc, final String name,
-                                             final List<TypeParam> typeParams, final List<ParamBinding> params,
-                                             final Type returnType, final List<Statement> body) {
+    public static List<Statement> funDecStmt(
+        final Loc loc, final String name,
+        final List<TypeParam> typeParams, final List<ParamBinding> params,
+        final Type returnType, final List<Statement> body
+    )
+    {
         final LambdaTerm lambdaTerm =
-                lambda(loc, typeParams, params, returnType, body);
+            lambda(loc, typeParams, params, returnType, body);
 
         final LetBinding let = new LetBinding(loc, name, lambdaTerm);
 
         return Collections.singletonList(let);
     }
 
-    public static List<Statement> intrinsicTypeDef(final Loc loc,
-                                                   final String name) {
+    public static List<Statement> intrinsicTypeDef(
+        final Loc loc,
+        final String name
+    )
+    {
         final TypeDef typeDef = new TypeDef(loc, name);
         return Collections.singletonList(typeDef);
     }
 
-    public static List<Statement> intrinsicFuncStmt(final Loc loc,
-                                                    final String name, final List<TypeParam> typeParams,
-                                                    final List<ParamBinding> params, final Type returnType) {
+    public static List<Statement> intrinsicFuncStmt(
+        final Loc loc,
+        final String name, final List<TypeParam> typeParams,
+        final List<ParamBinding> params, final Type returnType
+    )
+    {
         final Signature sig = new Signature(loc,
-                typeParams != null ? typeParams : Collections.emptyList(),
-                params != null ? params : Collections.emptyList(), returnType);
+            typeParams != null ? typeParams : Collections.emptyList(),
+            params != null ? params : Collections.emptyList(), returnType
+        );
         sig.commitParams(null);
 
         final LetBinding let = new LetBinding(loc, name, sig.getSignatureType());
@@ -164,35 +203,44 @@ public class ASTBuilder {
      * let statement
      * decomposing lets desugar into multiple statements
      */
-    public static List<Statement> letStmt(final Loc loc, final Term lval,
-                                          final Type ltype, final Term rval) {
+    public static List<Statement> letStmt(
+        final Loc loc, final Term lval,
+        final Type ltype, final Term rval
+    )
+    {
         Session.debug(loc, "HEY letStmt lval = ''{0}''", lval.dump());
 
-        if (lval instanceof RefTerm) {
+        if (lval instanceof RefTerm)
+        {
             final LetBinding let =
-                    new LetBinding(loc, ((RefTerm) lval).getName(), ltype, rval);
+                new LetBinding(loc, ((RefTerm) lval).getName(), ltype, rval);
 
             return Collections.singletonList(let);
         }
 
-        if (lval instanceof ListTerm) {
+        if (lval instanceof ListTerm)
+        {
             return listDecompAssigns(lval, ltype, rval);
         }
 
-        if (lval instanceof MapTerm) {
+        if (lval instanceof MapTerm)
+        {
             return mapDecompAssigns(lval, ltype, rval);
         }
 
-        if (lval instanceof TupleTerm) {
+        if (lval instanceof TupleTerm)
+        {
             return tupleDecompAssigns(lval, ltype, rval);
         }
 
-        if (lval instanceof RecordTerm) {
+        if (lval instanceof RecordTerm)
+        {
             return recordDecompAssigns(lval, ltype, rval);
         }
 
         Session.error(loc, "illegal receiver ''{0}'' in assignment statement",
-                lval.dump());
+            lval.dump()
+        );
 
         return Collections.emptyList();
     }
@@ -200,20 +248,27 @@ public class ASTBuilder {
     /**
      * convenience wrapper takes location from lval
      */
-    private static List<Statement> letStmt(final Term lval, final Type ltype,
-                                           final Term rval) {
+    private static List<Statement> letStmt(
+        final Term lval, final Type ltype,
+        final Term rval
+    )
+    {
         return letStmt(lval.getLoc(), lval, ltype, rval);
     }
 
     /**
      * [x, y,...] = rhs, where x, y, ... can be nested structures
      */
-    private static List<Statement> listDecompAssigns(final Term lhs,
-                                                     final Type type, final Term rhs) {
+    private static List<Statement> listDecompAssigns(
+        final Term lhs,
+        final Type type, final Term rhs
+    )
+    {
         final Loc loc = lhs.getLoc();
         final List<Statement> results = new ArrayList<>();
 
-        if (rhs instanceof ListTerm && type == null) {
+        if (rhs instanceof ListTerm && type == null)
+        {
             final ListTerm llist = (ListTerm) lhs;
             final ListTerm rlist = (ListTerm) rhs;
 
@@ -221,16 +276,22 @@ public class ASTBuilder {
             final List<Term> ritems = rlist.getItems();
 
             if (litems.size() != ritems.size())
+            {
                 Session.error(loc, "arity mismatch in decomposing assignment");
+            }
 
-            for (int i = 0; i < litems.size(); i++) {
+            for (int i = 0; i < litems.size(); i++)
+            {
                 results.addAll(letStmt(litems.get(i), null, ritems.get(i)));
             }
-        } else {
+        }
+        else
+        {
             final RefTerm rhsRef = ensureRef(rhs, loc, type, results);
 
             int i = 0;
-            for (final Term litem : ((ListTerm) lhs).getItems()) {
+            for (final Term litem : ((ListTerm) lhs).getItems())
+            {
                 final IntLiteral posArg = new IntLiteral(loc, i++);
                 final Term selTerm = new ApplyTerm(loc, rhsRef, posArg, CollIndex);
 
@@ -248,12 +309,17 @@ public class ASTBuilder {
      * variable, add binding from temp to original expr
      * to results list, and return reference to it.
      */
-    private static RefTerm ensureRef(final Term expr, final Loc loc,
-                                     final Type type, final List<Statement> results) {
+    private static RefTerm ensureRef(
+        final Term expr, final Loc loc,
+        final Type type, final List<Statement> results
+    )
+    {
         // if expr is already a ref and we aren't demanding a particular type,
         // return existing ref.
         if (expr instanceof RefTerm && type == null)
+        {
             return (RefTerm) expr;
+        }
 
         // temp = expr
         final String tempName = "_" + loc.getLine() + "_" + loc.getColumn();
@@ -265,12 +331,16 @@ public class ASTBuilder {
     /**
      * [k1: x, k2: y,...] = rhs, where x, y, ... can be nested structures
      */
-    private static List<Statement> mapDecompAssigns(final Term lhs,
-                                                    final Type type, final Term rhs) {
+    private static List<Statement> mapDecompAssigns(
+        final Term lhs,
+        final Type type, final Term rhs
+    )
+    {
         final Loc loc = lhs.getLoc();
         final List<Statement> results = new ArrayList<>();
 
-        if (rhs instanceof MapTerm && type == null) {
+        if (rhs instanceof MapTerm && type == null)
+        {
             final MapTerm lmap = (MapTerm) lhs;
             final MapTerm rmap = (MapTerm) rhs;
 
@@ -278,16 +348,22 @@ public class ASTBuilder {
             final Map<Term, Term> ritems = rmap.getItems();
 
             if (!litems.keySet().equals(ritems.keySet()))
+            {
                 Session.error(loc, "keyset mismatch in decomposing assignment");
+            }
 
-            for (final Term key : litems.keySet()) {
+            for (final Term key : litems.keySet())
+            {
                 results.addAll(letStmt(litems.get(key), null, ritems.get(key)));
             }
-        } else {
+        }
+        else
+        {
             final RefTerm rhsRef = ensureRef(rhs, loc, type, results);
 
             for (final Map.Entry<Term, Term> lhsEntry : ((MapTerm) lhs).getItems()
-                    .entrySet()) {
+                .entrySet())
+            {
                 final Term lhsKey = lhsEntry.getKey();
                 final Term lhsValue = lhsEntry.getValue();
                 final Term selTerm = new ApplyTerm(loc, rhsRef, lhsKey, CollIndex);
@@ -302,12 +378,16 @@ public class ASTBuilder {
     /**
      * (x,y,...) = rhs, where x, y, ... can be nested structures
      */
-    private static List<Statement> tupleDecompAssigns(final Term lhs,
-                                                      final Type type, final Term rhs) {
+    private static List<Statement> tupleDecompAssigns(
+        final Term lhs,
+        final Type type, final Term rhs
+    )
+    {
         final Loc loc = lhs.getLoc();
         final List<Statement> results = new ArrayList<>();
 
-        if (rhs instanceof TupleTerm && type == null) {
+        if (rhs instanceof TupleTerm && type == null)
+        {
             final TupleTerm ltup = (TupleTerm) lhs;
             final TupleTerm rtup = (TupleTerm) rhs;
 
@@ -315,16 +395,22 @@ public class ASTBuilder {
             final List<Term> ritems = rtup.getItems();
 
             if (litems.size() != ritems.size())
+            {
                 Session.error(loc, "arity mismatch in decomposing assignment");
+            }
 
-            for (int i = 0; i < litems.size(); i++) {
+            for (int i = 0; i < litems.size(); i++)
+            {
                 results.addAll(letStmt(litems.get(i), null, ritems.get(i)));
             }
-        } else {
+        }
+        else
+        {
             final RefTerm rhsRef = ensureRef(rhs, loc, type, results);
 
             int i = 0;
-            for (final Term litem : ((TupleTerm) lhs).getItems()) {
+            for (final Term litem : ((TupleTerm) lhs).getItems())
+            {
                 final IntLiteral posArg = new IntLiteral(loc, i++);
                 final Term selTerm = new ApplyTerm(loc, rhsRef, posArg, StructAddr);
 
@@ -338,12 +424,16 @@ public class ASTBuilder {
     /**
      * (k1: x, k2: y,...) = rhs, where x, y, ... can be nested structures
      */
-    private static List<Statement> recordDecompAssigns(final Term lhs,
-                                                       final Type type, final Term rhs) {
+    private static List<Statement> recordDecompAssigns(
+        final Term lhs,
+        final Type type, final Term rhs
+    )
+    {
         final Loc loc = lhs.getLoc();
         final List<Statement> results = new ArrayList<>();
 
-        if (rhs instanceof RecordTerm && type == null) {
+        if (rhs instanceof RecordTerm && type == null)
+        {
             final RecordTerm lrec = (RecordTerm) lhs;
             final RecordTerm rrec = (RecordTerm) rhs;
 
@@ -351,16 +441,22 @@ public class ASTBuilder {
             final Map<Term, Term> ritems = rrec.getItems();
 
             if (!litems.keySet().equals(ritems.keySet()))
+            {
                 Session.error(loc, "keyset mismatch in decomposing assignment");
+            }
 
-            for (final Term key : litems.keySet()) {
+            for (final Term key : litems.keySet())
+            {
                 results.addAll(letStmt(litems.get(key), null, ritems.get(key)));
             }
-        } else {
+        }
+        else
+        {
             final RefTerm rhsRef = ensureRef(rhs, loc, type, results);
 
             for (final Map.Entry<Term, Term> lhsEntry : ((RecordTerm) lhs).getItems()
-                    .entrySet()) {
+                .entrySet())
+            {
                 final Term lhsKey = lhsEntry.getKey();
                 final Term lhsValue = lhsEntry.getValue();
 
@@ -376,7 +472,8 @@ public class ASTBuilder {
     /**
      * unbound expression statement
      */
-    public static List<Statement> unboundExprStmt(final Term expr) {
+    public static List<Statement> unboundExprStmt(final Term expr)
+    {
         final UnboundTerm term = new UnboundTerm(expr);
 
         return Collections.singletonList(term);
@@ -385,8 +482,11 @@ public class ASTBuilder {
     /**
      * declared parameter. type may be null
      */
-    public static ParamBinding param(final Loc loc, final String name,
-                                     final Type type) {
+    public static ParamBinding param(
+        final Loc loc, final String name,
+        final Type type
+    )
+    {
         return new ParamBinding(loc, name, type);
     }
 
@@ -395,8 +495,11 @@ public class ASTBuilder {
      * based on precedence/associativity info from {@link Ops#BINOP_INFO}.
      * ops may be strings containing infix operator symbols, or full terms.
      */
-    public static Term binaryExpr(final Term head,
-                                  final List<Pair<Object, Term>> tail) {
+    public static Term binaryExpr(
+        final Term head,
+        final List<Pair<Object, Term>> tail
+    )
+    {
         return TermBinExprBuilder.build(head, tail);
     }
 
@@ -405,28 +508,37 @@ public class ASTBuilder {
      * Term),
      * plus left and right dimensionality ranks
      */
-    public static Object verb(final int lefts, final Object op, final int rights) {
+    public static Object verb(final int lefts, final Object op, final int rights)
+    {
         return lefts + rights == 0 ? op : new Verb(lefts, op, rights);
     }
 
     /**
      * unary expression
      */
-    public static Term unaryExpr(final Loc loc, final String op, final Term term) {
+    public static Term unaryExpr(final Loc loc, final String op, final Term term)
+    {
         assert Ops.UNOP_INFO.containsKey(op);
 
-        if (op.equals(Ops.MINUS_SYM)) {
+        if (op.equals(Ops.MINUS_SYM))
+        {
             // deliver negative numerics as constants
             if (term instanceof IntLiteral)
+            {
                 return new IntLiteral(loc, -((IntLiteral) term).getValue());
+            }
             else if (term instanceof DoubleLiteral)
+            {
                 return new DoubleLiteral(loc, -((DoubleLiteral) term).getValue());
+            }
         }
 
         final String name = Ops.UNOP_INFO.get(op);
 
         if (name == null)
+        {
             Session.error(loc, "unary op ''{0}'' not yet supported", op);
+        }
 
         return new ApplyTerm(loc, new RefTerm(loc, name), term);
     }
@@ -434,14 +546,28 @@ public class ASTBuilder {
     /**
      * build chain of application terms from term list
      */
-    public static Term applyChain(final Term base,
-                                  final List<Pair<Term, ApplyFlavor>> chain) {
+    public static Term applyChain(
+        final Term base,
+        final List<Pair<Term, ApplyFlavor>> chain
+    )
+    {
         final Loc loc = base.getLoc();
 
         Term result = base;
 
-        for (final Pair<Term, ApplyFlavor> arg : chain) {
-            result = new ApplyTerm(loc, result, arg.left, arg.right);
+        for (final Pair<Term, ApplyFlavor> arg : chain)
+        {
+            switch (arg.right)
+            {
+            case CollIndex:
+                // x # f
+                result = new ApplyTerm(loc, arg.left, result, arg.right);
+                break;
+            default:
+                // f x, f . x
+                result = new ApplyTerm(loc, result, arg.left, arg.right);
+                break;
+            }
         }
 
         return result;
@@ -450,35 +576,40 @@ public class ASTBuilder {
     /**
      * id reference
      */
-    public static RefTerm idRef(final Loc loc, final String id) {
+    public static RefTerm idRef(final Loc loc, final String id)
+    {
         return new RefTerm(loc, id);
     }
 
     /**
      * enum literal
      */
-    public static VariantTerm enumLit(final Term lit) {
+    public static VariantTerm enumLit(final Term lit)
+    {
         return new VariantTerm(lit.getLoc(), lit, TupleTerm.UNIT);
     }
 
     /**
      * boolean literal
      */
-    public static BoolLiteral boolLiteral(final Loc loc, final String text) {
+    public static BoolLiteral boolLiteral(final Loc loc, final String text)
+    {
         return new BoolLiteral(loc, Boolean.parseBoolean(text));
     }
 
     /**
      * natural (nonnegative base 10 whole number) literal
      */
-    public static SimpleLiteralTerm natLiteral(final Loc loc, final String text) {
+    public static SimpleLiteralTerm natLiteral(final Loc loc, final String text)
+    {
         return numLiteral(loc, text, 10);
     }
 
     /**
      * hex number literal
      */
-    public static SimpleLiteralTerm hexLiteral(final Loc loc, final String text) {
+    public static SimpleLiteralTerm hexLiteral(final Loc loc, final String text)
+    {
         return numLiteral(loc, text, 0x10);
     }
 
@@ -487,28 +618,40 @@ public class ASTBuilder {
      * Trailing 'L' as forces long; also tries long on int parse error,
      * so literals too big for int will produce long without trailing 'L'.
      */
-    private static SimpleLiteralTerm numLiteral(final Loc loc, String text,
-                                                final int radix) {
+    private static SimpleLiteralTerm numLiteral(
+        final Loc loc, String text,
+        final int radix
+    )
+    {
         final boolean explicitLong = text.endsWith("L") || text.endsWith("l");
 
-        if (explicitLong) {
+        if (explicitLong)
+        {
             text = text.substring(0, text.length() - 1);
         }
 
-        if (!explicitLong) {
-            try {
+        if (!explicitLong)
+        {
+            try
+            {
                 return new IntLiteral(loc, Integer.parseInt(text, radix));
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e)
+            {
                 // NOTE: fall through to long parse
             }
         }
 
         // try parsing as long
-        try {
+        try
+        {
             return new LongLiteral(loc, Long.parseLong(text, radix));
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e)
+        {
             Session.error(loc, "error parsing {0} decimal literal \"{1}\"",
-                    explicitLong ? "long" : "", text);
+                explicitLong ? "long" : "", text
+            );
 
             return explicitLong ? new LongLiteral(loc, 0) : new IntLiteral(loc, 0);
         }
@@ -518,48 +661,64 @@ public class ASTBuilder {
      * floating point literal
      * TODO trailing 'f' means float, 'd' forces double
      */
-    public static DoubleLiteral floatLiteral(final Loc loc, final String text) {
+    public static DoubleLiteral floatLiteral(final Loc loc, final String text)
+    {
         return new DoubleLiteral(loc, Double.parseDouble(text));
     }
 
     /**
      * string literal
      */
-    public static StringLiteral strLiteral(final Loc loc, final String text) {
-        return new StringLiteral(loc,
-                StringUtils.unescapeJava(text.substring(1, text.length() - 1)));
+    public static StringLiteral strLiteral(final Loc loc, final String text)
+    {
+        return new StringLiteral(
+            loc,
+            StringUtils.unescapeJava(text.substring(1, text.length() - 1))
+        );
     }
 
     /**
      * symbol literal
      */
-    public static SymbolLiteral symLiteral(final Loc loc, final String text) {
+    public static SymbolLiteral symLiteral(final Loc loc, final String text)
+    {
         return new SymbolLiteral(loc, text);
     }
 
     /**
      * list literal
      */
-    public static ListTerm listLiteral(final Loc loc, final List<Term> items) {
+    public static ListTerm listLiteral(final Loc loc, final List<Term> items)
+    {
         return new ListTerm(loc, items != null ? items : Collections.emptyList());
     }
 
     /**
      * map literal
      */
-    public static MapTerm mapLiteral(final Loc loc,
-                                     final List<Pair<Term, Term>> pairs) {
-        return new MapTerm(loc,
-                mapFromPairs(pairs != null ? pairs : Collections.emptyList(), false));
+    public static MapTerm mapLiteral(
+        final Loc loc,
+        final List<Pair<Term, Term>> pairs
+    )
+    {
+        return new MapTerm(
+            loc,
+            mapFromPairs(pairs != null ? pairs : Collections.emptyList(), false)
+        );
     }
 
     /**
      * tuple literal
      */
-    public static TupleTerm tupLiteral(final Loc loc, final Term head,
-                                       final List<Term> tail) {
-        return new TupleTerm(loc,
-                head != null ? cons(head, tail) : Collections.emptyList());
+    public static TupleTerm tupLiteral(
+        final Loc loc, final Term head,
+        final List<Term> tail
+    )
+    {
+        return new TupleTerm(
+            loc,
+            head != null ? cons(head, tail) : Collections.emptyList()
+        );
     }
 
     /**
@@ -567,18 +726,26 @@ public class ASTBuilder {
      * Note: syntactic ids appearing in key positions are parsed as symbol
      * literals
      */
-    public static RecordTerm recLiteral(final Loc loc,
-                                        final List<Pair<Term, Term>> pairs) {
-        return new RecordTerm(loc,
-                mapFromPairs(pairs != null ? pairs : Collections.emptyList(), true));
+    public static RecordTerm recLiteral(
+        final Loc loc,
+        final List<Pair<Term, Term>> pairs
+    )
+    {
+        return new RecordTerm(
+            loc,
+            mapFromPairs(pairs != null ? pairs : Collections.emptyList(), true)
+        );
     }
 
     /**
      * lambda
      */
-    public static LambdaTerm lambda(final Loc loc,
-                                    final List<TypeParam> typeParams, final List<ParamBinding> params,
-                                    final Type returnType, final List<Statement> body) {
+    public static LambdaTerm lambda(
+        final Loc loc,
+        final List<TypeParam> typeParams, final List<ParamBinding> params,
+        final Type returnType, final List<Statement> body
+    )
+    {
     /*
 
     TODO desugar param decls into destructuring assignments.
@@ -602,23 +769,27 @@ public class ASTBuilder {
     */
 
         return new LambdaTerm(loc,
-                typeParams != null ? typeParams : Collections.emptyList(),
-                params != null ? params :
-                        Collections.singletonList(new ParamBinding(loc, "_", null)),
-                returnType, body);
+            typeParams != null ? typeParams : Collections.emptyList(),
+            params != null ? params :
+                Collections.singletonList(new ParamBinding(loc, "_", null)),
+            returnType, body
+        );
     }
 
     /**
      * operator reference, e.g. (+)
      */
-    public static Term opRef(final Loc loc, final String opsym) {
+    public static Term opRef(final Loc loc, final String opsym)
+    {
         final BinopInfo binopInfo = Ops.BINOP_INFO.get(opsym);
 
         final String name =
-                binopInfo != null ? binopInfo.func : Ops.UNOP_INFO.get(opsym);
+            binopInfo != null ? binopInfo.func : Ops.UNOP_INFO.get(opsym);
 
         if (name == null)
+        {
             Session.error(loc, "operator {0} not yet supported", opsym);
+        }
 
         return new RefTerm(loc, name);
     }
@@ -630,8 +801,11 @@ public class ASTBuilder {
     /**
      *
      */
-    public static Type quantifiedType(final Loc loc, final List<TypeParam> params,
-                                      final Type type) {
+    public static Type quantifiedType(
+        final Loc loc, final List<TypeParam> params,
+        final Type type
+    )
+    {
         type.setLoc(loc);
         type.addParams(params);
         return type;
@@ -640,16 +814,22 @@ public class ASTBuilder {
     /**
      * binary type expression
      */
-    public static Type binaryTypeExpr(final Type left,
-                                      final List<Pair<Object, Type>> rights) {
+    public static Type binaryTypeExpr(
+        final Type left,
+        final List<Pair<Object, Type>> rights
+    )
+    {
         return TypeBinExprBuilder.build(left, rights);
     }
 
     /**
      * desugar unary type op to application of type constructor or mapping
      */
-    public static Type unaryTypeExpr(final Loc loc, final String op,
-                                     final Type arg) {
+    public static Type unaryTypeExpr(
+        final Loc loc, final String op,
+        final Type arg
+    )
+    {
         assert Ops.TYPE_UNOP_INFO.containsKey(op);
 
         final TypeRef base = new TypeRef(loc, Ops.TYPE_UNOP_INFO.get(op));
@@ -660,11 +840,15 @@ public class ASTBuilder {
     /**
      * build chain of application terms from type list
      */
-    public static Type typeApplyChain(final Loc loc, final Type base,
-                                      final List<Type> chain) {
+    public static Type typeApplyChain(
+        final Loc loc, final Type base,
+        final List<Type> chain
+    )
+    {
         Type result = base;
 
-        for (final Type arg : chain) {
+        for (final Type arg : chain)
+        {
             //final Type arg = args.size() == 1 ? args.get(0) : new TypeTuple(loc,
             // args);
 
@@ -677,60 +861,74 @@ public class ASTBuilder {
     /**
      * build finished arg expr out of arglist
      */
-    public static Type typeArgExpr(final Loc loc, final List<Type> args) {
+    public static Type typeArgExpr(final Loc loc, final List<Type> args)
+    {
         return args.size() == 1 ? args.get(0) : new TypeTuple(loc, args);
     }
 
     /**
      *
      */
-    public static Type typeIdRef(final Loc loc, final String name) {
+    public static Type typeIdRef(final Loc loc, final String name)
+    {
         return new TypeRef(loc, name);
     }
 
     /**
      *
      */
-    public static Type wildcardType(final Loc loc) {
+    public static Type wildcardType(final Loc loc)
+    {
         return new WildcardType(loc);
     }
 
     /**
      *
      */
-    public static Type listType(final Loc loc, final Type itemType) {
+    public static Type listType(final Loc loc, final Type itemType)
+    {
         return Types.list(loc, itemType);
     }
 
     /**
      *
      */
-    public static Type mapType(final Loc loc, final Type keyType,
-                               final Type valueType) {
+    public static Type mapType(
+        final Loc loc, final Type keyType,
+        final Type valueType
+    )
+    {
         return Types.map(loc, keyType, valueType);
     }
 
     /**
      *
      */
-    public static Type tupType(final Loc loc, final Type head,
-                               final List<Type> tail) {
+    public static Type tupType(
+        final Loc loc, final Type head,
+        final List<Type> tail
+    )
+    {
         return Types
-                .tup(loc, head != null ? cons(head, tail) : Collections.emptyList());
+            .tup(loc, head != null ? cons(head, tail) : Collections.emptyList());
     }
 
     /**
      *
      */
-    public static Type recType(final Loc loc, final List<Pair<Term, Type>> pairs) {
-        return Types.rec(loc,
-                pairs != null ? mapFromPairs(pairs, true) : Collections.emptyMap());
+    public static Type recType(final Loc loc, final List<Pair<Term, Type>> pairs)
+    {
+        return Types.rec(
+            loc,
+            pairs != null ? mapFromPairs(pairs, true) : Collections.emptyMap()
+        );
     }
 
     /**
      *
      */
-    public static Type enumType(final Loc loc, final List<Term> items) {
+    public static Type enumType(final Loc loc, final List<Term> items)
+    {
         final LinkedHashSet<Term> values = new LinkedHashSet<>(items);
         return new EnumType(loc, new WildcardType(loc), values);
     }
@@ -738,13 +936,17 @@ public class ASTBuilder {
     /**
      *
      */
-    public static TypeParam typeParam(final Loc loc, final String name,
-                                      final Kind kind, final Type constraintType) {
+    public static TypeParam typeParam(
+        final Loc loc, final String name,
+        final Kind kind, final Type constraintType
+    )
+    {
         final Constraint constraint = constraintType == null ?
-                Constraint.ANY : new SubsumptionConstraint(constraintType);
+            Constraint.ANY : new SubsumptionConstraint(constraintType);
 
         return new TypeParam(loc, name, kind == null ? Kinds.STAR : kind,
-                constraint);
+            constraint
+        );
     }
 
     //
@@ -754,17 +956,24 @@ public class ASTBuilder {
     /**
      *
      */
-    public static Kind arrowKind(final Loc loc, final Kind head,
-                                 final List<Kind> tail) {
+    public static Kind arrowKind(
+        final Loc loc, final Kind head,
+        final List<Kind> tail
+    )
+    {
         return tail.isEmpty() ? head : new ArrowKind(loc, head,
-                arrowKind(loc, tail.get(0), tail.subList(1, tail.size())));
+            arrowKind(loc, tail.get(0), tail.subList(1, tail.size()))
+        );
     }
 
     /**
      *
      */
-    public static Kind tupleKind(final Loc loc, final Kind head,
-                                 final List<Kind> tail) {
+    public static Kind tupleKind(
+        final Loc loc, final Kind head,
+        final List<Kind> tail
+    )
+    {
         return tail.isEmpty() ? head : new TupleKind(loc, cons(head, tail));
     }
 
@@ -781,22 +990,31 @@ public class ASTBuilder {
      * we must defer some semantic checks until later.
      */
     private static <T> LinkedHashMap<Term, T> mapFromPairs(
-            final List<Pair<Term, T>> pairs, final boolean keySymSugar) {
+        final List<Pair<Term, T>> pairs, final boolean keySymSugar
+    )
+    {
         final LinkedHashMap<Term, T> accum = new LinkedHashMap<>();
 
-        for (final Pair<Term, T> pair : pairs) {
+        for (final Pair<Term, T> pair : pairs)
+        {
             final Term key;
-            if (keySymSugar) {
+            if (keySymSugar)
+            {
                 final Term rawKey = pair.left;
                 key = rawKey instanceof RefTerm ?
-                        symLiteral(rawKey.getLoc(), ((RefTerm) rawKey).getName()) : rawKey;
-            } else {
+                    symLiteral(rawKey.getLoc(), ((RefTerm) rawKey).getName()) : rawKey;
+            }
+            else
+            {
                 key = pair.left;
             }
 
-            if (accum.containsKey(key)) {
+            if (accum.containsKey(key))
+            {
                 Session.error(key.getLoc(), "duplicate key: {0}", key.dump());
-            } else {
+            }
+            else
+            {
                 accum.put(key, pair.right);
             }
         }
@@ -811,50 +1029,64 @@ public class ASTBuilder {
     /**
      *
      */
-    public static <T> List<T> flatten(final List<T> h, final List<List<T>> tail) {
+    public static <T> List<T> flatten(final List<T> h, final List<List<T>> tail)
+    {
         final List<T> result = new ArrayList<>(h);
         for (final List<T> list : tail)
+        {
             result.addAll(list);
+        }
         return result;
     }
 
     /**
      *
      */
-    public static <T> List<T> empty() {
+    public static <T> List<T> empty()
+    {
         return Collections.emptyList();
     }
 
     /**
      *
      */
-    public static <K, V> Pair<K, V> assoc(final K k, final V v) {
+    public static <K, V> Pair<K, V> assoc(final K k, final V v)
+    {
         return Pair.create(k, v);
     }
 
     /**
      * cons a list (tail may be null)
      */
-    public static <T> List<T> cons(final T head, final List<T> tail) {
+    public static <T> List<T> cons(final T head, final List<T> tail)
+    {
         final List<T> list = new ArrayList<>();
         list.add(0, head);
         if (tail != null)
+        {
             list.addAll(tail);
+        }
         return list;
     }
 
-    public static <T> List<T> concat(final List<T> head, final List<T> tail) {
+    public static <T> List<T> concat(final List<T> head, final List<T> tail)
+    {
         final List<T> list = new ArrayList<>(head.size() + tail.size());
         list.addAll(head);
         list.addAll(tail);
         return list;
     }
 
-    public static List<String> distribute(final String prefix,
-                                          final List<String> rest) {
+    public static List<String> distribute(
+        final String prefix,
+        final List<String> rest
+    )
+    {
         final List<String> list = new ArrayList<>(rest.size());
         for (final String s : rest)
+        {
             list.add(prefix + s);
+        }
         return list;
     }
 }

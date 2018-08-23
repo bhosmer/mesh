@@ -96,8 +96,8 @@ intrinsic <T> if(c : Bool, y : () -> T, z : () -> T) -> T;
 <T> ifelse(cases : [(() -> Bool, () -> T)], default : () -> T) -> T
 {
     n = size(cases);
-    c = cycle(0, { i -> i < n && { !cases[i].0() } }, inc);
-    if(c == n, default, { cases[c].1() })
+    c = cycle(0, { i -> i < n && { !(i#cases).0() } }, inc);
+    if(c == n, default, { (c#cases).1() })
 };
 
 /**
@@ -137,7 +137,7 @@ intrinsic <K, K2 | K, V:[*], R> cond(
  * switch(0, [ 0:{"0"}, 1:{"1"}]) //returns "0"
  * @endcode
  */
-<K, V> switch(sel : K, cases : [ K : () -> V ]) { cases[sel]() };
+<K, V> switch(sel : K, cases : [ K : () -> V ]) { (sel # cases)() };
 
 // ------------------------------------------------------------------
 
@@ -619,7 +619,7 @@ memo(f)
     m = box([:]);
 
     { a ->
-        if(iskey(*m, a), { (*m)[a] }, {
+        if(iskey(*m, a), { a # (*m) }, {
             v = f(a);
             m <- { mapset(_, a, v) };
             v
@@ -1623,7 +1623,8 @@ intrinsic <T> drop(x:Int, y:[T]) -> [T];
 eachpair(init, f, args)
 {
     list = [init] + args;
-    index(args) | { f(list[_], list[_ + 1]) }
+    // TODO: index(args) @ { f . (_, _ + 1) :# list }
+    index(args) | { f(_ # list, (_ + 1) # list) }
 };
 
 /**
@@ -1633,7 +1634,7 @@ eachpair(init, f, args)
  */
 edges(list)
 {
-    [0] + filter(drop(1, index(list)), { list[_ - 1] != list[_] })
+    [0] + filter(drop(1, index(list)), { ((_ - 1) # list) != (_ # list) })
 };
 
 /**
@@ -1689,7 +1690,7 @@ intrinsic <T> find(x:[T], y:T) -> Int;
 first_where(pred, vals)
 {
     n = size vals;
-    cycle(0, { i -> i < n && { !pred(vals[i]) } }, inc)
+    cycle(0, { i -> i < n && { !pred(i # vals) } }, inc)
 };
 
 /**
@@ -1848,7 +1849,7 @@ intrinsic <T> rep(x:Int, y:T) -> [T];
  */
 reverse(list) {
     n = size(list);
-    index(list) | { list[n - 1 - _] }
+    index(list) | { (n - 1 - _) # list }
 };
 
 /**
@@ -2228,7 +2229,7 @@ counts(list)
  */
 mapgetd(map, key, default)
 {
-    guard(!iskey(map, key), default, {map[key]})
+    guard(!iskey(map, key), default, {key # map})
 };
 
 // ------------------------------------------------------------------
