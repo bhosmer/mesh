@@ -1,12 +1,12 @@
-/**
- * ADOBE SYSTEMS INCORPORATED
- * Copyright 2009-2013 Adobe Systems Incorporated
- * All Rights Reserved.
- *
- * NOTICE: Adobe permits you to use, modify, and distribute
- * this file in accordance with the terms of the MIT license,
- * a copy of which can be found in the LICENSE.txt file or at
- * http://opensource.org/licenses/MIT.
+/*
+  ADOBE SYSTEMS INCORPORATED
+  Copyright 2009-2013 Adobe Systems Incorporated
+  All Rights Reserved.
+
+  NOTICE: Adobe permits you to use, modify, and distribute
+  this file in accordance with the terms of the MIT license,
+  a copy of which can be found in the LICENSE.txt file or at
+  http://opensource.org/licenses/MIT.
  */
 package compile.type;
 
@@ -58,6 +58,7 @@ public final class Types
     public static final TypeCons REC = findIntrinsicCons("Rec");
 
     public static final TypeCons VAR = findIntrinsicCons("Var");
+    public static final TypeCons SEL = findIntrinsicCons("Sel");
 
     //
     // built-in type transformers
@@ -287,8 +288,7 @@ public final class Types
 
     public static boolean isTup(Type type)
     {
-        if (type == null)
-            assert false;
+        assert type != null;
 
         type = type.deref();
         return type instanceof TypeApp && ((TypeApp)type).getBase().deref() == TUP;
@@ -364,7 +364,7 @@ public final class Types
 
         final EnumType keyEnum = ((TypeMap)fieldTypes).getKeyType();
 
-        final List<SimpleLiteralTerm> list = new ArrayList<SimpleLiteralTerm>();
+        final List<SimpleLiteralTerm> list = new ArrayList<>();
 
         for (final Term value : keyEnum.getValues())
             list.add((SimpleLiteralTerm)value);
@@ -373,7 +373,7 @@ public final class Types
     }
 
     //
-    // sum types are app(SUM, [<term> : <type>, ...])
+    // var (name-tagged sum) types are app(VAR, [<term> : <type>, ...])
     // one builder takes raw type map, others take cooked arg term.
     // arg kind is checked for compatibility later
     //
@@ -398,6 +398,37 @@ public final class Types
     {
         type = type.deref();
         if (!Types.isVar(type))
+            throw new IllegalArgumentException();
+
+        return ((TypeApp)type).getArg();
+    }
+
+    //
+    // sel (position-tagged sum) types are app(SEL, [<term> : <type>, ...])
+    // one builder takes raw type map, others take cooked arg term.
+    // arg kind is checked for compatibility later
+    //
+
+    public static TypeApp sel(final Loc loc, final List<Type> items)
+    {
+        return sel(loc, new TypeList(loc, items));
+    }
+
+    public static TypeApp sel(final Loc loc, final Type opts)
+    {
+        return app(loc, SEL, opts);
+    }
+
+    public static boolean isSel(Type type)
+    {
+        type = type.deref();
+        return type instanceof TypeApp && ((TypeApp)type).getBase().deref() == SEL;
+    }
+
+    public static Type selOpts(Type type)
+    {
+        type = type.deref();
+        if (!Types.isSel(type))
             throw new IllegalArgumentException();
 
         return ((TypeApp)type).getArg();

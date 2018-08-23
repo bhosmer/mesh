@@ -41,10 +41,11 @@ intrinsic type Fun;         // Fun(A, B), sugar A -> B      // fun:(Int, String)
 
 // kind: [*] -> *
 intrinsic type Tup;         // Tup(<type list>), sugar (T1, T2, ...)    tup:[Int, String, ...]
+intrinsic type Sel;         // Sel(<type list>), sugar |(T1, T2, ...)
 
 // kind: (*, [*]) -> *
 intrinsic type Rec;         // Rec(<key type>, <type list>), sugar (k1:T1, k2:T2, ...)      rec:[x:Int, y:String, ...]
-intrinsic type Var;         // Var(<key type>, <type list>), sugar (k1!T1, k2!T2, ...)      var:[x:Int, y:String, ...]
+intrinsic type Var;         // Var(<key type>, <type list>), sugar |(k1:T1, k2:T2, ...)      var:[x:Int, y:String, ...]
 
 // type transformers
 intrinsic type TMap;        // type-level map: TMap(<type list>, <type constructor>)    {ts,c->ts.map(c:_)}

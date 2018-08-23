@@ -557,6 +557,12 @@ Type TypeBaseExpr
     / <RecType>     LeftParen m:TermTypePairList RightParen
         { yyValue = recType(loc(yyStart), m); }
 
+    / <NamedVarType> VerticalBar LeftParen m:TermTypePairList RightParen
+        { yyValue = namedVarType(loc(yyStart), m); }
+
+    / <PosVarType> VerticalBar LeftParen h:TypeExpr Comma t:TypeExprList? RightParen
+        { yyValue = posVarType(loc(yyStart), h, t); }
+
 /*
     conflict: {...} for enums vs. juxtaposition apply syntax for types.
 
