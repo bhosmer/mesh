@@ -100,18 +100,13 @@ public final class ModuleClassGenerator extends ClassGenerator
      * Note: lets are not initialized inline or in a constructor,
      * due to Javassist issues around init/cinit ordering. Instead
      * they're initialized in the generated run() method.
-     * <p/>
-     * But note that we're declaring them final anyway, since at
-     * runtime they are in fact written exactly once. Javassist
-     * doesn't appear to do any static flow check that prevents
-     * this.
      */
     private static void addValueBindingFields(final Module module,
         final ClassDef classDef, final StatementFormatter fmt)
     {
         for (final LetBinding let : module.getLets().values())
             classDef.addFieldDef(new FieldDef(
-                formatFieldDecl(let, true, true, fmt), ""));
+                formatFieldDecl(let, true, false, fmt), ""));
     }
 
     /**
