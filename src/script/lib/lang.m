@@ -434,6 +434,7 @@ intrinsic <T> while(pred : () -> Bool, b : () -> T) -> ();
 };
 */
 
+// TODO fix precedence so middle `_` isn't parsed separately from `.` that follows absent parens
 apply = { _.0(_.1) };
 
 /**

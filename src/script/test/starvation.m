@@ -4,7 +4,7 @@ import unittest;
 // Transaction system uses age-based arbitration when write contention
 // occurs, but avoids preemption, so that a transaction is inevitable
 // once all necessary resource relationships have been established.
-// Arbtration avoids starvation by allowing a long-running transaction
+// Arbitration avoids starvation by allowing a long-running transaction
 // to queue for a resource without giving up already-acquired resources.
 //
 // Write-write contention: here a long-running transaction that attempts to
