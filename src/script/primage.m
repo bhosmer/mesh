@@ -12,7 +12,7 @@ import processing;
 // uses predefined XML node type:
 // type XNode = (name:String, attrs:[Symbol : String], elems:[XNode]);
 
-APIKEY = "3ca11f62d7c50c6527d0b4fc87916d36";
+APIKEY = ""; // redacted
 RESTAPI = "http://api.flickr.com/services/rest";
 SEARCH = RESTAPI + "/?method=flickr.photos.search&api_key=" + APIKEY;
 GETSIZES = RESTAPI + "/?method=flickr.photos.getSizes&api_key=" + APIKEY;
